@@ -10,6 +10,12 @@ import RegisterPage from '@/pages/register';
 import DashboardPage from '@/pages/dashboard';
 import ProfilePage from '@/pages/profile';
 import UsersPage from '@/pages/admin/users';
+import DepartmentsPage from '@/pages/departments';
+import DepartmentDetailPage from '@/pages/departments/department-detail';
+import DoctorsPage from '@/pages/doctors';
+import DoctorDetailPage from '@/pages/doctors/doctor-detail';
+import PatientsPage from '@/pages/patients';
+import PatientDetailPage from '@/pages/patients/patient-detail';
 
 export default function App() {
   return (
@@ -33,6 +39,12 @@ export default function App() {
               <Route path="/dashboard" element={<DashboardPage />} />
               <Route path="/profile" element={<ProfilePage />} />
               <Route path="/admin/users" element={<UsersPage />} />
+              <Route path="/departments" element={<DepartmentsPage />} />
+              <Route path="/departments/:id" element={<DepartmentDetailPage />} />
+              <Route path="/doctors" element={<DoctorsPage />} />
+              <Route path="/doctors/:id" element={<DoctorDetailPage />} />
+              <Route path="/patients" element={<PatientsPage />} />
+              <Route path="/patients/:id" element={<PatientDetailPage />} />
             </Route>
 
             {/* Catch-all redirect */}
