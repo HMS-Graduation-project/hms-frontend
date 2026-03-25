@@ -16,6 +16,14 @@ import DoctorsPage from '@/pages/doctors';
 import DoctorDetailPage from '@/pages/doctors/doctor-detail';
 import PatientsPage from '@/pages/patients';
 import PatientDetailPage from '@/pages/patients/patient-detail';
+import AppointmentsPage from '@/pages/appointments';
+import BookAppointmentPage from '@/pages/appointments/book-appointment';
+import AppointmentDetailPage from '@/pages/appointments/appointment-detail';
+import MedicalRecordsPage from '@/pages/medical-records';
+import RecordFormPage from '@/pages/medical-records/record-form';
+import RecordDetailPage from '@/pages/medical-records/record-detail';
+import PrescriptionsPage from '@/pages/prescriptions';
+import PrescriptionDetailPage from '@/pages/prescriptions/prescription-detail';
 
 export default function App() {
   return (
@@ -45,6 +53,15 @@ export default function App() {
               <Route path="/doctors/:id" element={<DoctorDetailPage />} />
               <Route path="/patients" element={<PatientsPage />} />
               <Route path="/patients/:id" element={<PatientDetailPage />} />
+              <Route path="/appointments" element={<AppointmentsPage />} />
+              <Route path="/appointments/book" element={<BookAppointmentPage />} />
+              <Route path="/appointments/:id" element={<AppointmentDetailPage />} />
+              <Route path="/medical-records" element={<MedicalRecordsPage />} />
+              <Route path="/medical-records/new" element={<RecordFormPage />} />
+              <Route path="/medical-records/:id" element={<RecordDetailPage />} />
+              <Route path="/medical-records/:id/edit" element={<RecordFormPage />} />
+              <Route path="/prescriptions" element={<PrescriptionsPage />} />
+              <Route path="/prescriptions/:id" element={<PrescriptionDetailPage />} />
             </Route>
 
             {/* Catch-all redirect */}

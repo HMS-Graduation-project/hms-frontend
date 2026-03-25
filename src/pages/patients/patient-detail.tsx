@@ -16,9 +16,12 @@ import {
   FlaskConical,
   CreditCard,
   Pill,
-  Clock,
+  Eye,
 } from 'lucide-react';
 import { usePatient } from '@/hooks/use-patients';
+import { usePatientMedicalRecords } from '@/hooks/use-medical-records';
+import { usePatientPrescriptions, type PrescriptionStatus } from '@/hooks/use-prescriptions';
+import { PatientTimeline } from '@/components/medical-records/patient-timeline';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -46,7 +49,14 @@ export default function PatientDetailPage() {
   const { t } = useTranslation('patients');
   const { t: tCommon } = useTranslation('common');
 
+  const { t: tMR } = useTranslation('medical-records');
+  const { t: tRx } = useTranslation('prescriptions');
+
   const { data: patient, isLoading } = usePatient(id);
+  const { data: medicalRecordsData, isLoading: isMRLoading } =
+    usePatientMedicalRecords(patient?.id, { page: 1, limit: 20 });
+  const { data: prescriptionsData, isLoading: isRxLoading } =
+    usePatientPrescriptions(patient?.id, { page: 1, limit: 20 });
   const [editDialogOpen, setEditDialogOpen] = useState(false);
 
   if (isLoading) {
@@ -251,10 +261,13 @@ export default function PatientDetailPage() {
         </TabsContent>
 
         {/* Medical History Tab */}
-        <TabsContent value="medical-history">
-          <PlaceholderTab
-            icon={<Clock className="h-12 w-12" />}
-            title={t('medicalHistory')}
+        <TabsContent value="medical-history" className="space-y-4">
+          <div className="flex items-center justify-between">
+            <h3 className="text-lg font-semibold">{tMR('patientHistory')}</h3>
+          </div>
+          <PatientTimeline
+            records={medicalRecordsData?.data ?? []}
+            isLoading={isMRLoading}
           />
         </TabsContent>
 
@@ -267,11 +280,69 @@ export default function PatientDetailPage() {
         </TabsContent>
 
         {/* Prescriptions Tab */}
-        <TabsContent value="prescriptions">
-          <PlaceholderTab
-            icon={<Pill className="h-12 w-12" />}
-            title={t('prescriptions')}
-          />
+        <TabsContent value="prescriptions" className="space-y-4">
+          <div className="flex items-center justify-between">
+            <h3 className="text-lg font-semibold">{tRx('title')}</h3>
+          </div>
+          {isRxLoading ? (
+            <div className="space-y-2">
+              {Array.from({ length: 3 }).map((_, i) => (
+                <Skeleton key={i} className="h-16 w-full rounded-lg" />
+              ))}
+            </div>
+          ) : !prescriptionsData?.data?.length ? (
+            <Card>
+              <CardContent className="flex flex-col items-center justify-center py-12">
+                <Pill className="mb-4 h-12 w-12 text-muted-foreground" />
+                <p className="text-muted-foreground">{tRx('noMedications')}</p>
+              </CardContent>
+            </Card>
+          ) : (
+            <div className="space-y-2">
+              {prescriptionsData.data.map((rx) => {
+                const rxDoctorName = rx.doctor
+                  ? [rx.doctor.user.firstName, rx.doctor.user.lastName]
+                      .filter(Boolean)
+                      .join(' ')
+                  : '';
+                const statusBadge: Record<PrescriptionStatus, 'secondary' | 'success' | 'warning' | 'destructive'> = {
+                  PENDING: 'secondary',
+                  DISPENSED: 'success',
+                  PARTIALLY_DISPENSED: 'warning',
+                  CANCELLED: 'destructive',
+                };
+                return (
+                  <Card
+                    key={rx.id}
+                    className="transition-colors hover:bg-muted/50 cursor-pointer"
+                    onClick={() => navigate(`/prescriptions/${rx.id}`)}
+                  >
+                    <CardContent className="flex items-center justify-between p-4">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <Pill className="h-4 w-4 text-muted-foreground shrink-0" />
+                        <div className="min-w-0">
+                          <p className="text-sm font-medium">
+                            {new Date(rx.createdAt).toLocaleDateString()}
+                          </p>
+                          {rxDoctorName && (
+                            <p className="text-xs text-muted-foreground truncate">
+                              {tRx('prescribedBy')}: {rxDoctorName}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2 shrink-0">
+                        <Badge variant={statusBadge[rx.status]}>
+                          {tRx(`statuses.${rx.status}`)}
+                        </Badge>
+                        <Eye className="h-4 w-4 text-muted-foreground" />
+                      </div>
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
+          )}
         </TabsContent>
 
         {/* Lab Results Tab */}

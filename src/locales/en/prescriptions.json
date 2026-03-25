@@ -1,0 +1,40 @@
+{
+  "title": "Prescriptions",
+  "subtitle": "Manage prescriptions and dispensing",
+  "createPrescription": "Create Prescription",
+  "prescriptionDetail": "Prescription Details",
+  "medication": "Medication",
+  "dosage": "Dosage",
+  "frequency": "Frequency",
+  "duration": "Duration",
+  "quantity": "Quantity",
+  "instructions": "Instructions",
+  "addMedication": "Add Medication",
+  "removeMedication": "Remove",
+  "medications": "Medications",
+  "noMedications": "No medications added",
+  "status": "Status",
+  "statuses": {
+    "PENDING": "Pending",
+    "DISPENSED": "Dispensed",
+    "PARTIALLY_DISPENSED": "Partially Dispensed",
+    "CANCELLED": "Cancelled"
+  },
+  "actions": {
+    "dispense": "Dispense",
+    "cancel": "Cancel"
+  },
+  "notes": "Notes",
+  "patient": "Patient",
+  "doctor": "Doctor",
+  "date": "Date",
+  "prescriptionCreated": "Prescription created successfully",
+  "statusUpdated": "Prescription status updated",
+  "backToList": "Back",
+  "allStatuses": "All Statuses",
+  "filterByStatus": "Filter by status",
+  "print": "Print",
+  "prescribedBy": "Prescribed by",
+  "prescribedFor": "Prescribed for",
+  "prescriptionDate": "Date"
+}

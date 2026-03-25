@@ -1,0 +1,40 @@
+{
+  "title": "Re\u00e7eteler",
+  "subtitle": "Re\u00e7ete ve ila\u00e7 da\u011f\u0131t\u0131m y\u00f6netimi",
+  "createPrescription": "Re\u00e7ete Olu\u015ftur",
+  "prescriptionDetail": "Re\u00e7ete Detaylar\u0131",
+  "medication": "\u0130la\u00e7",
+  "dosage": "Dozaj",
+  "frequency": "S\u0131kl\u0131k",
+  "duration": "S\u00fcre",
+  "quantity": "Miktar",
+  "instructions": "Talimatlar",
+  "addMedication": "\u0130la\u00e7 Ekle",
+  "removeMedication": "Kald\u0131r",
+  "medications": "\u0130la\u00e7lar",
+  "noMedications": "\u0130la\u00e7 eklenmedi",
+  "status": "Durum",
+  "statuses": {
+    "PENDING": "Beklemede",
+    "DISPENSED": "Verildi",
+    "PARTIALLY_DISPENSED": "K\u0131smen Verildi",
+    "CANCELLED": "\u0130ptal Edildi"
+  },
+  "actions": {
+    "dispense": "\u0130la\u00e7 Ver",
+    "cancel": "\u0130ptal Et"
+  },
+  "notes": "Notlar",
+  "patient": "Hasta",
+  "doctor": "Doktor",
+  "date": "Tarih",
+  "prescriptionCreated": "Re\u00e7ete ba\u015far\u0131yla olu\u015fturuldu",
+  "statusUpdated": "Re\u00e7ete durumu g\u00fcncellendi",
+  "backToList": "Geri",
+  "allStatuses": "T\u00fcm Durumlar",
+  "filterByStatus": "Duruma g\u00f6re filtrele",
+  "print": "Yazd\u0131r",
+  "prescribedBy": "Yazan Doktor",
+  "prescribedFor": "Hasta",
+  "prescriptionDate": "Tarih"
+}
