@@ -1,0 +1,21 @@
+{
+  "title": "Kontrol Paneli",
+  "subtitle": "Tekrar hoş geldiniz",
+  "totalPatients": "Toplam Hasta",
+  "totalDoctors": "Toplam Doktor",
+  "todayAppointments": "Bugünkü Randevular",
+  "pendingLabResults": "Bekleyen Lab Sonuçları",
+  "recentAppointments": "Son Randevular",
+  "quickActions": "Hızlı İşlemler",
+  "newAppointment": "Yeni Randevu",
+  "registerPatient": "Hasta Kayıt",
+  "viewReports": "Raporları Görüntüle",
+  "noAppointmentsToday": "Bugün için planlanmış randevu yok",
+  "patient": "Hasta",
+  "doctor": "Doktor",
+  "time": "Saat",
+  "status": "Durum",
+  "overview": "Genel Bakış",
+  "monthlyRevenue": "Aylık Gelir",
+  "occupancyRate": "Doluluk Oranı"
+}

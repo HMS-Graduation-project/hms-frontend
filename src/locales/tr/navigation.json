@@ -1,0 +1,14 @@
+{
+  "dashboard": "Kontrol Paneli",
+  "patients": "Hastalar",
+  "doctors": "Doktorlar",
+  "departments": "Departmanlar",
+  "appointments": "Randevular",
+  "medicalRecords": "T\u0131bbi Kay\u0131tlar",
+  "prescriptions": "Re\u00e7eteler",
+  "laboratory": "Laboratuvar",
+  "billing": "Faturalama",
+  "analytics": "Analitik",
+  "users": "Kullan\u0131c\u0131 Y\u00f6netimi",
+  "settings": "Ayarlar"
+}

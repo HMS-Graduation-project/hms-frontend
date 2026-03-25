@@ -1,0 +1,14 @@
+{
+  "dashboard": "Dashboard",
+  "patients": "Patients",
+  "doctors": "Doctors",
+  "departments": "Departments",
+  "appointments": "Appointments",
+  "medicalRecords": "Medical Records",
+  "prescriptions": "Prescriptions",
+  "laboratory": "Laboratory",
+  "billing": "Billing",
+  "analytics": "Analytics",
+  "users": "User Management",
+  "settings": "Settings"
+}

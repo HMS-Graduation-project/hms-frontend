@@ -1,0 +1,21 @@
+{
+  "title": "Dashboard",
+  "subtitle": "Welcome back",
+  "totalPatients": "Total Patients",
+  "totalDoctors": "Total Doctors",
+  "todayAppointments": "Today's Appointments",
+  "pendingLabResults": "Pending Lab Results",
+  "recentAppointments": "Recent Appointments",
+  "quickActions": "Quick Actions",
+  "newAppointment": "New Appointment",
+  "registerPatient": "Register Patient",
+  "viewReports": "View Reports",
+  "noAppointmentsToday": "No appointments scheduled for today",
+  "patient": "Patient",
+  "doctor": "Doctor",
+  "time": "Time",
+  "status": "Status",
+  "overview": "Overview",
+  "monthlyRevenue": "Monthly Revenue",
+  "occupancyRate": "Occupancy Rate"
+}
