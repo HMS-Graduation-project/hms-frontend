@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { LogOut, User, ChevronDown } from 'lucide-react';
+import { LogOut, User, ChevronDown, Building2 } from 'lucide-react';
 import { useAuth } from '@/providers/auth-provider';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { LanguageSwitcher } from '@/components/language-switcher';
@@ -9,6 +9,7 @@ import { NotificationBell } from '@/components/layout/notification-bell';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
+import { Badge } from '@/components/ui/badge';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -29,7 +30,7 @@ function getInitials(email: string): string {
 }
 
 export function Header() {
-  const { user, logout } = useAuth();
+  const { user, hospital, logout } = useAuth();
   const navigate = useNavigate();
   const { t } = useTranslation('common');
   const { t: tAuth } = useTranslation('auth');
@@ -50,6 +51,29 @@ export function Header() {
       {/* Left section */}
       <div className="flex items-center gap-2">
         <MobileNav />
+        {hospital && (
+          <Badge
+            variant="secondary"
+            className="hidden items-center gap-1.5 py-1 pl-2 pr-3 sm:inline-flex"
+            title={hospital.city?.name ? `${hospital.name} — ${hospital.city.name}` : hospital.name}
+          >
+            <Building2 className="h-3.5 w-3.5" />
+            <span className="max-w-[180px] truncate text-xs font-medium">
+              {hospital.name}
+            </span>
+            {hospital.city?.name && (
+              <span className="text-[10px] text-muted-foreground">
+                · {hospital.city.name}
+              </span>
+            )}
+          </Badge>
+        )}
+        {!hospital && user?.role === 'SUPER_ADMIN' && (
+          <Badge variant="outline" className="hidden items-center gap-1.5 sm:inline-flex">
+            <Building2 className="h-3.5 w-3.5" />
+            <span className="text-xs">National scope</span>
+          </Badge>
+        )}
       </div>
 
       {/* Spacer */}
