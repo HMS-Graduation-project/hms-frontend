@@ -12,6 +12,7 @@ import {
   BarChart3,
   Settings,
   Brain,
+  ShieldCheck,
 } from 'lucide-react';
 
 export interface NavItem {
@@ -34,5 +35,6 @@ export const navigationItems: NavItem[] = [
   { label: 'aiTools', icon: Brain, href: '/ai/symptom-checker', roles: ['DOCTOR', 'ADMIN', 'HOSPITAL_ADMIN', 'SUPER_ADMIN'] },
   { label: 'analytics', icon: BarChart3, href: '/analytics', roles: ['SUPER_ADMIN', 'ADMIN', 'HOSPITAL_ADMIN'] },
   { label: 'users', icon: Users, href: '/admin/users', roles: ['SUPER_ADMIN', 'ADMIN', 'HOSPITAL_ADMIN'] },
+  { label: 'nationalRegistry', icon: ShieldCheck, href: '/admin/national-registry', roles: ['SUPER_ADMIN', 'MINISTRY_ADMIN'] },
   { label: 'settings', icon: Settings, href: '/settings', roles: ['SUPER_ADMIN', 'ADMIN', 'HOSPITAL_ADMIN'] },
 ];

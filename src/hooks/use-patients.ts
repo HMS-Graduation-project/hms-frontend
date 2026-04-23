@@ -1,10 +1,14 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '@/lib/api';
 import type { PaginatedResponse } from '@/lib/types';
+import type {
+  NationalPatient,
+  NationalPatientProfileLink,
+} from '@/hooks/use-national-registry';
 
 export interface PatientProfile {
   id: string;
-  userId: string;
+  userId: string | null;
   bloodType: string | null;
   allergies: string | null;
   emergencyContactName: string | null;
@@ -13,7 +17,7 @@ export interface PatientProfile {
   insuranceProvider: string | null;
   insurancePolicyNumber: string | null;
   medicalNotes: string | null;
-  user: {
+  user?: {
     id: string;
     email: string;
     firstName: string | null;
@@ -23,6 +27,7 @@ export interface PatientProfile {
     dateOfBirth: string | null;
     address: string | null;
   };
+  nationalPatient: NationalPatient & { profiles?: NationalPatientProfileLink[] };
   createdAt: string;
 }
 
@@ -35,15 +40,29 @@ interface UsePatientsParams {
   bloodType?: string;
 }
 
+/**
+ * Create-patient payload. Caller sends EITHER `nationalPatientId` (link mode)
+ * OR full demographic fields (new-registry mode). `email`+`password` are
+ * optional and create a login account for the patient.
+ */
 interface CreatePatientPayload {
-  email: string;
-  password: string;
+  // Link mode
+  nationalPatientId?: string;
+  // New-registry mode (required if no nationalPatientId)
+  syrianNationalId?: string;
   firstName?: string;
   lastName?: string;
-  phone?: string;
-  gender?: string;
+  firstNameAr?: string;
+  lastNameAr?: string;
   dateOfBirth?: string;
+  gender?: string;
+  // Optional login
+  email?: string;
+  password?: string;
+  // Contact / address (go to NationalPatient when creating new)
+  phone?: string;
   address?: string;
+  // Hospital-local fields
   bloodType?: string;
   allergies?: string;
   emergencyContactName?: string;
@@ -51,17 +70,14 @@ interface CreatePatientPayload {
   emergencyContactRelation?: string;
   insuranceProvider?: string;
   insurancePolicyNumber?: string;
+  medicalNotes?: string;
 }
 
 interface UpdatePatientPayload {
   id: string;
   data: {
-    firstName?: string;
-    lastName?: string;
-    phone?: string;
-    gender?: string;
-    dateOfBirth?: string;
-    address?: string;
+    // Hospital-local fields only. Demographic fields are silently dropped by
+    // the backend — use /v1/national-registry/patients/:nhid for those.
     bloodType?: string;
     allergies?: string;
     emergencyContactName?: string;
@@ -69,6 +85,7 @@ interface UpdatePatientPayload {
     emergencyContactRelation?: string;
     insuranceProvider?: string;
     insurancePolicyNumber?: string;
+    medicalNotes?: string;
   };
 }
 
@@ -110,6 +127,7 @@ export function useCreatePatient() {
     mutationFn: (payload) => api.post<PatientProfile>('/v1/patients', payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['patients'] });
+      queryClient.invalidateQueries({ queryKey: ['national-registry'] });
     },
   });
 }

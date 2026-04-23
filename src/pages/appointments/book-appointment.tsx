@@ -30,7 +30,17 @@ function getDoctorName(doctor: DoctorProfile): string {
 }
 
 function getPatientName(patient: PatientProfile): string {
-  return [patient.user.firstName, patient.user.lastName].filter(Boolean).join(' ') || patient.user.email;
+  const fromNational = [
+    patient.nationalPatient?.firstName,
+    patient.nationalPatient?.lastName,
+  ]
+    .filter(Boolean)
+    .join(' ');
+  if (fromNational) return fromNational;
+  const fromUser = [patient.user?.firstName, patient.user?.lastName]
+    .filter(Boolean)
+    .join(' ');
+  return fromUser || patient.user?.email || '—';
 }
 
 export default function BookAppointmentPage() {

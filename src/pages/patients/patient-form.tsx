@@ -1,13 +1,16 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useTranslation } from 'react-i18next';
+import { ArrowLeft, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Separator } from '@/components/ui/separator';
+import { Badge } from '@/components/ui/badge';
 import {
   Select,
   SelectContent,
@@ -21,39 +24,74 @@ import {
   useUpdatePatient,
   type PatientProfile,
 } from '@/hooks/use-patients';
+import type { NationalPatient } from '@/hooks/use-national-registry';
+import {
+  NationalPatientSearch,
+  type NationalPatientSearchResult,
+} from '@/components/patients/national-patient-search';
 
 const BLOOD_TYPES = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'] as const;
-const GENDERS = ['MALE', 'FEMALE', 'OTHER'] as const;
+// NationalPatient uses capitalized gender values per backend.
+const GENDERS = ['Male', 'Female', 'Other'] as const;
 
-function createPatientSchema(isEditing: boolean) {
-  const base = {
-    firstName: z.string().optional(),
-    lastName: z.string().optional(),
-    email: z.string().email(),
-    phone: z.string().optional(),
-    gender: z.string().optional(),
-    dateOfBirth: z.string().optional(),
-    address: z.string().optional(),
-    bloodType: z.string().optional(),
-    allergies: z.string().optional(),
-    emergencyContactName: z.string().optional(),
-    emergencyContactPhone: z.string().optional(),
-    emergencyContactRelation: z.string().optional(),
-    insuranceProvider: z.string().optional(),
-    insurancePolicyNumber: z.string().optional(),
-  };
+/* ------------------------------------------------------------------------- */
+/*  Zod schemas                                                              */
+/* ------------------------------------------------------------------------- */
 
-  if (isEditing) {
-    return z.object(base);
-  }
+// Hospital-local fields — always editable.
+const localFieldsSchema = z.object({
+  bloodType: z.string().optional(),
+  allergies: z.string().optional(),
+  emergencyContactName: z.string().optional(),
+  emergencyContactPhone: z.string().optional(),
+  emergencyContactRelation: z.string().optional(),
+  insuranceProvider: z.string().optional(),
+  insurancePolicyNumber: z.string().optional(),
+  medicalNotes: z.string().optional(),
+});
 
-  return z.object({
-    ...base,
-    password: z.string().min(6),
-  });
-}
+// Optional login credentials (only for create).
+const loginFieldsSchema = z.object({
+  email: z
+    .union([z.string().email(), z.literal('')])
+    .optional()
+    .transform((v) => (v === '' ? undefined : v)),
+  password: z
+    .union([z.string().min(6), z.literal('')])
+    .optional()
+    .transform((v) => (v === '' ? undefined : v)),
+});
 
-type PatientFormValues = z.infer<ReturnType<typeof createPatientSchema>>;
+// Demographic fields — required in "new" mode; read-only in "existing" mode.
+const newDemographicsSchema = z.object({
+  syrianNationalId: z
+    .string()
+    .regex(/^\d{11}$/, { message: 'Must be 11 digits' }),
+  firstName: z.string().min(1),
+  lastName: z.string().min(1),
+  firstNameAr: z.string().optional(),
+  lastNameAr: z.string().optional(),
+  dateOfBirth: z.string().min(1),
+  gender: z.enum(GENDERS),
+  phone: z.string().optional(),
+  address: z.string().optional(),
+});
+
+// Schemas per flow
+const createNewSchema = newDemographicsSchema
+  .merge(localFieldsSchema)
+  .merge(loginFieldsSchema);
+
+const createLinkSchema = localFieldsSchema.merge(loginFieldsSchema);
+
+const editSchema = localFieldsSchema;
+
+type CreateNewValues = z.infer<typeof createNewSchema>;
+type CreateLinkValues = z.infer<typeof createLinkSchema>;
+type EditValues = z.infer<typeof editSchema>;
+
+type Mode = 'search' | 'form';
+type FlowKind = 'new' | 'existing' | 'edit';
 
 interface PatientFormProps {
   patient?: PatientProfile | null;
@@ -61,15 +99,144 @@ interface PatientFormProps {
 }
 
 export function PatientForm({ patient, onSuccess }: PatientFormProps) {
+  const isEditing = !!patient;
+
+  const [mode, setMode] = useState<Mode>(isEditing ? 'form' : 'search');
+  const [selectedNational, setSelectedNational] = useState<NationalPatient | null>(
+    null,
+  );
+
+  // When editing, mode is always 'edit'. When creating, mode is 'new' or
+  // 'existing' after the user makes a search choice.
+  const flow: FlowKind = isEditing
+    ? 'edit'
+    : selectedNational
+      ? 'existing'
+      : 'new';
+
+  const handleSearchSelect = (result: NationalPatientSearchResult) => {
+    if (result.mode === 'existing') {
+      setSelectedNational(result.nationalPatient);
+    } else {
+      setSelectedNational(null);
+    }
+    setMode('form');
+  };
+
+  const handleBackToSearch = () => {
+    setSelectedNational(null);
+    setMode('search');
+  };
+
+  if (!isEditing && mode === 'search') {
+    return <NationalPatientSearch onSelect={handleSearchSelect} />;
+  }
+
+  return (
+    <PatientFormInner
+      key={flow + (selectedNational?.id ?? '')}
+      patient={patient ?? null}
+      selectedNational={selectedNational}
+      flow={flow}
+      onBack={isEditing ? undefined : handleBackToSearch}
+      onSuccess={onSuccess}
+    />
+  );
+}
+
+/* ------------------------------------------------------------------------- */
+/*  Inner form (active after step 1 is done or in edit mode)                 */
+/* ------------------------------------------------------------------------- */
+
+interface PatientFormInnerProps {
+  patient: PatientProfile | null;
+  selectedNational: NationalPatient | null;
+  flow: FlowKind;
+  onBack?: () => void;
+  onSuccess: () => void;
+}
+
+function PatientFormInner({
+  patient,
+  selectedNational,
+  flow,
+  onBack,
+  onSuccess,
+}: PatientFormInnerProps) {
   const { t } = useTranslation('patients');
   const { t: tCommon } = useTranslation('common');
   const { toast } = useToast();
 
-  const isEditing = !!patient;
-  const schema = createPatientSchema(isEditing);
-
   const createPatient = useCreatePatient();
   const updatePatient = useUpdatePatient();
+
+  const defaultLocalValues = (): EditValues => ({
+    bloodType: patient?.bloodType ?? '',
+    allergies: patient?.allergies ?? '',
+    emergencyContactName: patient?.emergencyContactName ?? '',
+    emergencyContactPhone: patient?.emergencyContactPhone ?? '',
+    emergencyContactRelation: patient?.emergencyContactRelation ?? '',
+    insuranceProvider: patient?.insuranceProvider ?? '',
+    insurancePolicyNumber: patient?.insurancePolicyNumber ?? '',
+    medicalNotes: patient?.medicalNotes ?? '',
+  });
+
+  // Pick the schema based on flow.
+  const activeSchema =
+    flow === 'new'
+      ? createNewSchema
+      : flow === 'existing'
+        ? createLinkSchema
+        : editSchema;
+
+  /**
+   * A superset form type. Schema validation narrows individual fields per
+   * flow; this shape just captures every possible field so a single
+   * `useForm` call can be reused.
+   */
+  type FormValues = Partial<CreateNewValues> & Partial<CreateLinkValues> &
+    EditValues & {
+      syrianNationalId?: string;
+      firstName?: string;
+      lastName?: string;
+      firstNameAr?: string;
+      lastNameAr?: string;
+      dateOfBirth?: string;
+      gender?: string;
+      phone?: string;
+      address?: string;
+      email?: string;
+      password?: string;
+    };
+
+  const form = useForm<FormValues>({
+    resolver: zodResolver(
+      activeSchema as unknown as z.ZodType<FormValues>,
+    ),
+    defaultValues:
+      flow === 'new'
+        ? {
+            syrianNationalId: '',
+            firstName: '',
+            lastName: '',
+            firstNameAr: '',
+            lastNameAr: '',
+            dateOfBirth: '',
+            gender: undefined,
+            phone: '',
+            address: '',
+            email: '',
+            password: '',
+            ...defaultLocalValues(),
+          }
+        : flow === 'existing'
+          ? {
+              email: '',
+              password: '',
+              ...defaultLocalValues(),
+            }
+          : defaultLocalValues(),
+  });
 
   const {
     register,
@@ -78,239 +245,405 @@ export function PatientForm({ patient, onSuccess }: PatientFormProps) {
     reset,
     watch,
     formState: { errors, isSubmitting },
-  } = useForm<PatientFormValues>({
-    resolver: zodResolver(schema),
-    defaultValues: {
-      firstName: '',
-      lastName: '',
-      email: '',
-      phone: '',
-      gender: '',
-      dateOfBirth: '',
-      address: '',
-      bloodType: '',
-      allergies: '',
-      emergencyContactName: '',
-      emergencyContactPhone: '',
-      emergencyContactRelation: '',
-      insuranceProvider: '',
-      insurancePolicyNumber: '',
-      ...(isEditing ? {} : { password: '' }),
-    },
-  });
+  } = form;
 
   const selectedGender = watch('gender');
   const selectedBloodType = watch('bloodType');
 
+  // Reset when editing a different patient (keeps form in sync).
   useEffect(() => {
-    if (patient) {
-      reset({
-        firstName: patient.user.firstName ?? '',
-        lastName: patient.user.lastName ?? '',
-        email: patient.user.email,
-        phone: patient.user.phone ?? '',
-        gender: patient.user.gender ?? '',
-        dateOfBirth: patient.user.dateOfBirth
-          ? patient.user.dateOfBirth.substring(0, 10)
-          : '',
-        address: patient.user.address ?? '',
-        bloodType: patient.bloodType ?? '',
-        allergies: patient.allergies ?? '',
-        emergencyContactName: patient.emergencyContactName ?? '',
-        emergencyContactPhone: patient.emergencyContactPhone ?? '',
-        emergencyContactRelation: patient.emergencyContactRelation ?? '',
-        insuranceProvider: patient.insuranceProvider ?? '',
-        insurancePolicyNumber: patient.insurancePolicyNumber ?? '',
-      });
+    if (flow === 'edit') {
+      reset(defaultLocalValues() as FormValues);
     }
-  }, [patient, reset]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [patient?.id, flow]);
 
-  const onSubmit = async (values: PatientFormValues) => {
+  const nationalForDisplay: NationalPatient | null =
+    selectedNational ?? patient?.nationalPatient ?? null;
+
+  const fullNameDisplay = nationalForDisplay
+    ? [nationalForDisplay.firstName, nationalForDisplay.lastName]
+        .filter(Boolean)
+        .join(' ')
+    : '';
+
+  const onSubmit = async (values: FormValues) => {
     try {
-      if (isEditing && patient) {
-        const { email, ...rest } = values;
-        void email;
+      if (flow === 'edit' && patient) {
         await updatePatient.mutateAsync({
           id: patient.id,
-          data: rest,
+          data: {
+            bloodType: values.bloodType || undefined,
+            allergies: values.allergies || undefined,
+            emergencyContactName: values.emergencyContactName || undefined,
+            emergencyContactPhone: values.emergencyContactPhone || undefined,
+            emergencyContactRelation: values.emergencyContactRelation || undefined,
+            insuranceProvider: values.insuranceProvider || undefined,
+            insurancePolicyNumber: values.insurancePolicyNumber || undefined,
+            medicalNotes: values.medicalNotes || undefined,
+          },
         });
-        toast({
-          title: t('patientUpdated'),
-          variant: 'success',
+        toast({ title: t('patientUpdated'), variant: 'success' });
+      } else if (flow === 'existing' && selectedNational) {
+        await createPatient.mutateAsync({
+          nationalPatientId: selectedNational.id,
+          email: values.email || undefined,
+          password: values.password || undefined,
+          bloodType: values.bloodType || undefined,
+          allergies: values.allergies || undefined,
+          emergencyContactName: values.emergencyContactName || undefined,
+          emergencyContactPhone: values.emergencyContactPhone || undefined,
+          emergencyContactRelation: values.emergencyContactRelation || undefined,
+          insuranceProvider: values.insuranceProvider || undefined,
+          insurancePolicyNumber: values.insurancePolicyNumber || undefined,
+          medicalNotes: values.medicalNotes || undefined,
         });
+        toast({ title: t('patientCreated'), variant: 'success' });
       } else {
-        await createPatient.mutateAsync(
-          values as Parameters<typeof createPatient.mutateAsync>[0]
-        );
-        toast({
-          title: t('patientCreated'),
-          variant: 'success',
+        // New national + new profile. Zod schema guarantees the required
+        // demographic fields are present in this branch.
+        await createPatient.mutateAsync({
+          syrianNationalId: values.syrianNationalId ?? '',
+          firstName: values.firstName ?? '',
+          lastName: values.lastName ?? '',
+          firstNameAr: values.firstNameAr || undefined,
+          lastNameAr: values.lastNameAr || undefined,
+          dateOfBirth: values.dateOfBirth ?? '',
+          gender: values.gender ?? '',
+          phone: values.phone || undefined,
+          address: values.address || undefined,
+          email: values.email || undefined,
+          password: values.password || undefined,
+          bloodType: values.bloodType || undefined,
+          allergies: values.allergies || undefined,
+          emergencyContactName: values.emergencyContactName || undefined,
+          emergencyContactPhone: values.emergencyContactPhone || undefined,
+          emergencyContactRelation: values.emergencyContactRelation || undefined,
+          insuranceProvider: values.insuranceProvider || undefined,
+          insurancePolicyNumber: values.insurancePolicyNumber || undefined,
+          medicalNotes: values.medicalNotes || undefined,
         });
+        toast({ title: t('patientCreated'), variant: 'success' });
       }
       onSuccess();
     } catch {
-      toast({
-        title: tCommon('error'),
-        variant: 'destructive',
-      });
+      toast({ title: tCommon('error'), variant: 'destructive' });
     }
   };
 
   const isPending = createPatient.isPending || updatePatient.isPending;
 
+  // error accessor that works across the union form values type
+  const err = errors as Record<string, { message?: string } | undefined>;
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-      {/* Personal Information */}
-      <div>
-        <h4 className="text-sm font-medium text-muted-foreground mb-3">
-          {t('personalInfo')}
-        </h4>
-        <div className="space-y-4">
-          {/* Email */}
-          <div className="space-y-2">
-            <Label htmlFor="email">{t('email')}</Label>
-            <Input
-              id="email"
-              type="email"
-              {...register('email')}
-              placeholder={t('email')}
-              disabled={isEditing}
-            />
-            {errors.email && (
-              <p className="text-sm text-destructive">{errors.email.message}</p>
+      {/* Step-1 summary header (create only) */}
+      {flow !== 'edit' && onBack && (
+        <div className="flex items-start justify-between gap-2 rounded-md border bg-muted/30 p-3">
+          <div className="flex-1 min-w-0">
+            {flow === 'existing' ? (
+              <>
+                <p className="text-xs font-medium text-muted-foreground">
+                  {t('linkingToExisting')}
+                </p>
+                <p className="text-sm font-medium truncate">
+                  {fullNameDisplay}
+                </p>
+                {nationalForDisplay?.syrianNationalId && (
+                  <p className="text-xs text-muted-foreground">
+                    {t('syrianNationalId')}:{' '}
+                    {nationalForDisplay.syrianNationalId}
+                  </p>
+                )}
+              </>
+            ) : (
+              <>
+                <p className="text-xs font-medium text-muted-foreground">
+                  {t('registeringNewNational')}
+                </p>
+                <p className="text-sm">{t('registeringNewNationalDesc')}</p>
+              </>
             )}
           </div>
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={onBack}
+            className="shrink-0"
+          >
+            <ArrowLeft className="mr-1 h-3 w-3" />
+            {t('change')}
+          </Button>
+        </div>
+      )}
 
-          {/* Password (create only) */}
-          {!isEditing && (
+      {/* Edit-mode national-registry banner */}
+      {flow === 'edit' && nationalForDisplay && (
+        <div className="rounded-md border bg-muted/30 p-3">
+          <div className="flex items-start justify-between gap-2">
+            <div className="flex-1 min-w-0 space-y-1">
+              <p className="text-xs font-medium text-muted-foreground">
+                {t('nationalRegistryRecord')}
+              </p>
+              <p className="text-sm font-medium">{fullNameDisplay}</p>
+              {nationalForDisplay.syrianNationalId && (
+                <p className="text-xs text-muted-foreground">
+                  {t('syrianNationalId')}:{' '}
+                  {nationalForDisplay.syrianNationalId}
+                </p>
+              )}
+            </div>
+            <Button
+              asChild
+              type="button"
+              variant="outline"
+              size="sm"
+              className="shrink-0"
+            >
+              <Link to={`/admin/national-registry?nhid=${nationalForDisplay.id}`}>
+                <ExternalLink className="mr-1 h-3 w-3" />
+                {t('editInNationalRegistry')}
+              </Link>
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {/* Demographics section */}
+      {flow !== 'edit' && (
+        <div>
+          <h4 className="text-sm font-medium text-muted-foreground mb-3">
+            {t('nationalDemographics')}
+          </h4>
+          <div className="space-y-4">
+            {/* Syrian National ID */}
+            <div className="space-y-2">
+              <Label htmlFor="syrianNationalId">{t('syrianNationalId')}</Label>
+              {flow === 'new' ? (
+                <Input
+                  id="syrianNationalId"
+                  inputMode="numeric"
+                  maxLength={11}
+                  {...register('syrianNationalId')}
+                  placeholder={t('nationalIdPlaceholder')}
+                />
+              ) : (
+                <Input
+                  id="syrianNationalId"
+                  readOnly
+                  value={nationalForDisplay?.syrianNationalId ?? ''}
+                  className="bg-muted"
+                />
+              )}
+              {err.syrianNationalId?.message && (
+                <p className="text-sm text-destructive">
+                  {err.syrianNationalId.message}
+                </p>
+              )}
+            </div>
+
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div className="space-y-2">
+                <Label htmlFor="firstName">{t('firstName')}</Label>
+                {flow === 'new' ? (
+                  <Input id="firstName" {...register('firstName')} />
+                ) : (
+                  <Input
+                    id="firstName"
+                    readOnly
+                    value={nationalForDisplay?.firstName ?? ''}
+                    className="bg-muted"
+                  />
+                )}
+                {err.firstName?.message && (
+                  <p className="text-sm text-destructive">
+                    {err.firstName.message}
+                  </p>
+                )}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="lastName">{t('lastName')}</Label>
+                {flow === 'new' ? (
+                  <Input id="lastName" {...register('lastName')} />
+                ) : (
+                  <Input
+                    id="lastName"
+                    readOnly
+                    value={nationalForDisplay?.lastName ?? ''}
+                    className="bg-muted"
+                  />
+                )}
+                {err.lastName?.message && (
+                  <p className="text-sm text-destructive">
+                    {err.lastName.message}
+                  </p>
+                )}
+              </div>
+            </div>
+
+            {flow === 'new' && (
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div className="space-y-2">
+                  <Label htmlFor="firstNameAr">{t('firstNameAr')}</Label>
+                  <Input
+                    id="firstNameAr"
+                    dir="rtl"
+                    {...register('firstNameAr')}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="lastNameAr">{t('lastNameAr')}</Label>
+                  <Input
+                    id="lastNameAr"
+                    dir="rtl"
+                    {...register('lastNameAr')}
+                  />
+                </div>
+              </div>
+            )}
+
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div className="space-y-2">
+                <Label htmlFor="dateOfBirth">{t('dateOfBirth')}</Label>
+                {flow === 'new' ? (
+                  <Input
+                    id="dateOfBirth"
+                    type="date"
+                    {...register('dateOfBirth')}
+                  />
+                ) : (
+                  <Input
+                    id="dateOfBirth"
+                    readOnly
+                    value={
+                      nationalForDisplay?.dateOfBirth
+                        ? nationalForDisplay.dateOfBirth.substring(0, 10)
+                        : ''
+                    }
+                    className="bg-muted"
+                  />
+                )}
+                {err.dateOfBirth?.message && (
+                  <p className="text-sm text-destructive">
+                    {err.dateOfBirth.message}
+                  </p>
+                )}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="gender">{t('gender')}</Label>
+                {flow === 'new' ? (
+                  <Select
+                    value={selectedGender || ''}
+                    onValueChange={(value) =>
+                      setValue(
+                        'gender',
+                        value as 'Male' | 'Female' | 'Other',
+                        { shouldValidate: true },
+                      )
+                    }
+                  >
+                    <SelectTrigger id="gender">
+                      <SelectValue placeholder={t('selectGender')} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {GENDERS.map((g) => (
+                        <SelectItem key={g} value={g}>
+                          {t(g.toLowerCase() as 'male' | 'female' | 'other')}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                ) : (
+                  <Input
+                    id="gender"
+                    readOnly
+                    value={nationalForDisplay?.gender ?? ''}
+                    className="bg-muted"
+                  />
+                )}
+                {err.gender?.message && (
+                  <p className="text-sm text-destructive">
+                    {err.gender.message}
+                  </p>
+                )}
+              </div>
+            </div>
+
+            {flow === 'new' && (
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div className="space-y-2">
+                  <Label htmlFor="phone">{t('phone')}</Label>
+                  <Input id="phone" type="tel" {...register('phone')} />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="address">{t('address')}</Label>
+                  <Input id="address" {...register('address')} />
+                </div>
+              </div>
+            )}
+          </div>
+          <Separator className="my-6" />
+        </div>
+      )}
+
+      {/* Optional login credentials (create only) */}
+      {flow !== 'edit' && (
+        <div>
+          <h4 className="text-sm font-medium text-muted-foreground mb-3">
+            {t('loginCredentialsOptional')}
+          </h4>
+          <p className="text-xs text-muted-foreground mb-3">
+            {t('loginCredentialsHelp')}
+          </p>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div className="space-y-2">
+              <Label htmlFor="email">{t('email')}</Label>
+              <Input
+                id="email"
+                type="email"
+                {...register('email')}
+                placeholder={t('email')}
+              />
+              {err.email?.message && (
+                <p className="text-sm text-destructive">{err.email.message}</p>
+              )}
+            </div>
             <div className="space-y-2">
               <Label htmlFor="password">{t('password')}</Label>
               <Input
                 id="password"
                 type="password"
-                {...register('password' as keyof PatientFormValues)}
+                {...register('password')}
                 placeholder={t('password')}
               />
-              {(errors as Record<string, { message?: string }>).password && (
+              {err.password?.message && (
                 <p className="text-sm text-destructive">
-                  {(errors as Record<string, { message?: string }>).password?.message}
+                  {err.password.message}
                 </p>
               )}
             </div>
-          )}
-
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            {/* First Name */}
-            <div className="space-y-2">
-              <Label htmlFor="firstName">{t('firstName')}</Label>
-              <Input
-                id="firstName"
-                {...register('firstName')}
-                placeholder={t('firstName')}
-              />
-              {errors.firstName && (
-                <p className="text-sm text-destructive">{errors.firstName.message}</p>
-              )}
-            </div>
-
-            {/* Last Name */}
-            <div className="space-y-2">
-              <Label htmlFor="lastName">{t('lastName')}</Label>
-              <Input
-                id="lastName"
-                {...register('lastName')}
-                placeholder={t('lastName')}
-              />
-              {errors.lastName && (
-                <p className="text-sm text-destructive">{errors.lastName.message}</p>
-              )}
-            </div>
           </div>
-
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            {/* Phone */}
-            <div className="space-y-2">
-              <Label htmlFor="phone">{t('phone')}</Label>
-              <Input
-                id="phone"
-                type="tel"
-                {...register('phone')}
-                placeholder={t('phone')}
-              />
-              {errors.phone && (
-                <p className="text-sm text-destructive">{errors.phone.message}</p>
-              )}
-            </div>
-
-            {/* Gender */}
-            <div className="space-y-2">
-              <Label htmlFor="gender">{t('gender')}</Label>
-              <Select
-                value={selectedGender}
-                onValueChange={(value) =>
-                  setValue('gender', value, { shouldValidate: true })
-                }
-              >
-                <SelectTrigger id="gender">
-                  <SelectValue placeholder={t('selectGender')} />
-                </SelectTrigger>
-                <SelectContent>
-                  {GENDERS.map((g) => (
-                    <SelectItem key={g} value={g}>
-                      {t(g.toLowerCase() as 'male' | 'female' | 'other')}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              {errors.gender && (
-                <p className="text-sm text-destructive">{errors.gender.message}</p>
-              )}
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            {/* Date of Birth */}
-            <div className="space-y-2">
-              <Label htmlFor="dateOfBirth">{t('dateOfBirth')}</Label>
-              <Input
-                id="dateOfBirth"
-                type="date"
-                {...register('dateOfBirth')}
-              />
-              {errors.dateOfBirth && (
-                <p className="text-sm text-destructive">{errors.dateOfBirth.message}</p>
-              )}
-            </div>
-
-            {/* Address */}
-            <div className="space-y-2">
-              <Label htmlFor="address">{t('address')}</Label>
-              <Input
-                id="address"
-                {...register('address')}
-                placeholder={t('address')}
-              />
-              {errors.address && (
-                <p className="text-sm text-destructive">{errors.address.message}</p>
-              )}
-            </div>
-          </div>
+          <Separator className="my-6" />
         </div>
-      </div>
+      )}
 
-      <Separator />
-
-      {/* Medical Information */}
+      {/* Hospital-local medical info */}
       <div>
         <h4 className="text-sm font-medium text-muted-foreground mb-3">
           {t('medicalInfo')}
+          {flow !== 'edit' && (
+            <Badge variant="outline" className="ml-2 text-[10px]">
+              {t('hospitalLocal')}
+            </Badge>
+          )}
         </h4>
         <div className="space-y-4">
-          {/* Blood Type */}
           <div className="space-y-2">
             <Label htmlFor="bloodType">{t('bloodType')}</Label>
             <Select
-              value={selectedBloodType}
+              value={(selectedBloodType as string) || ''}
               onValueChange={(value) =>
                 setValue('bloodType', value, { shouldValidate: true })
               }
@@ -326,12 +659,7 @@ export function PatientForm({ patient, onSuccess }: PatientFormProps) {
                 ))}
               </SelectContent>
             </Select>
-            {errors.bloodType && (
-              <p className="text-sm text-destructive">{errors.bloodType.message}</p>
-            )}
           </div>
-
-          {/* Allergies */}
           <div className="space-y-2">
             <Label htmlFor="allergies">{t('allergies')}</Label>
             <Textarea
@@ -340,38 +668,28 @@ export function PatientForm({ patient, onSuccess }: PatientFormProps) {
               placeholder={t('allergies')}
               rows={3}
             />
-            {errors.allergies && (
-              <p className="text-sm text-destructive">{errors.allergies.message}</p>
-            )}
           </div>
         </div>
       </div>
 
       <Separator />
 
-      {/* Emergency Contact */}
+      {/* Emergency contact */}
       <div>
         <h4 className="text-sm font-medium text-muted-foreground mb-3">
           {t('emergencyContact')}
         </h4>
         <div className="space-y-4">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            {/* Emergency Contact Name */}
             <div className="space-y-2">
-              <Label htmlFor="emergencyContactName">{t('emergencyContactName')}</Label>
+              <Label htmlFor="emergencyContactName">
+                {t('emergencyContactName')}
+              </Label>
               <Input
                 id="emergencyContactName"
                 {...register('emergencyContactName')}
-                placeholder={t('emergencyContactName')}
               />
-              {errors.emergencyContactName && (
-                <p className="text-sm text-destructive">
-                  {errors.emergencyContactName.message}
-                </p>
-              )}
             </div>
-
-            {/* Emergency Contact Phone */}
             <div className="space-y-2">
               <Label htmlFor="emergencyContactPhone">
                 {t('emergencyContactPhone')}
@@ -380,17 +698,9 @@ export function PatientForm({ patient, onSuccess }: PatientFormProps) {
                 id="emergencyContactPhone"
                 type="tel"
                 {...register('emergencyContactPhone')}
-                placeholder={t('emergencyContactPhone')}
               />
-              {errors.emergencyContactPhone && (
-                <p className="text-sm text-destructive">
-                  {errors.emergencyContactPhone.message}
-                </p>
-              )}
             </div>
           </div>
-
-          {/* Emergency Contact Relation */}
           <div className="space-y-2">
             <Label htmlFor="emergencyContactRelation">
               {t('emergencyContactRelation')}
@@ -398,13 +708,7 @@ export function PatientForm({ patient, onSuccess }: PatientFormProps) {
             <Input
               id="emergencyContactRelation"
               {...register('emergencyContactRelation')}
-              placeholder={t('emergencyContactRelation')}
             />
-            {errors.emergencyContactRelation && (
-              <p className="text-sm text-destructive">
-                {errors.emergencyContactRelation.message}
-              </p>
-            )}
           </div>
         </div>
       </div>
@@ -417,22 +721,13 @@ export function PatientForm({ patient, onSuccess }: PatientFormProps) {
           {t('insurance')}
         </h4>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          {/* Insurance Provider */}
           <div className="space-y-2">
             <Label htmlFor="insuranceProvider">{t('insuranceProvider')}</Label>
             <Input
               id="insuranceProvider"
               {...register('insuranceProvider')}
-              placeholder={t('insuranceProvider')}
             />
-            {errors.insuranceProvider && (
-              <p className="text-sm text-destructive">
-                {errors.insuranceProvider.message}
-              </p>
-            )}
           </div>
-
-          {/* Insurance Policy Number */}
           <div className="space-y-2">
             <Label htmlFor="insurancePolicyNumber">
               {t('insurancePolicyNumber')}
@@ -440,13 +735,7 @@ export function PatientForm({ patient, onSuccess }: PatientFormProps) {
             <Input
               id="insurancePolicyNumber"
               {...register('insurancePolicyNumber')}
-              placeholder={t('insurancePolicyNumber')}
             />
-            {errors.insurancePolicyNumber && (
-              <p className="text-sm text-destructive">
-                {errors.insurancePolicyNumber.message}
-              </p>
-            )}
           </div>
         </div>
       </div>
@@ -456,7 +745,7 @@ export function PatientForm({ patient, onSuccess }: PatientFormProps) {
         <Button type="submit" disabled={isPending || isSubmitting}>
           {isPending
             ? tCommon('loading')
-            : isEditing
+            : flow === 'edit'
               ? t('updatePatient')
               : t('createPatient')}
         </Button>

@@ -11,6 +11,7 @@ import RegisterPage from '@/pages/register';
 import DashboardPage from '@/pages/dashboard';
 import ProfilePage from '@/pages/profile';
 import UsersPage from '@/pages/admin/users';
+import NationalRegistryPage from '@/pages/admin/national-registry';
 import DepartmentsPage from '@/pages/departments';
 import DepartmentDetailPage from '@/pages/departments/department-detail';
 import DoctorsPage from '@/pages/doctors';
@@ -61,6 +62,7 @@ export default function App() {
               <Route path="/dashboard" element={<DashboardPage />} />
               <Route path="/profile" element={<ProfilePage />} />
               <Route path="/admin/users" element={<UsersPage />} />
+              <Route path="/admin/national-registry" element={<NationalRegistryPage />} />
               <Route path="/departments" element={<DepartmentsPage />} />
               <Route path="/departments/:id" element={<DepartmentDetailPage />} />
               <Route path="/doctors" element={<DoctorsPage />} />

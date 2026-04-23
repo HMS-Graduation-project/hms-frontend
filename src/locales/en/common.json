@@ -56,5 +56,6 @@
   "tryAgain": "Try Again",
   "goHome": "Go Home",
   "noData": "No data available",
-  "areYouSure": "Are you sure?"
+  "areYouSure": "Are you sure?",
+  "notFound": "Not found"
 }

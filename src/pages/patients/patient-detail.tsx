@@ -17,10 +17,14 @@ import {
   CreditCard,
   Pill,
   Eye,
+  IdCard,
+  Hospital as HospitalIcon,
+  AlertTriangle,
 } from 'lucide-react';
 import { usePatient } from '@/hooks/use-patients';
 import { usePatientMedicalRecords } from '@/hooks/use-medical-records';
 import { usePatientPrescriptions, type PrescriptionStatus } from '@/hooks/use-prescriptions';
+import { useAuth } from '@/providers/auth-provider';
 import { PatientTimeline } from '@/components/medical-records/patient-timeline';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -48,6 +52,7 @@ export default function PatientDetailPage() {
   const navigate = useNavigate();
   const { t } = useTranslation('patients');
   const { t: tCommon } = useTranslation('common');
+  const { hospital } = useAuth();
 
   const { t: tMR } = useTranslation('medical-records');
   const { t: tRx } = useTranslation('prescriptions');
@@ -71,15 +76,23 @@ export default function PatientDetailPage() {
     );
   }
 
-  const fullName = [patient.user.firstName, patient.user.lastName]
+  const national = patient.nationalPatient;
+  const fullName = [national?.firstName, national?.lastName]
     .filter(Boolean)
     .join(' ');
+  const fullNameAr = [national?.firstNameAr, national?.lastNameAr]
+    .filter(Boolean)
+    .join(' ');
+
+  const otherProfiles =
+    national?.profiles?.filter((p) => p.id !== patient.id) ?? [];
+  const allProfiles = national?.profiles ?? [];
 
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 min-w-0">
           <Button
             variant="ghost"
             size="icon"
@@ -88,11 +101,27 @@ export default function PatientDetailPage() {
           >
             <ArrowLeft className="h-4 w-4" />
           </Button>
-          <div>
-            <h1 className="text-2xl font-bold tracking-tight">
-              {fullName || patient.user.email}
+          <div className="min-w-0">
+            <h1 className="text-2xl font-bold tracking-tight truncate">
+              {fullName || patient.user?.email || t('unnamedPatient')}
             </h1>
-            <p className="text-muted-foreground">{t('details')}</p>
+            <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
+              {national?.id && (
+                <span className="flex items-center gap-1">
+                  <IdCard className="h-3 w-3" />
+                  {t('nhid')}: {national.id.slice(0, 8)}
+                  <span className="opacity-60">…</span>
+                </span>
+              )}
+              {national?.syrianNationalId && (
+                <>
+                  <span className="opacity-50">·</span>
+                  <span>
+                    {t('syrianNationalId')}: {national.syrianNationalId}
+                  </span>
+                </>
+              )}
+            </div>
           </div>
         </div>
         <Button
@@ -103,6 +132,17 @@ export default function PatientDetailPage() {
           {t('editPatient')}
         </Button>
       </div>
+
+      {/* Critical alerts banner */}
+      {national?.criticalAlerts && (
+        <div className="flex items-start gap-2 rounded-md border border-destructive/50 bg-destructive/10 px-4 py-3 text-destructive">
+          <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
+          <div className="space-y-0.5">
+            <p className="text-sm font-semibold">{t('criticalAlerts')}</p>
+            <p className="text-sm">{national.criticalAlerts}</p>
+          </div>
+        </div>
+      )}
 
       {/* Tabs */}
       <Tabs defaultValue="profile">
@@ -117,12 +157,15 @@ export default function PatientDetailPage() {
 
         {/* Profile Tab */}
         <TabsContent value="profile" className="space-y-6">
-          {/* Personal Information */}
+          {/* Personal Information (from NationalPatient) */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-lg">
                 <User className="h-5 w-5" />
                 {t('personalInfo')}
+                <Badge variant="outline" className="ml-auto text-[10px]">
+                  {t('fromNationalRegistry')}
+                </Badge>
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -132,22 +175,40 @@ export default function PatientDetailPage() {
                   label={t('name')}
                   value={fullName}
                 />
+                {fullNameAr && (
+                  <InfoItem
+                    icon={<User className="h-4 w-4" />}
+                    label={t('nameAr')}
+                    value={fullNameAr}
+                  />
+                )}
+                <InfoItem
+                  icon={<IdCard className="h-4 w-4" />}
+                  label={t('syrianNationalId')}
+                  value={national?.syrianNationalId}
+                />
                 <InfoItem
                   icon={<Mail className="h-4 w-4" />}
                   label={t('email')}
-                  value={patient.user.email}
+                  value={patient.user?.email}
                 />
                 <InfoItem
                   icon={<Phone className="h-4 w-4" />}
                   label={t('phone')}
-                  value={patient.user.phone}
+                  value={national?.phone}
                 />
                 <InfoItem
                   icon={<User className="h-4 w-4" />}
                   label={t('gender')}
                   value={
-                    patient.user.gender
-                      ? t(patient.user.gender.toLowerCase() as 'male' | 'female' | 'other')
+                    national?.gender
+                      ? t(
+                          national.gender.toLowerCase() as
+                            | 'male'
+                            | 'female'
+                            | 'other',
+                          { defaultValue: national.gender },
+                        )
                       : null
                   }
                 />
@@ -155,19 +216,77 @@ export default function PatientDetailPage() {
                   icon={<Calendar className="h-4 w-4" />}
                   label={t('dateOfBirth')}
                   value={
-                    patient.user.dateOfBirth
-                      ? new Date(patient.user.dateOfBirth).toLocaleDateString()
+                    national?.dateOfBirth
+                      ? new Date(national.dateOfBirth).toLocaleDateString()
                       : null
                   }
                 />
                 <InfoItem
                   icon={<MapPin className="h-4 w-4" />}
                   label={t('address')}
-                  value={patient.user.address}
+                  value={national?.address}
                 />
               </div>
             </CardContent>
           </Card>
+
+          {/* Registered at (cross-hospital) */}
+          {allProfiles.length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <HospitalIcon className="h-5 w-5" />
+                  {t('alsoRegisteredAt')}
+                </CardTitle>
+                <CardDescription>
+                  {otherProfiles.length > 0
+                    ? t('crossHospitalInformational')
+                    : t('onlyHereSoFar')}
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2">
+                  {allProfiles.map((p) => {
+                    const isCurrent = p.id === patient.id;
+                    return (
+                      <div
+                        key={p.id}
+                        className="flex items-center justify-between rounded-md border p-3"
+                      >
+                        <div className="min-w-0">
+                          <p className="text-sm font-medium truncate">
+                            {p.hospital.name}
+                          </p>
+                          {p.hospital.nameAr && (
+                            <p
+                              className="text-xs text-muted-foreground truncate"
+                              dir="rtl"
+                            >
+                              {p.hospital.nameAr}
+                            </p>
+                          )}
+                          <p className="text-xs text-muted-foreground">
+                            {p.hospital.code}
+                          </p>
+                        </div>
+                        {isCurrent ? (
+                          <Badge variant="success" className="text-[10px]">
+                            {t('thisHospital')}
+                          </Badge>
+                        ) : (
+                          hospital?.id === p.hospitalId && (
+                            <Badge variant="success" className="text-[10px]">
+                              {t('thisHospital')}
+                            </Badge>
+                          )
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </CardContent>
+            </Card>
+          )}
 
           {/* Medical Information */}
           <Card>
@@ -180,26 +299,48 @@ export default function PatientDetailPage() {
             <CardContent>
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div className="space-y-1">
-                  <p className="text-sm text-muted-foreground">{t('bloodType')}</p>
-                  {patient.bloodType ? (
-                    <Badge variant="secondary">{patient.bloodType}</Badge>
+                  <p className="text-sm text-muted-foreground">
+                    {t('bloodType')}
+                  </p>
+                  {patient.bloodType || national?.bloodType ? (
+                    <Badge variant="secondary">
+                      {patient.bloodType ?? national?.bloodType}
+                    </Badge>
                   ) : (
                     <p className="text-sm text-muted-foreground">--</p>
                   )}
                 </div>
                 <div className="space-y-1">
-                  <p className="text-sm text-muted-foreground">{t('allergies')}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {t('allergies')}
+                  </p>
                   <p className="text-sm">
-                    {patient.allergies || t('noAllergies')}
+                    {patient.allergies ??
+                      national?.allergies ??
+                      t('noAllergies')}
                   </p>
                 </div>
+                {national?.chronicConditions && (
+                  <div className="space-y-1 sm:col-span-2">
+                    <p className="text-sm text-muted-foreground">
+                      {t('chronicConditions')}
+                    </p>
+                    <p className="text-sm whitespace-pre-wrap">
+                      {national.chronicConditions}
+                    </p>
+                  </div>
+                )}
               </div>
               {patient.medicalNotes && (
                 <>
                   <Separator className="my-4" />
                   <div className="space-y-1">
-                    <p className="text-sm text-muted-foreground">{t('medicalNotes')}</p>
-                    <p className="text-sm whitespace-pre-wrap">{patient.medicalNotes}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {t('medicalNotes')}
+                    </p>
+                    <p className="text-sm whitespace-pre-wrap">
+                      {patient.medicalNotes}
+                    </p>
                   </div>
                 </>
               )}

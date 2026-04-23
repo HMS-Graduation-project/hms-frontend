@@ -56,5 +56,6 @@
   "tryAgain": "Tekrar Dene",
   "goHome": "Ana Sayfa",
   "noData": "Veri bulunamadı",
-  "areYouSure": "Emin misiniz?"
+  "areYouSure": "Emin misiniz?",
+  "notFound": "Bulunamadı"
 }

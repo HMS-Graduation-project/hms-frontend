@@ -75,13 +75,18 @@ export default function PatientsPage() {
         label: t('name'),
         sortable: true,
         render: (row) => {
-          const name = [row.user.firstName, row.user.lastName]
+          const name = [
+            row.nationalPatient?.firstName,
+            row.nationalPatient?.lastName,
+          ]
             .filter(Boolean)
             .join(' ');
           return (
             <span className="font-medium">
               {name || (
-                <span className="text-muted-foreground">{row.user.email}</span>
+                <span className="text-muted-foreground">
+                  {row.user?.email ?? '--'}
+                </span>
               )}
             </span>
           );
@@ -93,7 +98,7 @@ export default function PatientsPage() {
         sortable: false,
         render: (row) => (
           <span className="text-muted-foreground">
-            {row.user.phone || '--'}
+            {row.nationalPatient?.phone || row.user?.phone || '--'}
           </span>
         ),
       },
@@ -101,24 +106,31 @@ export default function PatientsPage() {
         key: 'bloodType',
         label: t('bloodType'),
         sortable: false,
-        render: (row) =>
-          row.bloodType ? (
-            <Badge variant="secondary">{row.bloodType}</Badge>
+        render: (row) => {
+          const bt = row.bloodType ?? row.nationalPatient?.bloodType;
+          return bt ? (
+            <Badge variant="secondary">{bt}</Badge>
           ) : (
             <span className="text-muted-foreground">--</span>
-          ),
+          );
+        },
       },
       {
         key: 'gender',
         label: t('gender'),
         sortable: false,
-        render: (row) => (
-          <span className="text-muted-foreground">
-            {row.user.gender
-              ? t(row.user.gender.toLowerCase() as 'male' | 'female' | 'other')
-              : '--'}
-          </span>
-        ),
+        render: (row) => {
+          const gender = row.nationalPatient?.gender ?? row.user?.gender;
+          return (
+            <span className="text-muted-foreground">
+              {gender
+                ? t(gender.toLowerCase() as 'male' | 'female' | 'other', {
+                    defaultValue: gender,
+                  })
+                : '--'}
+            </span>
+          );
+        },
       },
       {
         key: 'insuranceProvider',
