@@ -11,6 +11,7 @@ import {
   Receipt,
   BarChart3,
   Settings,
+  Brain,
 } from 'lucide-react';
 
 export interface NavItem {
@@ -30,6 +31,7 @@ export const navigationItems: NavItem[] = [
   { label: 'prescriptions', icon: Pill, href: '/prescriptions', roles: ['SUPER_ADMIN', 'ADMIN', 'DOCTOR', 'NURSE', 'PHARMACIST'] },
   { label: 'laboratory', icon: FlaskConical, href: '/laboratory', roles: ['SUPER_ADMIN', 'ADMIN', 'DOCTOR', 'NURSE', 'LAB_TECHNICIAN'] },
   { label: 'billing', icon: Receipt, href: '/billing', roles: ['SUPER_ADMIN', 'ADMIN', 'RECEPTIONIST'] },
+  { label: 'aiTools', icon: Brain, href: '/ai/symptom-checker', roles: ['DOCTOR', 'ADMIN', 'SUPER_ADMIN'] },
   { label: 'analytics', icon: BarChart3, href: '/analytics', roles: ['SUPER_ADMIN', 'ADMIN'] },
   { label: 'users', icon: Users, href: '/admin/users', roles: ['SUPER_ADMIN', 'ADMIN'] },
   { label: 'settings', icon: Settings, href: '/settings', roles: ['SUPER_ADMIN', 'ADMIN'] },

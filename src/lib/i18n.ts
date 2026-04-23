@@ -13,6 +13,13 @@ import enPatients from '@/locales/en/patients.json';
 import enAppointments from '@/locales/en/appointments.json';
 import enMedicalRecords from '@/locales/en/medical-records.json';
 import enPrescriptions from '@/locales/en/prescriptions.json';
+import enLaboratory from '@/locales/en/laboratory.json';
+import enPharmacy from '@/locales/en/pharmacy.json';
+import enBilling from '@/locales/en/billing.json';
+import enSettings from '@/locales/en/settings.json';
+import enNotifications from '@/locales/en/notifications.json';
+import enAi from '@/locales/en/ai.json';
+import enAnalytics from '@/locales/en/analytics.json';
 import trCommon from '@/locales/tr/common.json';
 import trAuth from '@/locales/tr/auth.json';
 import trNavigation from '@/locales/tr/navigation.json';
@@ -24,6 +31,13 @@ import trPatients from '@/locales/tr/patients.json';
 import trAppointments from '@/locales/tr/appointments.json';
 import trMedicalRecords from '@/locales/tr/medical-records.json';
 import trPrescriptions from '@/locales/tr/prescriptions.json';
+import trLaboratory from '@/locales/tr/laboratory.json';
+import trPharmacy from '@/locales/tr/pharmacy.json';
+import trBilling from '@/locales/tr/billing.json';
+import trSettings from '@/locales/tr/settings.json';
+import trNotifications from '@/locales/tr/notifications.json';
+import trAi from '@/locales/tr/ai.json';
+import trAnalytics from '@/locales/tr/analytics.json';
 
 i18n
   .use(LanguageDetector)
@@ -42,6 +56,13 @@ i18n
         appointments: enAppointments,
         'medical-records': enMedicalRecords,
         prescriptions: enPrescriptions,
+        laboratory: enLaboratory,
+        pharmacy: enPharmacy,
+        billing: enBilling,
+        settings: enSettings,
+        notifications: enNotifications,
+        ai: enAi,
+        analytics: enAnalytics,
       },
       tr: {
         common: trCommon,
@@ -55,10 +76,17 @@ i18n
         appointments: trAppointments,
         'medical-records': trMedicalRecords,
         prescriptions: trPrescriptions,
+        laboratory: trLaboratory,
+        pharmacy: trPharmacy,
+        billing: trBilling,
+        settings: trSettings,
+        notifications: trNotifications,
+        ai: trAi,
+        analytics: trAnalytics,
       },
     },
     fallbackLng: 'en',
-    ns: ['common', 'auth', 'navigation', 'dashboard', 'users', 'departments', 'doctors', 'patients', 'appointments', 'medical-records', 'prescriptions'],
+    ns: ['common', 'auth', 'navigation', 'dashboard', 'users', 'departments', 'doctors', 'patients', 'appointments', 'medical-records', 'prescriptions', 'laboratory', 'pharmacy', 'billing', 'settings', 'notifications', 'ai', 'analytics'],
     defaultNS: 'common',
     interpolation: {
       escapeValue: false,

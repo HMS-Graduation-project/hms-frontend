@@ -1,0 +1,13 @@
+{
+  "title": "Bildirimler",
+  "markAllRead": "Tümünü okundu işaretle",
+  "markAsRead": "Okundu işaretle",
+  "noNotifications": "Bildirim yok",
+  "unread": "Okunmamış",
+  "all": "Tümü",
+  "viewAll": "Tüm bildirimleri görüntüle",
+  "justNow": "Az önce",
+  "minutesAgo": "{{count}} dk önce",
+  "hoursAgo": "{{count}}s önce",
+  "daysAgo": "{{count}}g önce"
+}

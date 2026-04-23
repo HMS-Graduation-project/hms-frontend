@@ -5,6 +5,7 @@ import { useAuth } from '@/providers/auth-provider';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { LanguageSwitcher } from '@/components/language-switcher';
 import { MobileNav } from '@/components/layout/mobile-nav';
+import { NotificationBell } from '@/components/layout/notification-bell';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
@@ -56,6 +57,8 @@ export function Header() {
 
       {/* Right section */}
       <div className="flex items-center gap-1 sm:gap-2">
+        <NotificationBell />
+
         <LanguageSwitcher />
 
         <ThemeToggle />

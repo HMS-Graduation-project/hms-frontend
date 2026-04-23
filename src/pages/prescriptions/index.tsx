@@ -62,7 +62,7 @@ export default function PrescriptionsPage() {
   const { data, isLoading } = usePrescriptions({
     page: table.page,
     limit: table.limit,
-    status: statusFilter === 'ALL' ? '' : statusFilter,
+    status: (statusFilter === 'ALL' ? '' : statusFilter) as any,
   });
 
   const updateStatus = useUpdatePrescriptionStatus();

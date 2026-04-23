@@ -120,7 +120,7 @@ export default function BookAppointmentPage() {
     try {
       await createAppointment.mutateAsync({
         doctorId: selectedDoctorId,
-        patientId: isPatient ? '' : selectedPatientId,
+        ...(isPatient ? {} : { patientId: selectedPatientId }),
         date: selectedDate,
         startTime: selectedSlot.startTime,
         endTime: selectedSlot.endTime,

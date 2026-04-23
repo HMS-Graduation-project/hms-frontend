@@ -53,7 +53,7 @@ interface UseAppointmentsParams {
 }
 
 interface CreateAppointmentPayload {
-  patientId: string;
+  patientId?: string;
   doctorId: string;
   departmentId?: string;
   date: string;

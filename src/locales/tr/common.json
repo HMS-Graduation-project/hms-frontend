@@ -51,5 +51,10 @@
   "profile": "Profil",
   "role": "Rol",
   "memberSince": "Üyelik tarihi",
-  "failedToLoadProfile": "Profil yüklenemedi"
+  "failedToLoadProfile": "Profil yüklenemedi",
+  "somethingWentWrong": "Bir şeyler ters gitti",
+  "tryAgain": "Tekrar Dene",
+  "goHome": "Ana Sayfa",
+  "noData": "Veri bulunamadı",
+  "areYouSure": "Emin misiniz?"
 }
