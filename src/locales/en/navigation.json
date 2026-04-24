@@ -4,6 +4,8 @@
   "doctors": "Doctors",
   "departments": "Departments",
   "appointments": "Appointments",
+  "emergency": "Emergency",
+  "inpatient": "Inpatient",
   "medicalRecords": "Medical Records",
   "prescriptions": "Prescriptions",
   "laboratory": "Laboratory",

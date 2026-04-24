@@ -13,6 +13,8 @@ import {
   Settings,
   Brain,
   ShieldCheck,
+  Siren,
+  BedDouble,
 } from 'lucide-react';
 
 export interface NavItem {
@@ -28,6 +30,8 @@ export const navigationItems: NavItem[] = [
   { label: 'doctors', icon: Stethoscope, href: '/doctors', roles: ['SUPER_ADMIN', 'ADMIN', 'HOSPITAL_ADMIN', 'RECEPTIONIST', 'PATIENT'] },
   { label: 'departments', icon: Building2, href: '/departments', roles: ['*'] },
   { label: 'appointments', icon: CalendarDays, href: '/appointments', roles: ['*'] },
+  { label: 'emergency', icon: Siren, href: '/emergency', roles: ['SUPER_ADMIN', 'ADMIN', 'HOSPITAL_ADMIN', 'DOCTOR', 'NURSE', 'RECEPTIONIST'] },
+  { label: 'inpatient', icon: BedDouble, href: '/inpatient/admissions', roles: ['SUPER_ADMIN', 'ADMIN', 'HOSPITAL_ADMIN', 'DOCTOR', 'NURSE', 'RECEPTIONIST'] },
   { label: 'medicalRecords', icon: FileText, href: '/medical-records', roles: ['SUPER_ADMIN', 'ADMIN', 'HOSPITAL_ADMIN', 'DOCTOR', 'NURSE'] },
   { label: 'prescriptions', icon: Pill, href: '/prescriptions', roles: ['SUPER_ADMIN', 'ADMIN', 'HOSPITAL_ADMIN', 'DOCTOR', 'NURSE', 'PHARMACIST'] },
   { label: 'laboratory', icon: FlaskConical, href: '/laboratory', roles: ['SUPER_ADMIN', 'ADMIN', 'HOSPITAL_ADMIN', 'DOCTOR', 'NURSE', 'LAB_TECHNICIAN'] },

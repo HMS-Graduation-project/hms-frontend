@@ -4,6 +4,8 @@
   "doctors": "Doktorlar",
   "departments": "Departmanlar",
   "appointments": "Randevular",
+  "emergency": "Acil",
+  "inpatient": "Yatan Hasta",
   "medicalRecords": "T\u0131bbi Kay\u0131tlar",
   "prescriptions": "Re\u00e7eteler",
   "laboratory": "Laboratuvar",

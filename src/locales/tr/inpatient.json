@@ -1,0 +1,144 @@
+{
+  "wards": {
+    "title": "Servisler",
+    "subtitle": "Yataklı servisler ve yatak kapasitesi",
+    "newWard": "Yeni servis",
+    "newWardDescription": "Yeni bir yataklı servis ve yatak kapasitesini oluşturun.",
+    "floor": "Kat",
+    "department": "Bölüm",
+    "bedCount": "{{count}} yatak",
+    "bedCount_one": "{{count}} yatak",
+    "viewBedBoard": "Yatak panosu",
+    "addBed": "Yatak ekle",
+    "emptyTitle": "Henüz servis yok",
+    "emptyDescription": "Yataklı kapasiteyi takip etmek için ilk servisi oluşturun.",
+    "createSuccess": "Servis oluşturuldu",
+    "createError": "Servis oluşturulamadı",
+    "fields": {
+      "name": "Servis adı",
+      "type": "Servis tipi",
+      "floor": "Kat",
+      "description": "Açıklama"
+    }
+  },
+  "beds": {
+    "newBed": "Yatak ekle",
+    "newBedDescription": "{{ward}} servisine yeni bir yatak ekleyin.",
+    "fields": {
+      "number": "Yatak no",
+      "notes": "Notlar"
+    },
+    "createSuccess": "Yatak eklendi",
+    "createError": "Yatak eklenemedi"
+  },
+  "bedBoard": {
+    "title": "Yatak Panosu",
+    "subtitle": "Tüm yatakların ve durumlarının görsel özeti",
+    "allWards": "Tüm servisler",
+    "emptyTitle": "Yatak yapılandırılmamış",
+    "emptyDescription": "Panoyu doldurmak için servislere yatak ekleyin."
+  },
+  "bedStatus": {
+    "AVAILABLE": "Müsait",
+    "OCCUPIED": "Dolu",
+    "MAINTENANCE": "Bakım",
+    "RESERVED": "Rezerve"
+  },
+  "wardType": {
+    "GENERAL": "Genel",
+    "ICU": "Yoğun Bakım",
+    "NICU": "Yenidoğan YB",
+    "POST_OP": "Post-Op",
+    "ISOLATION": "İzolasyon",
+    "MATERNITY": "Doğum",
+    "PEDIATRIC": "Pediatri"
+  },
+  "admissions": {
+    "title": "Yatışlar",
+    "subtitle": "Tüm servislerdeki yataklı yatışlar",
+    "admitPatient": "Hasta yatır",
+    "admit": "Yatır",
+    "noBed": "Yatak atanmadı",
+    "admitDescription": "Hastayı, yatıran doktoru ve isteğe bağlı bir yatağı seçin.",
+    "admitSuccess": "Hasta yatırıldı",
+    "admitError": "Yatış başarısız",
+    "emptyTitle": "Açık yatış yok",
+    "emptyDescription": "Yatırılan hastalar burada görünecek.",
+    "filter": {
+      "open": "Açık (yatışta + transferde)",
+      "all": "Tüm durumlar"
+    },
+    "columns": {
+      "patient": "Hasta",
+      "bed": "Yatak",
+      "diagnosis": "Tanı",
+      "admittedBy": "Yatıran",
+      "admissionDate": "Yatış tarihi",
+      "status": "Durum"
+    },
+    "fields": {
+      "patient": "Hasta",
+      "patientPlaceholder": "Hasta seçin",
+      "doctor": "Yatıran doktor",
+      "doctorPlaceholder": "Doktor seçin",
+      "ward": "Servis",
+      "wardPlaceholder": "Servis seçin",
+      "bed": "Yatak",
+      "bedPlaceholder": "Yatak seçin",
+      "noBedNow": "Şimdilik yatak atama",
+      "pickLater": "Sonra yatak seç",
+      "diagnosis": "Çalışan tanı",
+      "reason": "Sebep / sevk notu"
+    }
+  },
+  "admissionStatus": {
+    "ADMITTED": "Yatırıldı",
+    "TRANSFERRED": "Transfer edildi",
+    "DISCHARGED": "Taburcu",
+    "DECEASED": "Vefat"
+  },
+  "admissionDetail": {
+    "admittedSince": "{{when}} yatırıldı",
+    "loadError": "Yatış yüklenemedi.",
+    "backToList": "Yatışlara dön",
+    "criticalAlerts": "Kritik uyarılar",
+    "patientInfo": "Hasta",
+    "clinical": "Klinik",
+    "transfers": "Yatak transferleri",
+    "noTransfers": "Henüz transfer yok.",
+    "fromNowhere": "Yatışta",
+    "medicalRecords": "Tıbbi kayıtlar",
+    "noRecords": "Bu yatışa bağlı kayıt yok.",
+    "currentBed": "Mevcut yatak",
+    "noBedAllocated": "Yatak atanmadı. Transferle yatak atayın.",
+    "openBedBoard": "Yatak panosunu aç",
+    "openPatientRecord": "Hasta kaydını aç",
+    "transferBed": "Yatak transferi",
+    "transfer": "Transfer et",
+    "transferDescription": "Hastayı müsait başka bir yatağa taşıyın.",
+    "transferSuccess": "Transfer kaydedildi",
+    "transferError": "Transfer başarısız",
+    "discharge": "Taburcu",
+    "confirmDischarge": "Taburcuyu onayla",
+    "dischargeDescription": "Yatışı sonuç ve özetle kapatın.",
+    "dischargeSuccess": "Hasta taburcu edildi",
+    "dischargeError": "Taburcu başarısız",
+    "fields": {
+      "nhid": "NHID",
+      "dob": "Doğum tarihi",
+      "gender": "Cinsiyet",
+      "bloodType": "Kan grubu",
+      "allergies": "Alerjiler",
+      "patientProfile": "Yerel kayıt",
+      "admittingDoctor": "Yatıran doktor",
+      "admissionDate": "Yatış",
+      "dischargeDate": "Taburcu",
+      "diagnosis": "Tanı",
+      "reason": "Sebep / not",
+      "dischargeSummary": "Taburcu özeti",
+      "transferReason": "Transfer sebebi",
+      "outcome": "Sonuç",
+      "dischargeSummaryPlaceholder": "Taburcuda klinik özet, takip planı, ilaçlar."
+    }
+  }
+}

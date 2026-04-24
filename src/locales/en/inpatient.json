@@ -1,0 +1,144 @@
+{
+  "wards": {
+    "title": "Wards",
+    "subtitle": "Inpatient wards and bed capacity",
+    "newWard": "New ward",
+    "newWardDescription": "Create a new inpatient ward with its bed capacity.",
+    "floor": "Floor",
+    "department": "Department",
+    "bedCount": "{{count}} beds",
+    "bedCount_one": "{{count}} bed",
+    "viewBedBoard": "Bed board",
+    "addBed": "Add bed",
+    "emptyTitle": "No wards yet",
+    "emptyDescription": "Create the first ward to begin tracking inpatient capacity.",
+    "createSuccess": "Ward created",
+    "createError": "Failed to create ward",
+    "fields": {
+      "name": "Ward name",
+      "type": "Ward type",
+      "floor": "Floor",
+      "description": "Description"
+    }
+  },
+  "beds": {
+    "newBed": "Add bed",
+    "newBedDescription": "Add a new bed to {{ward}}.",
+    "fields": {
+      "number": "Bed number",
+      "notes": "Notes"
+    },
+    "createSuccess": "Bed added",
+    "createError": "Failed to add bed"
+  },
+  "bedBoard": {
+    "title": "Bed Board",
+    "subtitle": "Visual overview of all beds and their status",
+    "allWards": "All wards",
+    "emptyTitle": "No beds configured",
+    "emptyDescription": "Add beds to your wards to populate the board."
+  },
+  "bedStatus": {
+    "AVAILABLE": "Available",
+    "OCCUPIED": "Occupied",
+    "MAINTENANCE": "Maintenance",
+    "RESERVED": "Reserved"
+  },
+  "wardType": {
+    "GENERAL": "General",
+    "ICU": "ICU",
+    "NICU": "NICU",
+    "POST_OP": "Post-Op",
+    "ISOLATION": "Isolation",
+    "MATERNITY": "Maternity",
+    "PEDIATRIC": "Pediatric"
+  },
+  "admissions": {
+    "title": "Admissions",
+    "subtitle": "Inpatient admissions across all wards",
+    "admitPatient": "Admit patient",
+    "admit": "Admit",
+    "noBed": "No bed allocated",
+    "admitDescription": "Choose a patient, the admitting doctor, and optionally a bed.",
+    "admitSuccess": "Patient admitted",
+    "admitError": "Admission failed",
+    "emptyTitle": "No open admissions",
+    "emptyDescription": "Admitted patients will appear here.",
+    "filter": {
+      "open": "Open (admitted + transferred)",
+      "all": "All statuses"
+    },
+    "columns": {
+      "patient": "Patient",
+      "bed": "Bed",
+      "diagnosis": "Diagnosis",
+      "admittedBy": "Admitted by",
+      "admissionDate": "Admission date",
+      "status": "Status"
+    },
+    "fields": {
+      "patient": "Patient",
+      "patientPlaceholder": "Select patient",
+      "doctor": "Admitting doctor",
+      "doctorPlaceholder": "Select doctor",
+      "ward": "Ward",
+      "wardPlaceholder": "Select ward",
+      "bed": "Bed",
+      "bedPlaceholder": "Select bed",
+      "noBedNow": "Do not allocate a bed yet",
+      "pickLater": "Pick a bed later",
+      "diagnosis": "Working diagnosis",
+      "reason": "Reason / referral note"
+    }
+  },
+  "admissionStatus": {
+    "ADMITTED": "Admitted",
+    "TRANSFERRED": "Transferred",
+    "DISCHARGED": "Discharged",
+    "DECEASED": "Deceased"
+  },
+  "admissionDetail": {
+    "admittedSince": "Admitted {{when}}",
+    "loadError": "Could not load admission.",
+    "backToList": "Back to admissions",
+    "criticalAlerts": "Critical alerts",
+    "patientInfo": "Patient",
+    "clinical": "Clinical",
+    "transfers": "Bed transfers",
+    "noTransfers": "No transfers yet.",
+    "fromNowhere": "On admission",
+    "medicalRecords": "Medical records",
+    "noRecords": "No records tied to this admission yet.",
+    "currentBed": "Current bed",
+    "noBedAllocated": "No bed allocated. Allocate one via transfer.",
+    "openBedBoard": "Open bed board",
+    "openPatientRecord": "Open patient record",
+    "transferBed": "Transfer bed",
+    "transfer": "Transfer",
+    "transferDescription": "Move this patient to a different available bed.",
+    "transferSuccess": "Transfer recorded",
+    "transferError": "Transfer failed",
+    "discharge": "Discharge",
+    "confirmDischarge": "Confirm discharge",
+    "dischargeDescription": "Close the admission with an outcome and summary.",
+    "dischargeSuccess": "Patient discharged",
+    "dischargeError": "Discharge failed",
+    "fields": {
+      "nhid": "NHID",
+      "dob": "Date of birth",
+      "gender": "Gender",
+      "bloodType": "Blood type",
+      "allergies": "Allergies",
+      "patientProfile": "Local record",
+      "admittingDoctor": "Admitting doctor",
+      "admissionDate": "Admitted",
+      "dischargeDate": "Discharged",
+      "diagnosis": "Diagnosis",
+      "reason": "Reason / note",
+      "dischargeSummary": "Discharge summary",
+      "transferReason": "Reason for transfer",
+      "outcome": "Outcome",
+      "dischargeSummaryPlaceholder": "Clinical summary at discharge, follow-up plan, medications."
+    }
+  }
+}

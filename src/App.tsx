@@ -21,6 +21,13 @@ import PatientDetailPage from '@/pages/patients/patient-detail';
 import AppointmentsPage from '@/pages/appointments';
 import BookAppointmentPage from '@/pages/appointments/book-appointment';
 import AppointmentDetailPage from '@/pages/appointments/appointment-detail';
+import EmergencyQueuePage from '@/pages/emergency/queue';
+import EmergencyIntakePage from '@/pages/emergency/intake';
+import EmergencyVisitDetailPage from '@/pages/emergency/visit-detail';
+import WardsPage from '@/pages/inpatient/wards';
+import BedBoardPage from '@/pages/inpatient/bed-board';
+import AdmissionsPage from '@/pages/inpatient/admissions';
+import AdmissionDetailPage from '@/pages/inpatient/admission-detail';
 import MedicalRecordsPage from '@/pages/medical-records';
 import RecordFormPage from '@/pages/medical-records/record-form';
 import RecordDetailPage from '@/pages/medical-records/record-detail';
@@ -72,6 +79,14 @@ export default function App() {
               <Route path="/appointments" element={<AppointmentsPage />} />
               <Route path="/appointments/book" element={<BookAppointmentPage />} />
               <Route path="/appointments/:id" element={<AppointmentDetailPage />} />
+              <Route path="/emergency" element={<EmergencyQueuePage />} />
+              <Route path="/emergency/intake" element={<EmergencyIntakePage />} />
+              <Route path="/emergency/:id" element={<EmergencyVisitDetailPage />} />
+              <Route path="/inpatient" element={<AdmissionsPage />} />
+              <Route path="/inpatient/wards" element={<WardsPage />} />
+              <Route path="/inpatient/bed-board" element={<BedBoardPage />} />
+              <Route path="/inpatient/admissions" element={<AdmissionsPage />} />
+              <Route path="/inpatient/admissions/:id" element={<AdmissionDetailPage />} />
               <Route path="/medical-records" element={<MedicalRecordsPage />} />
               <Route path="/medical-records/new" element={<RecordFormPage />} />
               <Route path="/medical-records/:id" element={<RecordDetailPage />} />
