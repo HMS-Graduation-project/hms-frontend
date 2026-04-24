@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { Navigate } from 'react-router-dom';
 import { useAuth } from '@/providers/auth-provider';
 import { Users, Stethoscope, CalendarDays, FlaskConical } from 'lucide-react';
 import { StatCard } from '@/components/dashboard/stat-card';
@@ -8,6 +9,21 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { useDashboardStats } from '@/hooks/use-analytics';
 
 export default function DashboardPage() {
+  const { user } = useAuth();
+
+  // National/regional roles get their own dashboards — the hospital dashboard
+  // is not meaningful for them (no hospitalId scope).
+  if (user?.role === 'MINISTRY_ADMIN') {
+    return <Navigate to="/ministry" replace />;
+  }
+  if (user?.role === 'REGIONAL_ADMIN') {
+    return <Navigate to="/regional" replace />;
+  }
+
+  return <HospitalDashboard />;
+}
+
+function HospitalDashboard() {
   const { t } = useTranslation('dashboard');
   const { user } = useAuth();
   const { data: stats, isLoading } = useDashboardStats();

@@ -15,5 +15,7 @@
   "analytics": "Analytics",
   "users": "User Management",
   "nationalRegistry": "National Registry",
+  "regionalDashboard": "Regional",
+  "ministryDashboard": "Ministry",
   "settings": "Settings"
 }

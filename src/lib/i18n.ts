@@ -23,6 +23,7 @@ import enSettings from '@/locales/en/settings.json';
 import enNotifications from '@/locales/en/notifications.json';
 import enAi from '@/locales/en/ai.json';
 import enAnalytics from '@/locales/en/analytics.json';
+import enReporting from '@/locales/en/reporting.json';
 import trCommon from '@/locales/tr/common.json';
 import trAuth from '@/locales/tr/auth.json';
 import trNavigation from '@/locales/tr/navigation.json';
@@ -44,6 +45,7 @@ import trSettings from '@/locales/tr/settings.json';
 import trNotifications from '@/locales/tr/notifications.json';
 import trAi from '@/locales/tr/ai.json';
 import trAnalytics from '@/locales/tr/analytics.json';
+import trReporting from '@/locales/tr/reporting.json';
 
 i18n
   .use(LanguageDetector)
@@ -72,6 +74,7 @@ i18n
         notifications: enNotifications,
         ai: enAi,
         analytics: enAnalytics,
+        reporting: enReporting,
       },
       tr: {
         common: trCommon,
@@ -95,10 +98,11 @@ i18n
         notifications: trNotifications,
         ai: trAi,
         analytics: trAnalytics,
+        reporting: trReporting,
       },
     },
     fallbackLng: 'en',
-    ns: ['common', 'auth', 'navigation', 'dashboard', 'users', 'departments', 'doctors', 'patients', 'appointments', 'emergency', 'inpatient', 'referrals', 'medical-records', 'prescriptions', 'laboratory', 'pharmacy', 'billing', 'settings', 'notifications', 'ai', 'analytics'],
+    ns: ['common', 'auth', 'navigation', 'dashboard', 'users', 'departments', 'doctors', 'patients', 'appointments', 'emergency', 'inpatient', 'referrals', 'medical-records', 'prescriptions', 'laboratory', 'pharmacy', 'billing', 'settings', 'notifications', 'ai', 'analytics', 'reporting'],
     defaultNS: 'common',
     interpolation: {
       escapeValue: false,
