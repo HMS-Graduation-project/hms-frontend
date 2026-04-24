@@ -28,6 +28,9 @@ import WardsPage from '@/pages/inpatient/wards';
 import BedBoardPage from '@/pages/inpatient/bed-board';
 import AdmissionsPage from '@/pages/inpatient/admissions';
 import AdmissionDetailPage from '@/pages/inpatient/admission-detail';
+import ReferralsListPage from '@/pages/referrals/list';
+import NewReferralPage from '@/pages/referrals/new';
+import ReferralDetailPage from '@/pages/referrals/detail';
 import MedicalRecordsPage from '@/pages/medical-records';
 import RecordFormPage from '@/pages/medical-records/record-form';
 import RecordDetailPage from '@/pages/medical-records/record-detail';
@@ -87,6 +90,11 @@ export default function App() {
               <Route path="/inpatient/bed-board" element={<BedBoardPage />} />
               <Route path="/inpatient/admissions" element={<AdmissionsPage />} />
               <Route path="/inpatient/admissions/:id" element={<AdmissionDetailPage />} />
+              <Route path="/referrals" element={<Navigate to="/referrals/incoming" replace />} />
+              <Route path="/referrals/incoming" element={<ReferralsListPage direction="incoming" />} />
+              <Route path="/referrals/outgoing" element={<ReferralsListPage direction="outgoing" />} />
+              <Route path="/referrals/new" element={<NewReferralPage />} />
+              <Route path="/referrals/:id" element={<ReferralDetailPage />} />
               <Route path="/medical-records" element={<MedicalRecordsPage />} />
               <Route path="/medical-records/new" element={<RecordFormPage />} />
               <Route path="/medical-records/:id" element={<RecordDetailPage />} />

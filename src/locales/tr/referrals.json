@@ -1,0 +1,144 @@
+{
+  "newReferral": "Yeni sevk",
+  "incoming": {
+    "tab": "Gelen",
+    "title": "Gelen sevkler",
+    "subtitle": "Hastanenize gönderilen sevkler",
+    "emptyTitle": "Gelen sevk yok",
+    "emptyDescription": "Diğer hastanelerden gelen sevkler burada görünecek."
+  },
+  "outgoing": {
+    "tab": "Giden",
+    "title": "Giden sevkler",
+    "subtitle": "Hastanenizin gönderdiği sevkler",
+    "emptyTitle": "Henüz giden sevk yok",
+    "emptyDescription": "Bir hastayı başka bir hastaneye sevk ederek başlayın."
+  },
+  "columns": {
+    "urgency": "Aciliyet",
+    "patient": "Hasta",
+    "reason": "Sebep",
+    "from": "Gönderen",
+    "to": "Alıcı",
+    "status": "Durum",
+    "created": "Oluşturulma"
+  },
+  "filter": {
+    "allStatuses": "Tüm durumlar",
+    "allUrgencies": "Tüm aciliyetler"
+  },
+  "status": {
+    "PENDING": "Beklemede",
+    "ACCEPTED": "Kabul edildi",
+    "REJECTED": "Reddedildi",
+    "COMPLETED": "Tamamlandı",
+    "CANCELLED": "İptal edildi"
+  },
+  "urgency": {
+    "ROUTINE": "Rutin",
+    "URGENT": "Acil",
+    "EMERGENT": "Çok acil"
+  },
+  "newPage": {
+    "title": "Yeni sevk",
+    "subtitle": "Hastayı başka bir hastaneye sevk et",
+    "step1": "1. Ulusal kayıttan hasta seç",
+    "step2": "2. Sevk detayları",
+    "mustBeRegistered": "Hasta önce kaydedilmeli",
+    "registerFirst": "Hastayı önce Hastalar bölümünden kaydedin, sonra sevk için buraya dönün.",
+    "changePatient": "Değiştir",
+    "createSuccess": "Sevk gönderildi",
+    "createError": "Sevk gönderilemedi",
+    "submit": "Sevki gönder",
+    "fields": {
+      "toHospital": "Alıcı hastane",
+      "toHospitalPlaceholder": "Alıcı hastaneyi seçin",
+      "urgency": "Aciliyet",
+      "reason": "Sevk sebebi",
+      "reasonPlaceholder": "Kısa sebep (örn: \"STEMI şüphesi — PCI gerekli\")",
+      "clinicalSummary": "Klinik özet (alıcıya iletilir)",
+      "clinicalSummaryPlaceholder": "Hikaye, bulgular, şimdiye kadarki müdahaleler, tanı.",
+      "clinicalSummaryHelper": "Alıcı ekip bu özeti hastanın ulusal kaydıyla birlikte görecek."
+    }
+  },
+  "detail": {
+    "loadError": "Sevk bulunamadı veya erişilemiyor.",
+    "back": "Sevklere dön",
+    "createdAgo": "{{when}} oluşturuldu",
+    "accept": "Kabul et",
+    "reject": "Reddet",
+    "complete": "Tamamlandı olarak işaretle",
+    "cancel": "İptal et",
+    "criticalAlerts": "Kritik uyarılar",
+    "routeCardTitle": "Yol",
+    "clinicalCardTitle": "Klinik",
+    "patientCardTitle": "Hasta",
+    "timelineTitle": "Zaman çizelgesi",
+    "crossHospitalTitle": "Gönderen hastanenin kayıtları",
+    "crossHospitalLocked": "Gönderen hastaneden hasta kayıtlarına salt-okunur erişim için sevki kabul edin. Mevcut durum: {{status}}.",
+    "crossHospitalEmpty": "Gönderen hastanede kayıt bulunamadı.",
+    "readOnly": "Salt-okunur",
+    "abnormal": "Anormal",
+    "medicalRecords": "Tıbbi kayıtlar ({{count}})",
+    "prescriptions": "Reçeteler ({{count}})",
+    "labOrders": "Lab istekleri ({{count}})",
+    "from": "Gönderen",
+    "to": "Alıcı",
+    "fromDoctor": "Sevk eden doktor",
+    "toDoctor": "Alan doktor",
+    "unassigned": "Henüz atanmadı",
+    "reason": "Sebep",
+    "clinicalSummary": "Klinik özet",
+    "responseNote": "Cevap notu",
+    "nhid": "NHID",
+    "syrianId": "Suriye kimlik no",
+    "dob": "Doğum tarihi",
+    "gender": "Cinsiyet",
+    "bloodType": "Kan grubu",
+    "allergies": "Alerjiler",
+    "chronicConditions": "Kronik rahatsızlıklar",
+    "openInRegistry": "Ulusal kayıtta aç",
+    "timeline": {
+      "created": "Oluşturuldu",
+      "accepted": "Kabul edildi",
+      "rejected": "Reddedildi",
+      "completed": "Tamamlandı",
+      "cancelled": "İptal edildi"
+    },
+    "actions": {
+      "note": "Not",
+      "accept": {
+        "title": "Sevki kabul et",
+        "description": "Kabul etmek, hastanızın gönderen hastanedeki hasta kayıtlarına salt-okunur erişim sağlar.",
+        "confirm": "Kabul et",
+        "notePlaceholder": "Sevk eden ekibe isteğe bağlı not.",
+        "success": "Sevk kabul edildi",
+        "error": "Sevk kabul edilemedi"
+      },
+      "reject": {
+        "title": "Sevki reddet",
+        "description": "Sevk eden hastane bilgilendirilecek. Hasta kayıtlarına erişim verilmez.",
+        "confirm": "Reddet",
+        "notePlaceholder": "Reddetme sebebi (isteğe bağlı).",
+        "success": "Sevk reddedildi",
+        "error": "Sevk reddedilemedi"
+      },
+      "complete": {
+        "title": "Sevki tamamlandı olarak işaretle",
+        "description": "Bu sevk kapsamındaki hasta bakımı tamamlandığında kullanın. Paylaşılan kayıtlara erişim devam eder.",
+        "confirm": "Tamamlandı",
+        "notePlaceholder": "Sonuç özeti (isteğe bağlı).",
+        "success": "Sevk tamamlandı olarak işaretlendi",
+        "error": "Tamamlanmış olarak işaretlenemedi"
+      },
+      "cancel": {
+        "title": "Sevki iptal et",
+        "description": "Sadece gönderen hastane iptal edebilir. Alıcı hastanenin erişimi geri alınır.",
+        "confirm": "Sevki iptal et",
+        "notePlaceholder": "İptal sebebi (isteğe bağlı).",
+        "success": "Sevk iptal edildi",
+        "error": "Sevk iptal edilemedi"
+      }
+    }
+  }
+}

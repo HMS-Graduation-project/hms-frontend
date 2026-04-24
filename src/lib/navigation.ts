@@ -15,6 +15,7 @@ import {
   ShieldCheck,
   Siren,
   BedDouble,
+  ArrowRightLeft,
 } from 'lucide-react';
 
 export interface NavItem {
@@ -32,6 +33,7 @@ export const navigationItems: NavItem[] = [
   { label: 'appointments', icon: CalendarDays, href: '/appointments', roles: ['*'] },
   { label: 'emergency', icon: Siren, href: '/emergency', roles: ['SUPER_ADMIN', 'ADMIN', 'HOSPITAL_ADMIN', 'DOCTOR', 'NURSE', 'RECEPTIONIST'] },
   { label: 'inpatient', icon: BedDouble, href: '/inpatient/admissions', roles: ['SUPER_ADMIN', 'ADMIN', 'HOSPITAL_ADMIN', 'DOCTOR', 'NURSE', 'RECEPTIONIST'] },
+  { label: 'referrals', icon: ArrowRightLeft, href: '/referrals/incoming', roles: ['SUPER_ADMIN', 'ADMIN', 'HOSPITAL_ADMIN', 'DOCTOR', 'NURSE'] },
   { label: 'medicalRecords', icon: FileText, href: '/medical-records', roles: ['SUPER_ADMIN', 'ADMIN', 'HOSPITAL_ADMIN', 'DOCTOR', 'NURSE'] },
   { label: 'prescriptions', icon: Pill, href: '/prescriptions', roles: ['SUPER_ADMIN', 'ADMIN', 'HOSPITAL_ADMIN', 'DOCTOR', 'NURSE', 'PHARMACIST'] },
   { label: 'laboratory', icon: FlaskConical, href: '/laboratory', roles: ['SUPER_ADMIN', 'ADMIN', 'HOSPITAL_ADMIN', 'DOCTOR', 'NURSE', 'LAB_TECHNICIAN'] },

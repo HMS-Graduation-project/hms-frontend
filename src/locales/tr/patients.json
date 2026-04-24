@@ -35,6 +35,13 @@
   "prescriptions": "Reçeteler",
   "labResults": "Lab Sonuçları",
   "billing": "Faturalama",
+  "referrals": "Sevkler",
+  "referralsTab": {
+    "title": "Hastaneler arası sevkler",
+    "subtitle": "Tüm hastaneler arasında bu hastayı içeren her sevk.",
+    "newReferral": "Yeni sevk",
+    "empty": "Bu hasta için henüz sevk yok."
+  },
   "details": "Hasta Detayları",
   "patientCreated": "Hasta başarıyla kaydedildi",
   "patientUpdated": "Hasta başarıyla güncellendi",

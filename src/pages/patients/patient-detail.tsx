@@ -24,6 +24,7 @@ import {
 import { usePatient } from '@/hooks/use-patients';
 import { usePatientMedicalRecords } from '@/hooks/use-medical-records';
 import { usePatientPrescriptions, type PrescriptionStatus } from '@/hooks/use-prescriptions';
+import { usePatientReferrals } from '@/hooks/use-referrals';
 import { useAuth } from '@/providers/auth-provider';
 import { PatientTimeline } from '@/components/medical-records/patient-timeline';
 import { Button } from '@/components/ui/button';
@@ -153,6 +154,7 @@ export default function PatientDetailPage() {
           <TabsTrigger value="prescriptions">{t('prescriptions')}</TabsTrigger>
           <TabsTrigger value="lab-results">{t('labResults')}</TabsTrigger>
           <TabsTrigger value="billing">{t('billing')}</TabsTrigger>
+          <TabsTrigger value="referrals">{t('referrals')}</TabsTrigger>
         </TabsList>
 
         {/* Profile Tab */}
@@ -501,6 +503,14 @@ export default function PatientDetailPage() {
             title={t('billing')}
           />
         </TabsContent>
+
+        {/* Referrals Tab */}
+        <TabsContent value="referrals">
+          <PatientReferralsTab
+            nhid={national.id}
+            patientName={`${national.firstName} ${national.lastName}`}
+          />
+        </TabsContent>
       </Tabs>
 
       {/* Edit Dialog */}
@@ -541,6 +551,80 @@ function InfoItem({
       </p>
       <p className="text-sm font-medium">{value || '--'}</p>
     </div>
+  );
+}
+
+function PatientReferralsTab({
+  nhid,
+  patientName,
+}: {
+  nhid: string;
+  patientName: string;
+}) {
+  const { t } = useTranslation('patients');
+  const navigate = useNavigate();
+  const { data, isLoading } = usePatientReferrals(nhid);
+  const { user } = useAuth();
+  const canCreate =
+    !!user && ['DOCTOR', 'HOSPITAL_ADMIN', 'ADMIN'].includes(user.role);
+
+  if (isLoading) return <Skeleton className="h-48 w-full" />;
+
+  return (
+    <Card>
+      <CardHeader>
+        <div className="flex items-center justify-between">
+          <div>
+            <CardTitle className="text-lg">{t('referralsTab.title')}</CardTitle>
+            <CardDescription>{t('referralsTab.subtitle')}</CardDescription>
+          </div>
+          {canCreate && (
+            <Button
+              size="sm"
+              onClick={() =>
+                navigate(
+                  `/referrals/new?nhid=${nhid}&name=${encodeURIComponent(patientName)}`,
+                )
+              }
+            >
+              {t('referralsTab.newReferral')}
+            </Button>
+          )}
+        </div>
+      </CardHeader>
+      <CardContent>
+        {!data || data.length === 0 ? (
+          <p className="py-6 text-center text-sm text-muted-foreground">
+            {t('referralsTab.empty')}
+          </p>
+        ) : (
+          <ul className="space-y-2 text-sm">
+            {data.map((r) => (
+              <li
+                key={r.id}
+                className="flex cursor-pointer items-center justify-between rounded-md border p-3 hover:bg-muted/30"
+                onClick={() => navigate(`/referrals/${r.id}`)}
+              >
+                <div>
+                  <p className="font-medium">
+                    {r.fromHospital.name} → {r.toHospital.name}
+                  </p>
+                  <p className="text-xs text-muted-foreground">{r.reason}</p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Badge variant="outline" className="text-xs">
+                    {r.urgency}
+                  </Badge>
+                  <Badge variant="secondary" className="text-xs">
+                    {r.status}
+                  </Badge>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </CardContent>
+    </Card>
   );
 }
 

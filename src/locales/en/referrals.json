@@ -1,0 +1,144 @@
+{
+  "newReferral": "New referral",
+  "incoming": {
+    "tab": "Incoming",
+    "title": "Incoming referrals",
+    "subtitle": "Referrals sent to your hospital",
+    "emptyTitle": "No incoming referrals",
+    "emptyDescription": "Referrals sent from other hospitals will appear here."
+  },
+  "outgoing": {
+    "tab": "Outgoing",
+    "title": "Outgoing referrals",
+    "subtitle": "Referrals your hospital has sent",
+    "emptyTitle": "No outgoing referrals yet",
+    "emptyDescription": "Refer a patient to another hospital to get started."
+  },
+  "columns": {
+    "urgency": "Urgency",
+    "patient": "Patient",
+    "reason": "Reason",
+    "from": "From",
+    "to": "To",
+    "status": "Status",
+    "created": "Created"
+  },
+  "filter": {
+    "allStatuses": "All statuses",
+    "allUrgencies": "All urgencies"
+  },
+  "status": {
+    "PENDING": "Pending",
+    "ACCEPTED": "Accepted",
+    "REJECTED": "Rejected",
+    "COMPLETED": "Completed",
+    "CANCELLED": "Cancelled"
+  },
+  "urgency": {
+    "ROUTINE": "Routine",
+    "URGENT": "Urgent",
+    "EMERGENT": "Emergent"
+  },
+  "newPage": {
+    "title": "New referral",
+    "subtitle": "Send a patient to another hospital",
+    "step1": "1. Select patient from national registry",
+    "step2": "2. Referral details",
+    "mustBeRegistered": "Patient must be registered first",
+    "registerFirst": "Register this patient from the Patients section, then return here to refer.",
+    "changePatient": "Change",
+    "createSuccess": "Referral sent",
+    "createError": "Could not send referral",
+    "submit": "Send referral",
+    "fields": {
+      "toHospital": "Send to hospital",
+      "toHospitalPlaceholder": "Select receiving hospital",
+      "urgency": "Urgency",
+      "reason": "Reason for referral",
+      "reasonPlaceholder": "Brief reason (e.g. \"Suspected STEMI — PCI needed\")",
+      "clinicalSummary": "Clinical summary (shared with receiver)",
+      "clinicalSummaryPlaceholder": "History, key findings, interventions so far, working diagnosis.",
+      "clinicalSummaryHelper": "The receiving team will see this summary along with the patient's national record."
+    }
+  },
+  "detail": {
+    "loadError": "Referral not found or not accessible.",
+    "back": "Back to referrals",
+    "createdAgo": "Created {{when}}",
+    "accept": "Accept",
+    "reject": "Reject",
+    "complete": "Mark completed",
+    "cancel": "Cancel",
+    "criticalAlerts": "Critical alerts",
+    "routeCardTitle": "Route",
+    "clinicalCardTitle": "Clinical",
+    "patientCardTitle": "Patient",
+    "timelineTitle": "Timeline",
+    "crossHospitalTitle": "Records from the sending hospital",
+    "crossHospitalLocked": "Accept this referral to unlock read access to the patient's records from the sending hospital. Current status: {{status}}.",
+    "crossHospitalEmpty": "No records found at the sending hospital.",
+    "readOnly": "Read-only",
+    "abnormal": "Abnormal",
+    "medicalRecords": "Medical records ({{count}})",
+    "prescriptions": "Prescriptions ({{count}})",
+    "labOrders": "Lab orders ({{count}})",
+    "from": "From",
+    "to": "To",
+    "fromDoctor": "Referring doctor",
+    "toDoctor": "Receiving doctor",
+    "unassigned": "Not yet assigned",
+    "reason": "Reason",
+    "clinicalSummary": "Clinical summary",
+    "responseNote": "Response note",
+    "nhid": "NHID",
+    "syrianId": "Syrian national ID",
+    "dob": "Date of birth",
+    "gender": "Gender",
+    "bloodType": "Blood type",
+    "allergies": "Allergies",
+    "chronicConditions": "Chronic conditions",
+    "openInRegistry": "Open in national registry",
+    "timeline": {
+      "created": "Created",
+      "accepted": "Accepted",
+      "rejected": "Rejected",
+      "completed": "Completed",
+      "cancelled": "Cancelled"
+    },
+    "actions": {
+      "note": "Note",
+      "accept": {
+        "title": "Accept referral",
+        "description": "Accepting will grant your hospital read-only access to the patient's records from the sending hospital.",
+        "confirm": "Accept",
+        "notePlaceholder": "Optional note to the referring team.",
+        "success": "Referral accepted",
+        "error": "Could not accept referral"
+      },
+      "reject": {
+        "title": "Reject referral",
+        "description": "The referring hospital will be notified. Access to the patient's records will NOT be granted.",
+        "confirm": "Reject",
+        "notePlaceholder": "Reason for rejection (optional).",
+        "success": "Referral rejected",
+        "error": "Could not reject referral"
+      },
+      "complete": {
+        "title": "Mark referral completed",
+        "description": "Use once the patient's care under this referral is complete. Access to shared records remains.",
+        "confirm": "Mark completed",
+        "notePlaceholder": "Outcome summary (optional).",
+        "success": "Referral marked completed",
+        "error": "Could not mark completed"
+      },
+      "cancel": {
+        "title": "Cancel referral",
+        "description": "Only the sending hospital can cancel. The receiving hospital's access is revoked.",
+        "confirm": "Cancel referral",
+        "notePlaceholder": "Reason for cancellation (optional).",
+        "success": "Referral cancelled",
+        "error": "Could not cancel referral"
+      }
+    }
+  }
+}

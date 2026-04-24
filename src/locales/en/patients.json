@@ -35,6 +35,13 @@
   "prescriptions": "Prescriptions",
   "labResults": "Lab Results",
   "billing": "Billing",
+  "referrals": "Referrals",
+  "referralsTab": {
+    "title": "Cross-hospital referrals",
+    "subtitle": "Every referral involving this patient, across all hospitals.",
+    "newReferral": "New referral",
+    "empty": "No referrals for this patient yet."
+  },
   "details": "Patient Details",
   "patientCreated": "Patient registered successfully",
   "patientUpdated": "Patient updated successfully",

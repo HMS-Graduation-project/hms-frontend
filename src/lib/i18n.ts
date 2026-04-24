@@ -13,6 +13,7 @@ import enPatients from '@/locales/en/patients.json';
 import enAppointments from '@/locales/en/appointments.json';
 import enEmergency from '@/locales/en/emergency.json';
 import enInpatient from '@/locales/en/inpatient.json';
+import enReferrals from '@/locales/en/referrals.json';
 import enMedicalRecords from '@/locales/en/medical-records.json';
 import enPrescriptions from '@/locales/en/prescriptions.json';
 import enLaboratory from '@/locales/en/laboratory.json';
@@ -33,6 +34,7 @@ import trPatients from '@/locales/tr/patients.json';
 import trAppointments from '@/locales/tr/appointments.json';
 import trEmergency from '@/locales/tr/emergency.json';
 import trInpatient from '@/locales/tr/inpatient.json';
+import trReferrals from '@/locales/tr/referrals.json';
 import trMedicalRecords from '@/locales/tr/medical-records.json';
 import trPrescriptions from '@/locales/tr/prescriptions.json';
 import trLaboratory from '@/locales/tr/laboratory.json';
@@ -60,6 +62,7 @@ i18n
         appointments: enAppointments,
         emergency: enEmergency,
         inpatient: enInpatient,
+        referrals: enReferrals,
         'medical-records': enMedicalRecords,
         prescriptions: enPrescriptions,
         laboratory: enLaboratory,
@@ -82,6 +85,7 @@ i18n
         appointments: trAppointments,
         emergency: trEmergency,
         inpatient: trInpatient,
+        referrals: trReferrals,
         'medical-records': trMedicalRecords,
         prescriptions: trPrescriptions,
         laboratory: trLaboratory,
@@ -94,7 +98,7 @@ i18n
       },
     },
     fallbackLng: 'en',
-    ns: ['common', 'auth', 'navigation', 'dashboard', 'users', 'departments', 'doctors', 'patients', 'appointments', 'emergency', 'inpatient', 'medical-records', 'prescriptions', 'laboratory', 'pharmacy', 'billing', 'settings', 'notifications', 'ai', 'analytics'],
+    ns: ['common', 'auth', 'navigation', 'dashboard', 'users', 'departments', 'doctors', 'patients', 'appointments', 'emergency', 'inpatient', 'referrals', 'medical-records', 'prescriptions', 'laboratory', 'pharmacy', 'billing', 'settings', 'notifications', 'ai', 'analytics'],
     defaultNS: 'common',
     interpolation: {
       escapeValue: false,
