@@ -36,11 +36,15 @@
   },
   "language": {
     "en": "English",
-    "tr": "Türkçe"
+    "tr": "Türkçe",
+    "ar": "العربية"
   },
   "roles": {
     "SUPER_ADMIN": "Super Admin",
+    "MINISTRY_ADMIN": "Ministry Admin",
+    "REGIONAL_ADMIN": "Regional Admin",
     "ADMIN": "Admin",
+    "HOSPITAL_ADMIN": "Hospital Admin",
     "DOCTOR": "Doctor",
     "NURSE": "Nurse",
     "RECEPTIONIST": "Receptionist",

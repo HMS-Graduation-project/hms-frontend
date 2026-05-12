@@ -1,0 +1,144 @@
+{
+  "newReferral": "إحالة جديدة",
+  "incoming": {
+    "tab": "الواردة",
+    "title": "الإحالات الواردة",
+    "subtitle": "الإحالات المرسلة إلى مستشفاك",
+    "emptyTitle": "لا توجد إحالات واردة",
+    "emptyDescription": "ستظهر الإحالات من المستشفيات الأخرى هنا."
+  },
+  "outgoing": {
+    "tab": "الصادرة",
+    "title": "الإحالات الصادرة",
+    "subtitle": "الإحالات التي أرسلها مستشفاك",
+    "emptyTitle": "لا توجد إحالات صادرة بعد",
+    "emptyDescription": "أحل مريضاً إلى مستشفى آخر للبدء."
+  },
+  "columns": {
+    "urgency": "الأولوية",
+    "patient": "المريض",
+    "reason": "السبب",
+    "from": "من",
+    "to": "إلى",
+    "status": "الحالة",
+    "created": "تاريخ الإنشاء"
+  },
+  "filter": {
+    "allStatuses": "كل الحالات",
+    "allUrgencies": "كل الأولويات"
+  },
+  "status": {
+    "PENDING": "قيد الانتظار",
+    "ACCEPTED": "مقبولة",
+    "REJECTED": "مرفوضة",
+    "COMPLETED": "مكتملة",
+    "CANCELLED": "ملغاة"
+  },
+  "urgency": {
+    "ROUTINE": "اعتيادية",
+    "URGENT": "عاجلة",
+    "EMERGENT": "طارئة"
+  },
+  "newPage": {
+    "title": "إحالة جديدة",
+    "subtitle": "أرسل مريضاً إلى مستشفى آخر",
+    "step1": "1. اختر مريضاً من السجل الوطني",
+    "step2": "2. تفاصيل الإحالة",
+    "mustBeRegistered": "يجب تسجيل المريض أولاً",
+    "registerFirst": "سجل المريض من قسم المرضى، ثم عد إلى هنا للإحالة.",
+    "changePatient": "تغيير",
+    "createSuccess": "تم إرسال الإحالة",
+    "createError": "تعذر إرسال الإحالة",
+    "submit": "إرسال الإحالة",
+    "fields": {
+      "toHospital": "إلى مستشفى",
+      "toHospitalPlaceholder": "اختر المستشفى المستقبل",
+      "urgency": "الأولوية",
+      "reason": "سبب الإحالة",
+      "reasonPlaceholder": "سبب موجز (مثلاً: \"يُشتبه باحتشاء عضلة القلب — يحتاج قسطرة\")",
+      "clinicalSummary": "ملخص سريري (يُشارك مع المستقبل)",
+      "clinicalSummaryPlaceholder": "السوابق والنتائج الرئيسية والتدخلات حتى الآن والتشخيص المؤقت.",
+      "clinicalSummaryHelper": "سيرى الفريق المستقبل هذا الملخص مع السجل الوطني للمريض."
+    }
+  },
+  "detail": {
+    "loadError": "الإحالة غير موجودة أو غير متاحة.",
+    "back": "العودة إلى الإحالات",
+    "createdAgo": "أُنشئت {{when}}",
+    "accept": "قبول",
+    "reject": "رفض",
+    "complete": "وضع علامة مكتمل",
+    "cancel": "إلغاء",
+    "criticalAlerts": "تنبيهات حرجة",
+    "routeCardTitle": "المسار",
+    "clinicalCardTitle": "سريري",
+    "patientCardTitle": "المريض",
+    "timelineTitle": "الخط الزمني",
+    "crossHospitalTitle": "السجلات من المستشفى المرسل",
+    "crossHospitalLocked": "اقبل الإحالة لإلغاء قفل قراءة السجلات. الحالة الحالية: {{status}}.",
+    "crossHospitalEmpty": "لا توجد سجلات في المستشفى المرسل.",
+    "readOnly": "قراءة فقط",
+    "abnormal": "غير طبيعي",
+    "medicalRecords": "السجلات الطبية ({{count}})",
+    "prescriptions": "الوصفات الطبية ({{count}})",
+    "labOrders": "طلبات المختبر ({{count}})",
+    "from": "من",
+    "to": "إلى",
+    "fromDoctor": "الطبيب المُحيل",
+    "toDoctor": "الطبيب المستقبل",
+    "unassigned": "لم يُحدد بعد",
+    "reason": "السبب",
+    "clinicalSummary": "ملخص سريري",
+    "responseNote": "ملاحظة الرد",
+    "nhid": "الرقم الصحي الوطني",
+    "syrianId": "الرقم الوطني السوري",
+    "dob": "تاريخ الميلاد",
+    "gender": "الجنس",
+    "bloodType": "فصيلة الدم",
+    "allergies": "الحساسية",
+    "chronicConditions": "الأمراض المزمنة",
+    "openInRegistry": "فتح في السجل الوطني",
+    "timeline": {
+      "created": "أُنشئت",
+      "accepted": "قُبلت",
+      "rejected": "رُفضت",
+      "completed": "اكتملت",
+      "cancelled": "أُلغيت"
+    },
+    "actions": {
+      "note": "ملاحظة",
+      "accept": {
+        "title": "قبول الإحالة",
+        "description": "القبول يمنح مستشفاك حق القراءة لسجلات المريض من المستشفى المرسل.",
+        "confirm": "قبول",
+        "notePlaceholder": "ملاحظة اختيارية للفريق المُحيل.",
+        "success": "تم قبول الإحالة",
+        "error": "تعذر قبول الإحالة"
+      },
+      "reject": {
+        "title": "رفض الإحالة",
+        "description": "سيتم إعلام المستشفى المُحيل. لن يُمنح وصول إلى السجلات.",
+        "confirm": "رفض",
+        "notePlaceholder": "سبب الرفض (اختياري).",
+        "success": "تم رفض الإحالة",
+        "error": "تعذر رفض الإحالة"
+      },
+      "complete": {
+        "title": "وضع علامة مكتملة",
+        "description": "استخدم بعد إتمام رعاية المريض ضمن هذه الإحالة. يبقى الوصول للسجلات المشتركة.",
+        "confirm": "مكتملة",
+        "notePlaceholder": "ملخص النتيجة (اختياري).",
+        "success": "تم وضع الإحالة كمكتملة",
+        "error": "تعذر وضعها كمكتملة"
+      },
+      "cancel": {
+        "title": "إلغاء الإحالة",
+        "description": "فقط المستشفى المرسل يمكنه الإلغاء. سيُلغى وصول المستشفى المستقبل.",
+        "confirm": "إلغاء الإحالة",
+        "notePlaceholder": "سبب الإلغاء (اختياري).",
+        "success": "تم إلغاء الإحالة",
+        "error": "تعذر إلغاء الإحالة"
+      }
+    }
+  }
+}

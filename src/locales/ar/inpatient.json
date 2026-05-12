@@ -1,0 +1,144 @@
+{
+  "wards": {
+    "title": "الأجنحة",
+    "subtitle": "أجنحة التنويم وسعة الأسرة",
+    "newWard": "جناح جديد",
+    "newWardDescription": "أنشئ جناح تنويم جديد مع سعته من الأسرة.",
+    "floor": "الطابق",
+    "department": "القسم",
+    "bedCount": "{{count}} سرير",
+    "bedCount_one": "{{count}} سرير",
+    "viewBedBoard": "لوحة الأسرة",
+    "addBed": "إضافة سرير",
+    "emptyTitle": "لا توجد أجنحة بعد",
+    "emptyDescription": "أنشئ أول جناح لبدء تتبع سعة التنويم.",
+    "createSuccess": "تم إنشاء الجناح",
+    "createError": "فشل إنشاء الجناح",
+    "fields": {
+      "name": "اسم الجناح",
+      "type": "نوع الجناح",
+      "floor": "الطابق",
+      "description": "الوصف"
+    }
+  },
+  "beds": {
+    "newBed": "إضافة سرير",
+    "newBedDescription": "أضف سريراً جديداً إلى {{ward}}.",
+    "fields": {
+      "number": "رقم السرير",
+      "notes": "ملاحظات"
+    },
+    "createSuccess": "تمت إضافة السرير",
+    "createError": "فشل إضافة السرير"
+  },
+  "bedBoard": {
+    "title": "لوحة الأسرة",
+    "subtitle": "نظرة بصرية على جميع الأسرة وحالاتها",
+    "allWards": "كل الأجنحة",
+    "emptyTitle": "لم تُعدّ أسرة بعد",
+    "emptyDescription": "أضف أسرة إلى أجنحتك لملء اللوحة."
+  },
+  "bedStatus": {
+    "AVAILABLE": "متاح",
+    "OCCUPIED": "مشغول",
+    "MAINTENANCE": "صيانة",
+    "RESERVED": "محجوز"
+  },
+  "wardType": {
+    "GENERAL": "عام",
+    "ICU": "العناية المركزة",
+    "NICU": "حضانة الأطفال",
+    "POST_OP": "ما بعد الجراحة",
+    "ISOLATION": "عزل",
+    "MATERNITY": "الولادة",
+    "PEDIATRIC": "الأطفال"
+  },
+  "admissions": {
+    "title": "حالات التنويم",
+    "subtitle": "حالات التنويم في كل الأجنحة",
+    "admitPatient": "تنويم مريض",
+    "admit": "تنويم",
+    "noBed": "لم يُخصص سرير",
+    "admitDescription": "اختر مريضاً، الطبيب المنوّم، وسريراً اختيارياً.",
+    "admitSuccess": "تم تنويم المريض",
+    "admitError": "فشل التنويم",
+    "emptyTitle": "لا توجد حالات تنويم مفتوحة",
+    "emptyDescription": "ستظهر حالات التنويم هنا.",
+    "filter": {
+      "open": "المفتوحة (مُنوّم + محوّل)",
+      "all": "كل الحالات"
+    },
+    "columns": {
+      "patient": "المريض",
+      "bed": "السرير",
+      "diagnosis": "التشخيص",
+      "admittedBy": "نوّم بواسطة",
+      "admissionDate": "تاريخ التنويم",
+      "status": "الحالة"
+    },
+    "fields": {
+      "patient": "المريض",
+      "patientPlaceholder": "اختر مريضاً",
+      "doctor": "الطبيب المنوّم",
+      "doctorPlaceholder": "اختر طبيباً",
+      "ward": "الجناح",
+      "wardPlaceholder": "اختر جناحاً",
+      "bed": "السرير",
+      "bedPlaceholder": "اختر سريراً",
+      "noBedNow": "لا تخصص سريراً الآن",
+      "pickLater": "اختر سريراً لاحقاً",
+      "diagnosis": "التشخيص الأولي",
+      "reason": "السبب / ملاحظة الإحالة"
+    }
+  },
+  "admissionStatus": {
+    "ADMITTED": "مُنوّم",
+    "TRANSFERRED": "محوّل",
+    "DISCHARGED": "خرج",
+    "DECEASED": "متوفى"
+  },
+  "admissionDetail": {
+    "admittedSince": "مُنوّم منذ {{when}}",
+    "loadError": "تعذر تحميل بيانات التنويم.",
+    "backToList": "العودة إلى التنويم",
+    "criticalAlerts": "تنبيهات حرجة",
+    "patientInfo": "المريض",
+    "clinical": "سريري",
+    "transfers": "تحويلات الأسرة",
+    "noTransfers": "لا توجد تحويلات بعد.",
+    "fromNowhere": "عند التنويم",
+    "medicalRecords": "السجلات الطبية",
+    "noRecords": "لا توجد سجلات مرتبطة بهذا التنويم بعد.",
+    "currentBed": "السرير الحالي",
+    "noBedAllocated": "لم يُخصص سرير. خصص سريراً عبر التحويل.",
+    "openBedBoard": "فتح لوحة الأسرة",
+    "openPatientRecord": "فتح سجل المريض",
+    "transferBed": "تحويل سرير",
+    "transfer": "تحويل",
+    "transferDescription": "نقل المريض إلى سرير آخر متاح.",
+    "transferSuccess": "تم تسجيل التحويل",
+    "transferError": "فشل التحويل",
+    "discharge": "خروج",
+    "confirmDischarge": "تأكيد الخروج",
+    "dischargeDescription": "أغلق التنويم بنتيجة وملخص.",
+    "dischargeSuccess": "تم خروج المريض",
+    "dischargeError": "فشل الخروج",
+    "fields": {
+      "nhid": "الرقم الصحي الوطني",
+      "dob": "تاريخ الميلاد",
+      "gender": "الجنس",
+      "bloodType": "فصيلة الدم",
+      "allergies": "الحساسية",
+      "patientProfile": "السجل المحلي",
+      "admittingDoctor": "الطبيب المنوّم",
+      "admissionDate": "تاريخ التنويم",
+      "dischargeDate": "تاريخ الخروج",
+      "diagnosis": "التشخيص",
+      "reason": "السبب / ملاحظة",
+      "dischargeSummary": "ملخص الخروج",
+      "transferReason": "سبب التحويل",
+      "outcome": "النتيجة",
+      "dischargeSummaryPlaceholder": "ملخص سريري عند الخروج، خطة المتابعة، الأدوية."
+    }
+  }
+}

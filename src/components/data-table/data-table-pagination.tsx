@@ -92,7 +92,7 @@ export function DataTablePagination({
             disabled={page <= 1}
             aria-label={`${t("page")} 1`}
           >
-            <ChevronsLeft className="h-4 w-4" />
+            <ChevronsLeft className="h-4 w-4 rtl:rotate-180" />
           </Button>
           <Button
             variant="outline"
@@ -102,7 +102,7 @@ export function DataTablePagination({
             disabled={page <= 1}
             aria-label={t("previous")}
           >
-            <ChevronLeft className="h-4 w-4" />
+            <ChevronLeft className="h-4 w-4 rtl:rotate-180" />
           </Button>
           <Button
             variant="outline"
@@ -112,7 +112,7 @@ export function DataTablePagination({
             disabled={page >= totalPages}
             aria-label={t("next")}
           >
-            <ChevronRight className="h-4 w-4" />
+            <ChevronRight className="h-4 w-4 rtl:rotate-180" />
           </Button>
           <Button
             variant="outline"
@@ -122,7 +122,7 @@ export function DataTablePagination({
             disabled={page >= totalPages}
             aria-label={`${t("page")} ${totalPages}`}
           >
-            <ChevronsRight className="h-4 w-4" />
+            <ChevronsRight className="h-4 w-4 rtl:rotate-180" />
           </Button>
         </div>
       </div>

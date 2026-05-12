@@ -70,12 +70,12 @@ export default function SymptomCheckerPage() {
                   <Badge
                     key={symptom}
                     variant="secondary"
-                    className="cursor-pointer gap-1 pr-1"
+                    className="cursor-pointer gap-1 pe-1"
                   >
                     {symptom}
                     <button
                       onClick={() => removeSymptom(symptom)}
-                      className="ml-1 rounded-full p-0.5 hover:bg-muted-foreground/20"
+                      className="ms-1 rounded-full p-0.5 hover:bg-muted-foreground/20"
                     >
                       <X className="h-3 w-3" />
                     </button>
@@ -86,18 +86,18 @@ export default function SymptomCheckerPage() {
 
             {/* Search */}
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Search className="absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
                 placeholder={t('searchSymptoms')}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="pl-9"
+                className="ps-9"
               />
             </div>
 
             {/* Symptoms checklist */}
             <ScrollArea className="h-[300px]">
-              <div className="space-y-2 pr-4">
+              <div className="space-y-2 pe-4">
                 {filteredSymptoms.map((symptom) => (
                   <label
                     key={symptom}
@@ -123,7 +123,7 @@ export default function SymptomCheckerPage() {
               }
               className="w-full"
             >
-              <Brain className="mr-2 h-4 w-4" />
+              <Brain className="me-2 h-4 w-4" />
               {predictDisease.isPending ? t('analyzing') : t('checkSymptoms')}
             </Button>
           </CardContent>

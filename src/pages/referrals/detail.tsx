@@ -77,7 +77,7 @@ export default function ReferralDetailPage() {
           className="mt-4"
           onClick={() => navigate('/referrals/incoming')}
         >
-          <ArrowLeft className="mr-2 h-4 w-4" />
+          <ArrowLeft className="me-2 h-4 w-4 rtl:rotate-180" />
           {t('detail.back')}
         </Button>
       </div>
@@ -108,7 +108,7 @@ export default function ReferralDetailPage() {
               navigate(isReceiver ? '/referrals/incoming' : '/referrals/outgoing')
             }
           >
-            <ArrowLeft className="h-4 w-4" />
+            <ArrowLeft className="h-4 w-4 rtl:rotate-180" />
           </Button>
           <div>
             <h1 className="text-2xl font-bold tracking-tight">
@@ -128,7 +128,7 @@ export default function ReferralDetailPage() {
           <ReferralUrgencyBadge urgency={referral.urgency} />
           {canAccept && (
             <Button onClick={() => setAction('accept')}>
-              <Check className="mr-2 h-4 w-4" />
+              <Check className="me-2 h-4 w-4" />
               {t('detail.accept')}
             </Button>
           )}
@@ -137,13 +137,13 @@ export default function ReferralDetailPage() {
               variant="destructive"
               onClick={() => setAction('reject')}
             >
-              <X className="mr-2 h-4 w-4" />
+              <X className="me-2 h-4 w-4" />
               {t('detail.reject')}
             </Button>
           )}
           {canComplete && (
             <Button onClick={() => setAction('complete')}>
-              <CheckCheck className="mr-2 h-4 w-4" />
+              <CheckCheck className="me-2 h-4 w-4" />
               {t('detail.complete')}
             </Button>
           )}
@@ -152,7 +152,7 @@ export default function ReferralDetailPage() {
               variant="outline"
               onClick={() => setAction('cancel')}
             >
-              <Ban className="mr-2 h-4 w-4" />
+              <Ban className="me-2 h-4 w-4" />
               {t('detail.cancel')}
             </Button>
           )}
@@ -190,7 +190,7 @@ export default function ReferralDetailPage() {
                     {referral.fromHospital.code}
                   </p>
                 </div>
-                <ArrowRight className="h-5 w-5 text-muted-foreground" />
+                <ArrowRight className="h-5 w-5 text-muted-foreground rtl:rotate-180" />
                 <div className="rounded-md border bg-muted/30 p-3 text-sm">
                   <p className="text-xs uppercase tracking-wide text-muted-foreground">
                     {t('detail.to')}
@@ -441,7 +441,7 @@ function CrossHospitalRecordsPanel({
                       count: p.medicalRecords.length,
                     })}
                     items={p.medicalRecords.map((mr) => (
-                      <div key={mr.id} className="border-l-2 border-muted pl-3">
+                      <div key={mr.id} className="border-s-2 border-muted ps-3">
                         <p className="font-medium">
                           {mr.diagnosis ?? mr.chiefComplaint ?? mr.id.slice(0, 8)}
                         </p>
@@ -459,7 +459,7 @@ function CrossHospitalRecordsPanel({
                       count: p.prescriptions.length,
                     })}
                     items={p.prescriptions.map((rx) => (
-                      <div key={rx.id} className="border-l-2 border-muted pl-3">
+                      <div key={rx.id} className="border-s-2 border-muted ps-3">
                         <p className="font-medium">
                           {rx.items
                             .map(
@@ -477,13 +477,13 @@ function CrossHospitalRecordsPanel({
                     icon={FlaskConical}
                     title={t('detail.labOrders', { count: p.labOrders.length })}
                     items={p.labOrders.map((lab) => (
-                      <div key={lab.id} className="border-l-2 border-muted pl-3">
+                      <div key={lab.id} className="border-s-2 border-muted ps-3">
                         <p className="font-medium">{lab.testName}</p>
                         <p className="text-xs text-muted-foreground">
                           {lab.status} ·{' '}
                           {format(new Date(lab.orderedAt), 'PP')}
                           {lab.result?.isAbnormal && (
-                            <span className="ml-1 text-destructive">
+                            <span className="ms-1 text-destructive">
                               · {t('detail.abnormal')}
                             </span>
                           )}
@@ -594,7 +594,7 @@ function ActionDialog({
             </Button>
             <Button type="submit" disabled={mut.isPending}>
               {mut.isPending && (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                <Loader2 className="me-2 h-4 w-4 animate-spin" />
               )}
               {t(`detail.actions.${action}.confirm`)}
             </Button>

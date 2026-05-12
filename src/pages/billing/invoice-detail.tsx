@@ -121,7 +121,7 @@ export default function InvoiceDetailPage() {
             onClick={() => navigate('/billing')}
             aria-label={t('backToList')}
           >
-            <ArrowLeft className="h-4 w-4" />
+            <ArrowLeft className="h-4 w-4 rtl:rotate-180" />
           </Button>
           <div>
             <h1 className="text-2xl font-bold tracking-tight">
@@ -138,7 +138,7 @@ export default function InvoiceDetailPage() {
             onClick={handlePrint}
             className="flex-1 sm:flex-none"
           >
-            <Printer className="mr-2 h-4 w-4" />
+            <Printer className="me-2 h-4 w-4" />
             {t('print')}
           </Button>
           {canRecordPayment && (
@@ -146,7 +146,7 @@ export default function InvoiceDetailPage() {
               onClick={() => setPaymentOpen(true)}
               className="flex-1 sm:flex-none"
             >
-              <Plus className="mr-2 h-4 w-4" />
+              <Plus className="me-2 h-4 w-4" />
               {t('recordPayment')}
             </Button>
           )}
@@ -221,13 +221,13 @@ export default function InvoiceDetailPage() {
                     <TableHead>#</TableHead>
                     <TableHead>{t('description')}</TableHead>
                     <TableHead>{t('category')}</TableHead>
-                    <TableHead className="text-right">
+                    <TableHead className="text-end">
                       {t('quantity')}
                     </TableHead>
-                    <TableHead className="text-right">
+                    <TableHead className="text-end">
                       {t('unitPrice')}
                     </TableHead>
-                    <TableHead className="text-right">
+                    <TableHead className="text-end">
                       {t('itemTotal')}
                     </TableHead>
                   </TableRow>
@@ -242,13 +242,13 @@ export default function InvoiceDetailPage() {
                       <TableCell>
                         {t(`categories.${item.category}`)}
                       </TableCell>
-                      <TableCell className="text-right">
+                      <TableCell className="text-end">
                         {item.quantity}
                       </TableCell>
-                      <TableCell className="text-right">
+                      <TableCell className="text-end">
                         {formatCurrency(item.unitPrice)}
                       </TableCell>
-                      <TableCell className="text-right font-medium">
+                      <TableCell className="text-end font-medium">
                         {formatCurrency(item.total)}
                       </TableCell>
                     </TableRow>
@@ -337,7 +337,7 @@ export default function InvoiceDetailPage() {
               size="sm"
               onClick={() => setPaymentOpen(true)}
             >
-              <Plus className="mr-2 h-4 w-4" />
+              <Plus className="me-2 h-4 w-4" />
               {t('recordPayment')}
             </Button>
           )}
@@ -349,7 +349,7 @@ export default function InvoiceDetailPage() {
                 <TableHeader>
                   <TableRow>
                     <TableHead>#</TableHead>
-                    <TableHead className="text-right">{t('amount')}</TableHead>
+                    <TableHead className="text-end">{t('amount')}</TableHead>
                     <TableHead>{t('method')}</TableHead>
                     <TableHead>{t('reference')}</TableHead>
                     <TableHead>{t('paidAt')}</TableHead>
@@ -359,7 +359,7 @@ export default function InvoiceDetailPage() {
                   {invoice.payments.map((payment, index) => (
                     <TableRow key={payment.id}>
                       <TableCell>{index + 1}</TableCell>
-                      <TableCell className="text-right font-medium">
+                      <TableCell className="text-end font-medium">
                         {formatCurrency(payment.amount)}
                       </TableCell>
                       <TableCell>

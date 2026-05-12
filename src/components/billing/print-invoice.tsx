@@ -91,7 +91,7 @@ export const PrintInvoice = forwardRef<HTMLDivElement, PrintInvoiceProps>(
               background-color: #f3f4f6 !important;
               font-weight: 600;
             }
-            #print-invoice .text-right {
+            #print-invoice .text-end {
               text-align: right;
             }
           }
@@ -119,7 +119,7 @@ export const PrintInvoice = forwardRef<HTMLDivElement, PrintInvoiceProps>(
               <p className="print-text-muted">{t('invoiceNumber')}:</p>
               <p className="font-semibold">{invoice.invoiceNumber}</p>
             </div>
-            <div className="text-right">
+            <div className="text-end">
               <p className="print-text-muted">{t('status')}:</p>
               <p className="font-semibold">
                 {t(`statuses.${invoice.status}`)}
@@ -129,7 +129,7 @@ export const PrintInvoice = forwardRef<HTMLDivElement, PrintInvoiceProps>(
               <p className="print-text-muted">{t('patient')}:</p>
               <p className="font-semibold">{patientName}</p>
             </div>
-            <div className="text-right">
+            <div className="text-end">
               <p className="print-text-muted">{t('issuedAt')}:</p>
               <p className="font-semibold">{invoiceDate}</p>
             </div>
@@ -139,7 +139,7 @@ export const PrintInvoice = forwardRef<HTMLDivElement, PrintInvoiceProps>(
                 <p className="font-semibold">{invoice.patient.user.email}</p>
               </div>
             )}
-            <div className="text-right">
+            <div className="text-end">
               <p className="print-text-muted">{t('dueDate')}:</p>
               <p className="font-semibold">{dueDate}</p>
             </div>
@@ -153,9 +153,9 @@ export const PrintInvoice = forwardRef<HTMLDivElement, PrintInvoiceProps>(
                 <th>#</th>
                 <th>{t('description')}</th>
                 <th>{t('category')}</th>
-                <th className="text-right">{t('quantity')}</th>
-                <th className="text-right">{t('unitPrice')}</th>
-                <th className="text-right">{t('itemTotal')}</th>
+                <th className="text-end">{t('quantity')}</th>
+                <th className="text-end">{t('unitPrice')}</th>
+                <th className="text-end">{t('itemTotal')}</th>
               </tr>
             </thead>
             <tbody>
@@ -164,11 +164,11 @@ export const PrintInvoice = forwardRef<HTMLDivElement, PrintInvoiceProps>(
                   <td>{index + 1}</td>
                   <td className="font-medium">{item.description}</td>
                   <td>{t(`categories.${item.category}`)}</td>
-                  <td className="text-right">{item.quantity}</td>
-                  <td className="text-right">
+                  <td className="text-end">{item.quantity}</td>
+                  <td className="text-end">
                     {formatCurrency(item.unitPrice)}
                   </td>
-                  <td className="text-right">
+                  <td className="text-end">
                     {formatCurrency(item.total)}
                   </td>
                 </tr>

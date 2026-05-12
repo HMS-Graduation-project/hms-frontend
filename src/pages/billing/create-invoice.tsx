@@ -170,7 +170,7 @@ export default function CreateInvoicePage() {
           onClick={() => navigate('/billing')}
           aria-label={t('backToList')}
         >
-          <ArrowLeft className="h-4 w-4" />
+          <ArrowLeft className="h-4 w-4 rtl:rotate-180" />
         </Button>
         <div>
           <h1 className="text-2xl font-bold tracking-tight">
@@ -224,7 +224,7 @@ export default function CreateInvoicePage() {
         <CardHeader className="flex flex-row items-center justify-between space-y-0">
           <CardTitle className="text-lg">{t('items')}</CardTitle>
           <Button variant="outline" size="sm" onClick={addItem}>
-            <Plus className="mr-2 h-4 w-4" />
+            <Plus className="me-2 h-4 w-4" />
             {t('addItem')}
           </Button>
         </CardHeader>
@@ -315,7 +315,7 @@ export default function CreateInvoicePage() {
 
                 {/* Line Total */}
                 <div className="flex items-center">
-                  <span className="sm:hidden mr-2 text-sm font-medium text-muted-foreground">
+                  <span className="sm:hidden me-2 text-sm font-medium text-muted-foreground">
                     {t('itemTotal')}:
                   </span>
                   <span className="text-sm font-medium">

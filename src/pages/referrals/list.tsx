@@ -97,19 +97,19 @@ export default function ReferralsListPage({ direction }: Props) {
             variant={isIncoming ? 'default' : 'outline'}
             onClick={() => navigate('/referrals/incoming')}
           >
-            <Inbox className="mr-2 h-4 w-4" />
+            <Inbox className="me-2 h-4 w-4" />
             {t('incoming.tab')}
           </Button>
           <Button
             variant={!isIncoming ? 'default' : 'outline'}
             onClick={() => navigate('/referrals/outgoing')}
           >
-            <Send className="mr-2 h-4 w-4" />
+            <Send className="me-2 h-4 w-4" />
             {t('outgoing.tab')}
           </Button>
           {canCreate && !isIncoming && (
             <Button onClick={() => navigate('/referrals/new')}>
-              <Plus className="mr-2 h-4 w-4" />
+              <Plus className="me-2 h-4 w-4" />
               {t('newReferral')}
             </Button>
           )}
@@ -157,7 +157,7 @@ export default function ReferralsListPage({ direction }: Props) {
           action={
             canCreate && !isIncoming ? (
               <Button onClick={() => navigate('/referrals/new')}>
-                <Plus className="mr-2 h-4 w-4" />
+                <Plus className="me-2 h-4 w-4" />
                 {t('newReferral')}
               </Button>
             ) : undefined
@@ -176,7 +176,7 @@ export default function ReferralsListPage({ direction }: Props) {
                 </TableHead>
                 <TableHead>{t('columns.status')}</TableHead>
                 <TableHead>{t('columns.created')}</TableHead>
-                <TableHead className="text-right">{tCommon('actions')}</TableHead>
+                <TableHead className="text-end">{tCommon('actions')}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -223,7 +223,7 @@ export default function ReferralsListPage({ direction }: Props) {
                         addSuffix: true,
                       })}
                     </TableCell>
-                    <TableCell className="text-right">
+                    <TableCell className="text-end">
                       <Button
                         size="icon"
                         variant="ghost"

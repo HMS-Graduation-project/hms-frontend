@@ -46,7 +46,7 @@ export default function DepartmentDetailPage() {
           className="mt-4"
           onClick={() => navigate('/departments')}
         >
-          <ArrowLeft className="mr-2 h-4 w-4" />
+          <ArrowLeft className="me-2 h-4 w-4 rtl:rotate-180" />
           {t('backToList')}
         </Button>
       </div>
@@ -70,7 +70,7 @@ export default function DepartmentDetailPage() {
             onClick={() => navigate('/departments')}
             aria-label={t('backToList')}
           >
-            <ArrowLeft className="h-4 w-4" />
+            <ArrowLeft className="h-4 w-4 rtl:rotate-180" />
           </Button>
           <div>
             <h1 className="text-2xl font-bold tracking-tight">{department.name}</h1>

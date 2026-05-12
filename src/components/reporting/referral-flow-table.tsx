@@ -41,7 +41,7 @@ export function ReferralFlowTable({ data, isLoading }: ReferralFlowTableProps) {
                 <TableHead>{t('fromCity')}</TableHead>
                 <TableHead />
                 <TableHead>{t('toCity')}</TableHead>
-                <TableHead className="text-right">{t('referrals')}</TableHead>
+                <TableHead className="text-end">{t('referrals')}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -49,10 +49,10 @@ export function ReferralFlowTable({ data, isLoading }: ReferralFlowTableProps) {
                 <TableRow key={`${f.fromCity.id}-${f.toCity.id}-${idx}`}>
                   <TableCell className="font-medium">{f.fromCity.name}</TableCell>
                   <TableCell className="w-10 p-0 text-muted-foreground">
-                    <ArrowRight className="h-4 w-4" />
+                    <ArrowRight className="h-4 w-4 rtl:rotate-180" />
                   </TableCell>
                   <TableCell className="font-medium">{f.toCity.name}</TableCell>
-                  <TableCell className="text-right tabular-nums">{f.count}</TableCell>
+                  <TableCell className="text-end tabular-nums">{f.count}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

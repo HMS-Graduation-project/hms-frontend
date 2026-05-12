@@ -100,7 +100,7 @@ export default function NewReferralPage() {
           size="icon"
           onClick={() => navigate('/referrals/outgoing')}
         >
-          <ArrowLeft className="h-4 w-4" />
+          <ArrowLeft className="h-4 w-4 rtl:rotate-180" />
         </Button>
         <div>
           <h1 className="text-2xl font-bold tracking-tight">
@@ -225,9 +225,9 @@ export default function NewReferralPage() {
             </Button>
             <Button type="submit" disabled={!canSubmit}>
               {create.isPending && (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                <Loader2 className="me-2 h-4 w-4 animate-spin" />
               )}
-              <Send className="mr-2 h-4 w-4" />
+              <Send className="me-2 h-4 w-4" />
               {t('newPage.submit')}
             </Button>
           </div>

@@ -35,8 +35,8 @@ export default function RegisterPage() {
   const onSubmit = async (data: RegisterForm) => {
     try {
       setError('');
-      await registerUser(data.email, data.password);
-      navigate('/profile');
+      const u = await registerUser(data.email, data.password);
+      navigate(u.role === 'PATIENT' ? '/portal/home' : '/dashboard');
     } catch (err: any) {
       setError(err.message || t('registerFailed'));
     }

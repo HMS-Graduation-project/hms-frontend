@@ -149,7 +149,7 @@ export default function PrescriptionDetailPage() {
             onClick={() => navigate(-1)}
             aria-label={t('backToList')}
           >
-            <ArrowLeft className="h-4 w-4" />
+            <ArrowLeft className="h-4 w-4 rtl:rotate-180" />
           </Button>
           <div>
             <h1 className="text-2xl font-bold tracking-tight">
@@ -164,7 +164,7 @@ export default function PrescriptionDetailPage() {
             onClick={handlePrint}
             className="flex-1 sm:flex-none"
           >
-            <Printer className="mr-2 h-4 w-4" />
+            <Printer className="me-2 h-4 w-4" />
             {t('print')}
           </Button>
           {canDispense && (
@@ -172,7 +172,7 @@ export default function PrescriptionDetailPage() {
               onClick={() => handleStatusChange('DISPENSED')}
               className="flex-1 sm:flex-none"
             >
-              <CheckCircle className="mr-2 h-4 w-4" />
+              <CheckCircle className="me-2 h-4 w-4" />
               {t('actions.dispense')}
             </Button>
           )}
@@ -182,7 +182,7 @@ export default function PrescriptionDetailPage() {
               onClick={() => handleStatusChange('CANCELLED')}
               className="flex-1 sm:flex-none"
             >
-              <XCircle className="mr-2 h-4 w-4" />
+              <XCircle className="me-2 h-4 w-4" />
               {t('actions.cancel')}
             </Button>
           )}

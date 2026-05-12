@@ -107,7 +107,7 @@ export const PrintPrescription = forwardRef<
             <p className="print-text-muted">{t('prescribedFor')}:</p>
             <p className="font-semibold">{patientName}</p>
           </div>
-          <div className="text-right">
+          <div className="text-end">
             <p className="print-text-muted">{t('prescriptionDate')}:</p>
             <p className="font-semibold">{prescriptionDate}</p>
           </div>
@@ -115,7 +115,7 @@ export const PrintPrescription = forwardRef<
             <p className="print-text-muted">{t('prescribedBy')}:</p>
             <p className="font-semibold">{doctorName}</p>
           </div>
-          <div className="text-right">
+          <div className="text-end">
             <p className="print-text-muted">{t('status')}:</p>
             <p className="font-semibold">
               {t(`statuses.${prescription.status}`)}

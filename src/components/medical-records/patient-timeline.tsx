@@ -93,7 +93,7 @@ export function PatientTimeline({ records, isLoading }: PatientTimelineProps) {
                       className="shrink-0"
                       onClick={() => navigate(`/medical-records/${record.id}`)}
                     >
-                      <FileText className="mr-1 h-4 w-4" />
+                      <FileText className="me-1 h-4 w-4" />
                       {t('recordDetail')}
                     </Button>
                   </div>

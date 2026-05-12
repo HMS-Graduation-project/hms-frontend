@@ -31,8 +31,10 @@ export default function LoginPage() {
   const onSubmit = async (data: LoginForm) => {
     try {
       setError('');
-      await login(data.email, data.password);
-      navigate('/profile');
+      const u = await login(data.email, data.password);
+      // Role-aware landing: patients → portal, everyone else → dashboard
+      // (which itself redirects MINISTRY/REGIONAL admins to their views).
+      navigate(u.role === 'PATIENT' ? '/portal/home' : '/dashboard');
     } catch (err: any) {
       setError(err.message || t('loginFailed'));
     }

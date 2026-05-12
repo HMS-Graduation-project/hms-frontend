@@ -48,19 +48,19 @@ export function RecentAppointments() {
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b text-left">
-                  <th className="pb-3 pr-4 font-medium text-muted-foreground">{t('patient')}</th>
-                  <th className="pb-3 pr-4 font-medium text-muted-foreground">{t('doctor')}</th>
-                  <th className="pb-3 pr-4 font-medium text-muted-foreground">{t('time')}</th>
+                <tr className="border-b text-start">
+                  <th className="pb-3 pe-4 font-medium text-muted-foreground">{t('patient')}</th>
+                  <th className="pb-3 pe-4 font-medium text-muted-foreground">{t('doctor')}</th>
+                  <th className="pb-3 pe-4 font-medium text-muted-foreground">{t('time')}</th>
                   <th className="pb-3 font-medium text-muted-foreground">{t('status')}</th>
                 </tr>
               </thead>
               <tbody>
                 {appointments.slice(0, 5).map((appt) => (
                   <tr key={appt.id} className="border-b last:border-0">
-                    <td className="py-3 pr-4 font-medium">{appt.patient}</td>
-                    <td className="py-3 pr-4 text-muted-foreground">{appt.doctor}</td>
-                    <td className="py-3 pr-4 text-muted-foreground">{appt.time}</td>
+                    <td className="py-3 pe-4 font-medium">{appt.patient}</td>
+                    <td className="py-3 pe-4 text-muted-foreground">{appt.doctor}</td>
+                    <td className="py-3 pe-4 text-muted-foreground">{appt.time}</td>
                     <td className="py-3">
                       <Badge variant={statusVariantMap[appt.status]}>
                         {appt.status}

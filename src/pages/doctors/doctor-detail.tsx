@@ -75,7 +75,7 @@ export default function DoctorDetailPage() {
             onClick={() => navigate('/doctors')}
             aria-label={t('backToList')}
           >
-            <ArrowLeft className="h-5 w-5" />
+            <ArrowLeft className="h-5 w-5 rtl:rotate-180" />
           </Button>
           <div>
             <h1 className="text-2xl font-bold tracking-tight">{fullName}</h1>
@@ -83,7 +83,7 @@ export default function DoctorDetailPage() {
           </div>
         </div>
         <Button onClick={() => setEditDialogOpen(true)} className="w-full sm:w-auto">
-          <Pencil className="mr-2 h-4 w-4" />
+          <Pencil className="me-2 h-4 w-4" />
           {t('editDoctor')}
         </Button>
       </div>

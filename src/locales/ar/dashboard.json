@@ -1,0 +1,21 @@
+{
+  "title": "لوحة التحكم",
+  "subtitle": "مرحباً بعودتك",
+  "totalPatients": "إجمالي المرضى",
+  "totalDoctors": "إجمالي الأطباء",
+  "todayAppointments": "مواعيد اليوم",
+  "pendingLabResults": "نتائج المختبر المعلقة",
+  "recentAppointments": "المواعيد الأخيرة",
+  "quickActions": "إجراءات سريعة",
+  "newAppointment": "موعد جديد",
+  "registerPatient": "تسجيل مريض",
+  "viewReports": "عرض التقارير",
+  "noAppointmentsToday": "لا توجد مواعيد مجدولة لليوم",
+  "patient": "المريض",
+  "doctor": "الطبيب",
+  "time": "الوقت",
+  "status": "الحالة",
+  "overview": "نظرة عامة",
+  "monthlyRevenue": "الإيرادات الشهرية",
+  "occupancyRate": "معدل الإشغال"
+}

@@ -86,7 +86,7 @@ export default function AdmissionDetailPage() {
           variant="outline"
           onClick={() => navigate('/inpatient/admissions')}
         >
-          <ArrowLeft className="mr-2 h-4 w-4" />
+          <ArrowLeft className="me-2 h-4 w-4 rtl:rotate-180" />
           {t('admissionDetail.backToList')}
         </Button>
       </div>
@@ -112,7 +112,7 @@ export default function AdmissionDetailPage() {
             size="icon"
             onClick={() => navigate('/inpatient/admissions')}
           >
-            <ArrowLeft className="h-4 w-4" />
+            <ArrowLeft className="h-4 w-4 rtl:rotate-180" />
           </Button>
           <div>
             <h1 className="text-2xl font-bold tracking-tight">
@@ -134,13 +134,13 @@ export default function AdmissionDetailPage() {
               variant="outline"
               onClick={() => setTransferOpen(true)}
             >
-              <ArrowRightLeft className="mr-2 h-4 w-4" />
+              <ArrowRightLeft className="me-2 h-4 w-4" />
               {t('admissionDetail.transferBed')}
             </Button>
           )}
           {canDischarge && (
             <Button onClick={() => setDischargeOpen(true)}>
-              <LogOut className="mr-2 h-4 w-4" />
+              <LogOut className="me-2 h-4 w-4" />
               {t('admissionDetail.discharge')}
             </Button>
           )}
@@ -270,7 +270,7 @@ export default function AdmissionDetailPage() {
                         <Badge>
                           {tr.toBed.ward.name} · {tr.toBed.number}
                         </Badge>
-                        <span className="ml-auto text-xs text-muted-foreground">
+                        <span className="ms-auto text-xs text-muted-foreground">
                           {format(new Date(tr.transferredAt), 'PP p')}
                         </span>
                       </div>
@@ -509,7 +509,7 @@ function TransferDialog({
             </Button>
             <Button type="submit" disabled={!toBedId || transfer.isPending}>
               {transfer.isPending && (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                <Loader2 className="me-2 h-4 w-4 animate-spin" />
               )}
               {t('admissionDetail.transfer')}
             </Button>
@@ -598,9 +598,9 @@ function DischargeDialog({
             </Button>
             <Button type="submit" disabled={discharge.isPending}>
               {discharge.isPending && (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                <Loader2 className="me-2 h-4 w-4 animate-spin" />
               )}
-              <LogOut className="mr-2 h-4 w-4" />
+              <LogOut className="me-2 h-4 w-4" />
               {t('admissionDetail.confirmDischarge')}
             </Button>
           </DialogFooter>

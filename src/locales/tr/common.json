@@ -36,11 +36,15 @@
   },
   "language": {
     "en": "English",
-    "tr": "Türkçe"
+    "tr": "Türkçe",
+    "ar": "العربية"
   },
   "roles": {
     "SUPER_ADMIN": "Süper Yönetici",
+    "MINISTRY_ADMIN": "Bakanlık Yöneticisi",
+    "REGIONAL_ADMIN": "Bölge Yöneticisi",
     "ADMIN": "Yönetici",
+    "HOSPITAL_ADMIN": "Hastane Yöneticisi",
     "DOCTOR": "Doktor",
     "NURSE": "Hemşire",
     "RECEPTIONIST": "Resepsiyonist",

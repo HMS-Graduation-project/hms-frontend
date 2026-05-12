@@ -83,12 +83,12 @@ export default function DrugInteractionsPage() {
                   <Badge
                     key={medication}
                     variant="secondary"
-                    className="cursor-pointer gap-1 pr-1"
+                    className="cursor-pointer gap-1 pe-1"
                   >
                     {medication}
                     <button
                       onClick={() => removeMedication(medication)}
-                      className="ml-1 rounded-full p-0.5 hover:bg-muted-foreground/20"
+                      className="ms-1 rounded-full p-0.5 hover:bg-muted-foreground/20"
                     >
                       <X className="h-3 w-3" />
                     </button>
@@ -99,18 +99,18 @@ export default function DrugInteractionsPage() {
 
             {/* Search */}
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Search className="absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
                 placeholder={t('searchMedications')}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="pl-9"
+                className="ps-9"
               />
             </div>
 
             {/* Medications checklist */}
             <ScrollArea className="h-[300px]">
-              <div className="space-y-2 pr-4">
+              <div className="space-y-2 pe-4">
                 {filteredMedications.map((medication) => (
                   <label
                     key={medication}
@@ -136,7 +136,7 @@ export default function DrugInteractionsPage() {
               }
               className="w-full"
             >
-              <ShieldAlert className="mr-2 h-4 w-4" />
+              <ShieldAlert className="me-2 h-4 w-4" />
               {checkInteractions.isPending
                 ? t('checking')
                 : t('checkInteractions')}

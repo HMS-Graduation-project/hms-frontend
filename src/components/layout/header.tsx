@@ -54,7 +54,7 @@ export function Header() {
         {hospital && (
           <Badge
             variant="secondary"
-            className="hidden items-center gap-1.5 py-1 pl-2 pr-3 sm:inline-flex"
+            className="hidden items-center gap-1.5 py-1 ps-2 pe-3 sm:inline-flex"
             title={hospital.city?.name ? `${hospital.name} — ${hospital.city.name}` : hospital.name}
           >
             <Building2 className="h-3.5 w-3.5" />
@@ -127,7 +127,7 @@ export function Header() {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={handleProfile} className="cursor-pointer">
-              <User className="mr-2 h-4 w-4" />
+              <User className="me-2 h-4 w-4" />
               {t('profile')}
             </DropdownMenuItem>
             <DropdownMenuSeparator />
@@ -135,7 +135,7 @@ export function Header() {
               onClick={handleLogout}
               className="cursor-pointer text-destructive focus:text-destructive"
             >
-              <LogOut className="mr-2 h-4 w-4" />
+              <LogOut className="me-2 h-4 w-4" />
               {tAuth('signOut')}
             </DropdownMenuItem>
           </DropdownMenuContent>

@@ -116,38 +116,38 @@ export default function MinistryDashboardPage() {
               <TableHeader>
                 <TableRow>
                   <TableHead>{t('city')}</TableHead>
-                  <TableHead className="text-right">{t('hospitalsShort')}</TableHead>
-                  <TableHead className="text-right">{t('bedOccupancyShort')}</TableHead>
-                  <TableHead className="text-right">{t('openAdmissionsShort')}</TableHead>
-                  <TableHead className="text-right">{t('erVisitsShort')}</TableHead>
-                  <TableHead className="text-right">{t('patientsShort')}</TableHead>
-                  <TableHead className="text-right">{t('incomingShort')}</TableHead>
-                  <TableHead className="text-right">{t('outgoingShort')}</TableHead>
+                  <TableHead className="text-end">{t('hospitalsShort')}</TableHead>
+                  <TableHead className="text-end">{t('bedOccupancyShort')}</TableHead>
+                  <TableHead className="text-end">{t('openAdmissionsShort')}</TableHead>
+                  <TableHead className="text-end">{t('erVisitsShort')}</TableHead>
+                  <TableHead className="text-end">{t('patientsShort')}</TableHead>
+                  <TableHead className="text-end">{t('incomingShort')}</TableHead>
+                  <TableHead className="text-end">{t('outgoingShort')}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {data?.cities.map((c) => (
                   <TableRow key={c.city.id}>
                     <TableCell className="font-medium">{c.city.name}</TableCell>
-                    <TableCell className="text-right tabular-nums">
+                    <TableCell className="text-end tabular-nums">
                       {c.hospitalCount}
                     </TableCell>
-                    <TableCell className="text-right tabular-nums">
+                    <TableCell className="text-end tabular-nums">
                       {c.bedOccupancyPct}% ({c.occupiedBeds}/{c.totalBeds})
                     </TableCell>
-                    <TableCell className="text-right tabular-nums">
+                    <TableCell className="text-end tabular-nums">
                       {c.openAdmissions}
                     </TableCell>
-                    <TableCell className="text-right tabular-nums">
+                    <TableCell className="text-end tabular-nums">
                       {c.erVisitsInPeriod}
                     </TableCell>
-                    <TableCell className="text-right tabular-nums">
+                    <TableCell className="text-end tabular-nums">
                       {c.totalPatients}
                     </TableCell>
-                    <TableCell className="text-right tabular-nums">
+                    <TableCell className="text-end tabular-nums">
                       {c.referralsIn}
                     </TableCell>
-                    <TableCell className="text-right tabular-nums">
+                    <TableCell className="text-end tabular-nums">
                       {c.referralsOut}
                     </TableCell>
                   </TableRow>

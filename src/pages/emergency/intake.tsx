@@ -119,7 +119,7 @@ export default function EmergencyIntakePage() {
           onClick={() => navigate('/emergency')}
           aria-label={t('backToQueue')}
         >
-          <ArrowLeft className="h-4 w-4" />
+          <ArrowLeft className="h-4 w-4 rtl:rotate-180" />
         </Button>
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-red-600/10 text-red-600 dark:bg-red-500/20">
@@ -147,7 +147,7 @@ export default function EmergencyIntakePage() {
                 variant="outline"
                 onClick={handleAnonymous}
               >
-                <UserX className="mr-2 h-4 w-4" />
+                <UserX className="me-2 h-4 w-4" />
                 {t('unidentifiedIntake')}
               </Button>
             </div>
@@ -188,7 +188,7 @@ export default function EmergencyIntakePage() {
                 size="sm"
                 onClick={handleBackToSearch}
               >
-                <ArrowLeft className="mr-2 h-4 w-4" />
+                <ArrowLeft className="me-2 h-4 w-4 rtl:rotate-180" />
                 {tCommon('back')}
               </Button>
             </div>

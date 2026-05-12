@@ -178,7 +178,7 @@ export default function BookAppointmentPage() {
           onClick={() => navigate('/appointments')}
           aria-label={t('backToList')}
         >
-          <ArrowLeft className="h-4 w-4" />
+          <ArrowLeft className="h-4 w-4 rtl:rotate-180" />
         </Button>
         <div>
           <h1 className="text-2xl font-bold tracking-tight">{t('bookAppointment')}</h1>
@@ -255,7 +255,7 @@ export default function BookAppointmentPage() {
                       key={doctor.id}
                       type="button"
                       onClick={() => handleDoctorSelect(doctor.id)}
-                      className={`flex flex-col items-start gap-1 rounded-lg border p-4 text-left transition-colors hover:bg-accent ${
+                      className={`flex flex-col items-start gap-1 rounded-lg border p-4 text-start transition-colors hover:bg-accent ${
                         selectedDoctorId === doctor.id
                           ? 'border-primary bg-primary/5 ring-2 ring-primary'
                           : 'border-border'
@@ -483,14 +483,14 @@ export default function BookAppointmentPage() {
           onClick={handlePrevious}
           disabled={currentStep === 1}
         >
-          <ChevronLeft className="mr-2 h-4 w-4" />
+          <ChevronLeft className="me-2 h-4 w-4 rtl:rotate-180" />
           {t('previous')}
         </Button>
 
         {currentStep < 4 ? (
           <Button onClick={handleNext} disabled={!canProceed}>
             {t('next')}
-            <ChevronRight className="ml-2 h-4 w-4" />
+            <ChevronRight className="ms-2 h-4 w-4" />
           </Button>
         ) : (
           <Button

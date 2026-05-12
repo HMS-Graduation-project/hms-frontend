@@ -100,7 +100,7 @@ export default function PatientDetailPage() {
             onClick={() => navigate('/patients')}
             aria-label={t('backToList')}
           >
-            <ArrowLeft className="h-4 w-4" />
+            <ArrowLeft className="h-4 w-4 rtl:rotate-180" />
           </Button>
           <div className="min-w-0">
             <h1 className="text-2xl font-bold tracking-tight truncate">
@@ -129,7 +129,7 @@ export default function PatientDetailPage() {
           onClick={() => setEditDialogOpen(true)}
           className="w-full sm:w-auto"
         >
-          <Pencil className="mr-2 h-4 w-4" />
+          <Pencil className="me-2 h-4 w-4" />
           {t('editPatient')}
         </Button>
       </div>
@@ -165,7 +165,7 @@ export default function PatientDetailPage() {
               <CardTitle className="flex items-center gap-2 text-lg">
                 <User className="h-5 w-5" />
                 {t('personalInfo')}
-                <Badge variant="outline" className="ml-auto text-[10px]">
+                <Badge variant="outline" className="ms-auto text-[10px]">
                   {t('fromNationalRegistry')}
                 </Badge>
               </CardTitle>

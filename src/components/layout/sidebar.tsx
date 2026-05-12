@@ -37,7 +37,7 @@ export function Sidebar({ isOpen, onToggle }: SidebarProps) {
   return (
     <aside
       className={cn(
-        'fixed inset-y-0 left-0 z-30 hidden flex-col border-r bg-sidebar text-sidebar-foreground transition-all duration-300 ease-in-out lg:flex',
+        'fixed inset-y-0 start-0 z-30 hidden flex-col border-e bg-sidebar text-sidebar-foreground transition-all duration-300 ease-in-out lg:flex',
         isOpen ? 'w-64' : 'w-16'
       )}
     >

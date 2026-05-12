@@ -139,7 +139,7 @@ export default function LabOrderDetailPage() {
             onClick={() => navigate('/laboratory')}
             aria-label={t('backToList')}
           >
-            <ArrowLeft className="h-4 w-4" />
+            <ArrowLeft className="h-4 w-4 rtl:rotate-180" />
           </Button>
           <div>
             <h1 className="text-2xl font-bold tracking-tight">
@@ -154,7 +154,7 @@ export default function LabOrderDetailPage() {
               onClick={() => handleStatusChange('SAMPLE_COLLECTED')}
               className="flex-1 sm:flex-none"
             >
-              <TestTube className="mr-2 h-4 w-4" />
+              <TestTube className="me-2 h-4 w-4" />
               {t('collectSample')}
             </Button>
           )}
@@ -163,7 +163,7 @@ export default function LabOrderDetailPage() {
               onClick={() => handleStatusChange('IN_PROGRESS')}
               className="flex-1 sm:flex-none"
             >
-              <Clock className="mr-2 h-4 w-4" />
+              <Clock className="me-2 h-4 w-4" />
               {t('startProcessing')}
             </Button>
           )}
@@ -172,7 +172,7 @@ export default function LabOrderDetailPage() {
               onClick={() => handleStatusChange('COMPLETED')}
               className="flex-1 sm:flex-none"
             >
-              <CheckCircle className="mr-2 h-4 w-4" />
+              <CheckCircle className="me-2 h-4 w-4" />
               {t('markComplete')}
             </Button>
           )}
@@ -182,7 +182,7 @@ export default function LabOrderDetailPage() {
               onClick={() => handleStatusChange('CANCELLED')}
               className="flex-1 sm:flex-none"
             >
-              <XCircle className="mr-2 h-4 w-4" />
+              <XCircle className="me-2 h-4 w-4" />
               {t('cancelOrder')}
             </Button>
           )}
@@ -321,7 +321,7 @@ export default function LabOrderDetailPage() {
                 size="sm"
                 onClick={() => setResultFormOpen(true)}
               >
-                <FlaskConical className="mr-2 h-4 w-4" />
+                <FlaskConical className="me-2 h-4 w-4" />
                 {t('enterResults')}
               </Button>
             )}
@@ -346,12 +346,12 @@ export default function LabOrderDetailPage() {
                       variant={
                         order.result.isAbnormal ? 'destructive' : 'success'
                       }
-                      className="shrink-0 ml-2"
+                      className="shrink-0 ms-2"
                     >
                       {order.result.isAbnormal ? (
-                        <AlertTriangle className="mr-1 h-3 w-3" />
+                        <AlertTriangle className="me-1 h-3 w-3" />
                       ) : (
-                        <CheckCircle className="mr-1 h-3 w-3" />
+                        <CheckCircle className="me-1 h-3 w-3" />
                       )}
                       {order.result.isAbnormal ? t('abnormal') : t('normal')}
                     </Badge>

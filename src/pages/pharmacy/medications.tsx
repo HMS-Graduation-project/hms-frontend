@@ -211,7 +211,7 @@ export default function MedicationsPage() {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">
-            <Pill className="mr-2 inline-block h-6 w-6" />
+            <Pill className="me-2 inline-block h-6 w-6" />
             {t('title')}
           </h1>
           <p className="text-muted-foreground">{t('subtitle')}</p>
@@ -221,7 +221,7 @@ export default function MedicationsPage() {
             <Link to="/pharmacy/dispensing">{t('dispensing')}</Link>
           </Button>
           <Button onClick={handleOpenCreate} className="w-full sm:w-auto">
-            <Plus className="mr-2 h-4 w-4" />
+            <Plus className="me-2 h-4 w-4" />
             {t('addMedication')}
           </Button>
         </div>

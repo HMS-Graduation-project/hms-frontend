@@ -27,14 +27,32 @@ export interface NavItem {
   roles: string[]; // ['*'] means all authenticated users
 }
 
+/**
+ * Staff sidebar items. PATIENT users live in the patient portal layout
+ * (`/portal/*`) and must NOT see staff nav, so we never include them in
+ * any role list here. The wildcard `'*'` was retired for the same reason.
+ */
+const STAFF_ALL = [
+  'SUPER_ADMIN',
+  'MINISTRY_ADMIN',
+  'REGIONAL_ADMIN',
+  'ADMIN',
+  'HOSPITAL_ADMIN',
+  'DOCTOR',
+  'NURSE',
+  'RECEPTIONIST',
+  'PHARMACIST',
+  'LAB_TECHNICIAN',
+];
+
 export const navigationItems: NavItem[] = [
-  { label: 'dashboard', icon: LayoutDashboard, href: '/dashboard', roles: ['*'] },
+  { label: 'dashboard', icon: LayoutDashboard, href: '/dashboard', roles: STAFF_ALL },
   { label: 'ministryDashboard', icon: Globe2, href: '/ministry', roles: ['SUPER_ADMIN', 'MINISTRY_ADMIN'] },
   { label: 'regionalDashboard', icon: Map, href: '/regional', roles: ['SUPER_ADMIN', 'MINISTRY_ADMIN', 'REGIONAL_ADMIN'] },
   { label: 'patients', icon: UserRound, href: '/patients', roles: ['SUPER_ADMIN', 'ADMIN', 'HOSPITAL_ADMIN', 'DOCTOR', 'NURSE', 'RECEPTIONIST'] },
-  { label: 'doctors', icon: Stethoscope, href: '/doctors', roles: ['SUPER_ADMIN', 'ADMIN', 'HOSPITAL_ADMIN', 'RECEPTIONIST', 'PATIENT'] },
-  { label: 'departments', icon: Building2, href: '/departments', roles: ['*'] },
-  { label: 'appointments', icon: CalendarDays, href: '/appointments', roles: ['*'] },
+  { label: 'doctors', icon: Stethoscope, href: '/doctors', roles: ['SUPER_ADMIN', 'ADMIN', 'HOSPITAL_ADMIN', 'RECEPTIONIST'] },
+  { label: 'departments', icon: Building2, href: '/departments', roles: STAFF_ALL },
+  { label: 'appointments', icon: CalendarDays, href: '/appointments', roles: STAFF_ALL },
   { label: 'emergency', icon: Siren, href: '/emergency', roles: ['SUPER_ADMIN', 'ADMIN', 'HOSPITAL_ADMIN', 'DOCTOR', 'NURSE', 'RECEPTIONIST'] },
   { label: 'inpatient', icon: BedDouble, href: '/inpatient/admissions', roles: ['SUPER_ADMIN', 'ADMIN', 'HOSPITAL_ADMIN', 'DOCTOR', 'NURSE', 'RECEPTIONIST'] },
   { label: 'referrals', icon: ArrowRightLeft, href: '/referrals/incoming', roles: ['SUPER_ADMIN', 'ADMIN', 'HOSPITAL_ADMIN', 'DOCTOR', 'NURSE'] },

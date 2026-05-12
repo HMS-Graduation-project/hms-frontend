@@ -53,14 +53,14 @@ export function DataTableColumnHeader({
       variant="ghost"
       size="sm"
       className={cn(
-        "-ml-3 h-8 data-[state=active]:text-foreground",
+        "-ms-3 h-8 data-[state=active]:text-foreground",
         className
       )}
       onClick={handleClick}
       data-state={isActive ? "active" : undefined}
     >
       <span>{label}</span>
-      <SortIcon className="ml-2 h-4 w-4" />
+      <SortIcon className="ms-2 h-4 w-4" />
     </Button>
   );
 }

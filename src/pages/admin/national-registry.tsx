@@ -75,11 +75,11 @@ export default function NationalRegistryPage() {
       <Tabs defaultValue="search">
         <TabsList>
           <TabsTrigger value="search">
-            <Search className="mr-2 h-4 w-4" />
+            <Search className="me-2 h-4 w-4" />
             {t('searchRegistry')}
           </TabsTrigger>
           <TabsTrigger value="merge">
-            <Merge className="mr-2 h-4 w-4" />
+            <Merge className="me-2 h-4 w-4" />
             {t('mergeDuplicates')}
           </TabsTrigger>
         </TabsList>
@@ -489,7 +489,7 @@ function MergeSide({
         </div>
       ) : (
         <Button type="button" onClick={onOpen}>
-          <Search className="mr-2 h-4 w-4" />
+          <Search className="me-2 h-4 w-4" />
           {t('selectPatient')}
         </Button>
       )}

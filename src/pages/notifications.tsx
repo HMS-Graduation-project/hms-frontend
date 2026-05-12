@@ -88,7 +88,7 @@ function NotificationCard({
               onMarkAsRead(notification.id);
             }}
           >
-            <Check className="mr-1 h-4 w-4" />
+            <Check className="me-1 h-4 w-4" />
             {t('markAsRead')}
           </Button>
         )}
@@ -195,7 +195,7 @@ export default function NotificationsPage() {
           onClick={() => markAllAsRead.mutate()}
           disabled={markAllAsRead.isPending}
         >
-          <CheckCheck className="mr-2 h-4 w-4" />
+          <CheckCheck className="me-2 h-4 w-4" />
           {t('markAllRead')}
         </Button>
       </div>

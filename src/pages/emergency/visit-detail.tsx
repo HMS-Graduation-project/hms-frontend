@@ -142,7 +142,7 @@ export default function EmergencyVisitDetailPage() {
           className="mt-4"
           onClick={() => navigate('/emergency')}
         >
-          <ArrowLeft className="mr-2 h-4 w-4" />
+          <ArrowLeft className="me-2 h-4 w-4 rtl:rotate-180" />
           {t('backToQueue')}
         </Button>
       </div>
@@ -198,7 +198,7 @@ function VisitDetailContent({ visit }: VisitDetailContentProps) {
             onClick={() => navigate('/emergency')}
             aria-label={t('backToQueue')}
           >
-            <ArrowLeft className="h-4 w-4" />
+            <ArrowLeft className="h-4 w-4 rtl:rotate-180" />
           </Button>
           <div>
             <div className="flex items-center gap-2">
@@ -404,7 +404,7 @@ function PatientCard({ visit }: { visit: EmergencyVisit }) {
                   (window.location.href = `/patients/${visit.patientProfileId}`)
                 }
               >
-                <ExternalLink className="mr-2 h-4 w-4" />
+                <ExternalLink className="me-2 h-4 w-4" />
                 {t('viewPatientProfile')}
               </Button>
             )}
@@ -426,7 +426,7 @@ function PatientCard({ visit }: { visit: EmergencyVisit }) {
                 className="w-full"
                 onClick={() => setShowSearch(true)}
               >
-                <UserPlus className="mr-2 h-4 w-4" />
+                <UserPlus className="me-2 h-4 w-4" />
                 {t('identifyPatient')}
               </Button>
             )}
@@ -654,7 +654,7 @@ function ClaimCard({ visitId }: { visitId: string }) {
       </CardHeader>
       <CardContent>
         <Button onClick={handleClaim} disabled={claim.isPending}>
-          <Stethoscope className="mr-2 h-4 w-4" />
+          <Stethoscope className="me-2 h-4 w-4" />
           {claim.isPending ? tCommon('loading') : t('claim')}
         </Button>
       </CardContent>

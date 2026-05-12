@@ -184,7 +184,7 @@ export default function BillingPage() {
           <p className="text-muted-foreground">{t('subtitle')}</p>
         </div>
         <Button onClick={() => navigate('/billing/new')}>
-          <Plus className="mr-2 h-4 w-4" />
+          <Plus className="me-2 h-4 w-4" />
           {t('createInvoice')}
         </Button>
       </div>

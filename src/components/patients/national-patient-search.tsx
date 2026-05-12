@@ -98,7 +98,7 @@ export function NationalPatientSearch({
                 ) : (
                   <Search className="h-4 w-4" />
                 )}
-                <span className="ml-2">{tCommon('search')}</span>
+                <span className="ms-2">{tCommon('search')}</span>
               </Button>
             </div>
             <p
@@ -215,7 +215,7 @@ function SearchResultsArea({
   if (isFetching) {
     return (
       <div className="flex items-center justify-center py-6 text-muted-foreground">
-        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+        <Loader2 className="me-2 h-4 w-4 animate-spin" />
         {tCommon('loading')}
       </div>
     );

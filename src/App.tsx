@@ -1,14 +1,24 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider } from '@/providers/auth-provider';
+import { AuthProvider, useAuth } from '@/providers/auth-provider';
 import { QueryProvider } from '@/providers/query-provider';
 import { ProtectedRoute } from '@/components/protected-route';
 import { DashboardLayout } from '@/components/layout/dashboard-layout';
+import { PatientLayout } from '@/components/layout/patient-layout';
 import { ErrorBoundary } from '@/components/error-boundary';
 import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import LoginPage from '@/pages/login';
 import RegisterPage from '@/pages/register';
 import DashboardPage from '@/pages/dashboard';
+import PortalHomePage from '@/pages/portal/home';
+import PortalAppointmentsPage from '@/pages/portal/appointments';
+import PortalBookAppointmentPage from '@/pages/portal/book-appointment';
+import PortalRecordsPage from '@/pages/portal/records';
+import PortalPrescriptionsPage from '@/pages/portal/prescriptions';
+import PortalLabResultsPage from '@/pages/portal/lab-results';
+import PortalInvoicesPage from '@/pages/portal/invoices';
+import PortalReferralsPage from '@/pages/portal/referrals';
+import PortalProfilePage from '@/pages/portal/profile';
 import ProfilePage from '@/pages/profile';
 import UsersPage from '@/pages/admin/users';
 import NationalRegistryPage from '@/pages/admin/national-registry';
@@ -51,6 +61,21 @@ import AnalyticsPage from '@/pages/analytics';
 import RegionalDashboardPage from '@/pages/regional/dashboard';
 import MinistryDashboardPage from '@/pages/ministry/dashboard';
 
+/**
+ * Catch-all redirect that respects role: PATIENT → /portal/home,
+ * everyone else → /dashboard.
+ */
+function RoleAwareRedirect() {
+  const { user, isAuthenticated } = useAuth();
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
+  if (user?.role === 'PATIENT') {
+    return <Navigate to="/portal/home" replace />;
+  }
+  return <Navigate to="/dashboard" replace />;
+}
+
 export default function App() {
   return (
     <ErrorBoundary>
@@ -62,6 +87,26 @@ export default function App() {
             {/* Public routes */}
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
+
+            {/* Patient portal */}
+            <Route
+              element={
+                <ProtectedRoute>
+                  <PatientLayout />
+                </ProtectedRoute>
+              }
+            >
+              <Route path="/portal" element={<Navigate to="/portal/home" replace />} />
+              <Route path="/portal/home" element={<PortalHomePage />} />
+              <Route path="/portal/appointments" element={<PortalAppointmentsPage />} />
+              <Route path="/portal/appointments/book" element={<PortalBookAppointmentPage />} />
+              <Route path="/portal/records" element={<PortalRecordsPage />} />
+              <Route path="/portal/prescriptions" element={<PortalPrescriptionsPage />} />
+              <Route path="/portal/lab-results" element={<PortalLabResultsPage />} />
+              <Route path="/portal/invoices" element={<PortalInvoicesPage />} />
+              <Route path="/portal/referrals" element={<PortalReferralsPage />} />
+              <Route path="/portal/profile" element={<PortalProfilePage />} />
+            </Route>
 
             {/* Protected routes with dashboard layout */}
             <Route
@@ -119,8 +164,8 @@ export default function App() {
               <Route path="/ministry" element={<MinistryDashboardPage />} />
             </Route>
 
-            {/* Catch-all redirect */}
-            <Route path="*" element={<Navigate to="/dashboard" replace />} />
+            {/* Catch-all redirect — patients go to the portal */}
+            <Route path="*" element={<RoleAwareRedirect />} />
           </Routes>
         </BrowserRouter>
         <Toaster />

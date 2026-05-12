@@ -373,7 +373,7 @@ function PatientFormInner({
             onClick={onBack}
             className="shrink-0"
           >
-            <ArrowLeft className="mr-1 h-3 w-3" />
+            <ArrowLeft className="me-1 h-3 w-3 rtl:rotate-180" />
             {t('change')}
           </Button>
         </div>
@@ -403,7 +403,7 @@ function PatientFormInner({
               className="shrink-0"
             >
               <Link to={`/admin/national-registry?nhid=${nationalForDisplay.id}`}>
-                <ExternalLink className="mr-1 h-3 w-3" />
+                <ExternalLink className="me-1 h-3 w-3" />
                 {t('editInNationalRegistry')}
               </Link>
             </Button>
@@ -634,7 +634,7 @@ function PatientFormInner({
         <h4 className="text-sm font-medium text-muted-foreground mb-3">
           {t('medicalInfo')}
           {flow !== 'edit' && (
-            <Badge variant="outline" className="ml-2 text-[10px]">
+            <Badge variant="outline" className="ms-2 text-[10px]">
               {t('hospitalLocal')}
             </Badge>
           )}

@@ -78,7 +78,7 @@ export default function WardsPage() {
         </div>
         {canAdmin && (
           <Button onClick={() => setCreateOpen(true)}>
-            <Plus className="mr-2 h-4 w-4" />
+            <Plus className="me-2 h-4 w-4" />
             {t('wards.newWard')}
           </Button>
         )}
@@ -98,7 +98,7 @@ export default function WardsPage() {
           action={
             canAdmin ? (
               <Button onClick={() => setCreateOpen(true)}>
-                <Plus className="mr-2 h-4 w-4" />
+                <Plus className="me-2 h-4 w-4" />
                 {t('wards.newWard')}
               </Button>
             ) : undefined
@@ -146,7 +146,7 @@ export default function WardsPage() {
                 <div className="flex flex-wrap gap-2">
                   <Button asChild variant="outline" size="sm">
                     <Link to={`/inpatient/bed-board?wardId=${ward.id}`}>
-                      <LayoutGrid className="mr-1.5 h-3.5 w-3.5" />
+                      <LayoutGrid className="me-1.5 h-3.5 w-3.5" />
                       {t('wards.viewBedBoard')}
                     </Link>
                   </Button>
@@ -156,7 +156,7 @@ export default function WardsPage() {
                       variant="ghost"
                       onClick={() => setBedDialogWardId(ward.id)}
                     >
-                      <Plus className="mr-1.5 h-3.5 w-3.5" />
+                      <Plus className="me-1.5 h-3.5 w-3.5" />
                       {t('wards.addBed')}
                     </Button>
                   )}
@@ -279,7 +279,7 @@ function CreateWardDialog({
               {t('cancel', { ns: 'common' })}
             </Button>
             <Button type="submit" disabled={create.isPending || !name}>
-              {create.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              {create.isPending && <Loader2 className="me-2 h-4 w-4 animate-spin" />}
               {t('save', { ns: 'common' })}
             </Button>
           </DialogFooter>
@@ -361,7 +361,7 @@ function CreateBedDialog({
               {t('cancel', { ns: 'common' })}
             </Button>
             <Button type="submit" disabled={create.isPending || !number}>
-              {create.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              {create.isPending && <Loader2 className="me-2 h-4 w-4 animate-spin" />}
               {t('save', { ns: 'common' })}
             </Button>
           </DialogFooter>

@@ -147,7 +147,7 @@ export default function EmergencyQueuePage() {
             onClick={() => navigate('/emergency/intake')}
             className="w-full sm:w-auto"
           >
-            <Plus className="mr-2 h-4 w-4" />
+            <Plus className="me-2 h-4 w-4" />
             {t('newIntake')}
           </Button>
         )}
@@ -207,7 +207,7 @@ export default function EmergencyQueuePage() {
           action={
             canCreateIntake ? (
               <Button onClick={() => navigate('/emergency/intake')}>
-                <Plus className="mr-2 h-4 w-4" />
+                <Plus className="me-2 h-4 w-4" />
                 {t('newIntake')}
               </Button>
             ) : undefined
@@ -225,7 +225,7 @@ export default function EmergencyQueuePage() {
                 <TableHead className="w-[130px]">{t('arrived')}</TableHead>
                 <TableHead className="w-[100px]">{t('wait')}</TableHead>
                 <TableHead className="w-[180px]">{t('attending')}</TableHead>
-                <TableHead className="w-[200px] text-right">
+                <TableHead className="w-[200px] text-end">
                   {tCommon('actions')}
                 </TableHead>
               </TableRow>
@@ -328,7 +328,7 @@ function QueueRow({ visit }: QueueRowProps) {
         {formatDuration(visit.arrivedAt, visit.closedAt)}
       </TableCell>
       <TableCell className="text-sm">{doctorName}</TableCell>
-      <TableCell className="text-right">
+      <TableCell className="text-end">
         <div
           className="flex justify-end gap-1"
           onClick={(e) => e.stopPropagation()}
@@ -339,7 +339,7 @@ function QueueRow({ visit }: QueueRowProps) {
               variant="secondary"
               onClick={() => navigate(`/emergency/${visit.id}`)}
             >
-              <Activity className="mr-1 h-3.5 w-3.5" />
+              <Activity className="me-1 h-3.5 w-3.5" />
               {t('startTriage')}
             </Button>
           )}
@@ -349,7 +349,7 @@ function QueueRow({ visit }: QueueRowProps) {
               variant="default"
               onClick={() => navigate(`/emergency/${visit.id}`)}
             >
-              <Stethoscope className="mr-1 h-3.5 w-3.5" />
+              <Stethoscope className="me-1 h-3.5 w-3.5" />
               {t('claim')}
             </Button>
           )}

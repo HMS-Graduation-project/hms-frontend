@@ -1,0 +1,21 @@
+{
+  "dashboard": "لوحة التحكم",
+  "patients": "المرضى",
+  "doctors": "الأطباء",
+  "departments": "الأقسام",
+  "appointments": "المواعيد",
+  "emergency": "الطوارئ",
+  "inpatient": "التنويم",
+  "referrals": "الإحالات",
+  "medicalRecords": "السجلات الطبية",
+  "prescriptions": "الوصفات الطبية",
+  "laboratory": "المختبر",
+  "billing": "الفواتير",
+  "aiTools": "أدوات الذكاء الاصطناعي",
+  "analytics": "التحليلات",
+  "users": "إدارة المستخدمين",
+  "nationalRegistry": "السجل الوطني",
+  "regionalDashboard": "إقليمي",
+  "ministryDashboard": "وزارة",
+  "settings": "الإعدادات"
+}

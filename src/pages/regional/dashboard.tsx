@@ -147,13 +147,13 @@ export default function RegionalDashboardPage() {
               <TableHeader>
                 <TableRow>
                   <TableHead>{t('hospital')}</TableHead>
-                  <TableHead className="text-right">{t('bedOccupancyShort')}</TableHead>
-                  <TableHead className="text-right">{t('openAdmissionsShort')}</TableHead>
-                  <TableHead className="text-right">{t('erVisitsShort')}</TableHead>
-                  <TableHead className="text-right">{t('avgTriageMin')}</TableHead>
-                  <TableHead className="text-right">{t('incomingShort')}</TableHead>
-                  <TableHead className="text-right">{t('outgoingShort')}</TableHead>
-                  <TableHead className="text-right">{t('patientsShort')}</TableHead>
+                  <TableHead className="text-end">{t('bedOccupancyShort')}</TableHead>
+                  <TableHead className="text-end">{t('openAdmissionsShort')}</TableHead>
+                  <TableHead className="text-end">{t('erVisitsShort')}</TableHead>
+                  <TableHead className="text-end">{t('avgTriageMin')}</TableHead>
+                  <TableHead className="text-end">{t('incomingShort')}</TableHead>
+                  <TableHead className="text-end">{t('outgoingShort')}</TableHead>
+                  <TableHead className="text-end">{t('patientsShort')}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -165,25 +165,25 @@ export default function RegionalDashboardPage() {
                         {h.hospital.code} · {h.hospital.city.name}
                       </div>
                     </TableCell>
-                    <TableCell className="text-right tabular-nums">
+                    <TableCell className="text-end tabular-nums">
                       {h.bedOccupancyPct}% ({h.occupiedBeds}/{h.totalBeds})
                     </TableCell>
-                    <TableCell className="text-right tabular-nums">
+                    <TableCell className="text-end tabular-nums">
                       {h.openAdmissions}
                     </TableCell>
-                    <TableCell className="text-right tabular-nums">
+                    <TableCell className="text-end tabular-nums">
                       {h.erVisitsInPeriod}
                     </TableCell>
-                    <TableCell className="text-right tabular-nums">
+                    <TableCell className="text-end tabular-nums">
                       {h.avgTriageMinutes == null ? '—' : h.avgTriageMinutes}
                     </TableCell>
-                    <TableCell className="text-right tabular-nums">
+                    <TableCell className="text-end tabular-nums">
                       {h.incomingReferrals}
                     </TableCell>
-                    <TableCell className="text-right tabular-nums">
+                    <TableCell className="text-end tabular-nums">
                       {h.outgoingReferrals}
                     </TableCell>
-                    <TableCell className="text-right tabular-nums">
+                    <TableCell className="text-end tabular-nums">
                       {h.totalPatients}
                     </TableCell>
                   </TableRow>

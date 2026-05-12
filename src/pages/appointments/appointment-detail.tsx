@@ -157,7 +157,7 @@ export default function AppointmentDetailPage() {
           className="mt-4"
           onClick={() => navigate('/appointments')}
         >
-          <ArrowLeft className="mr-2 h-4 w-4" />
+          <ArrowLeft className="me-2 h-4 w-4 rtl:rotate-180" />
           {t('backToList')}
         </Button>
       </div>
@@ -193,7 +193,7 @@ export default function AppointmentDetailPage() {
             onClick={() => navigate('/appointments')}
             aria-label={t('backToList')}
           >
-            <ArrowLeft className="h-4 w-4" />
+            <ArrowLeft className="h-4 w-4 rtl:rotate-180" />
           </Button>
           <div>
             <h1 className="text-2xl font-bold tracking-tight">
@@ -334,7 +334,7 @@ export default function AppointmentDetailPage() {
                 <Separator />
                 <div>
                   <p className="text-sm font-medium text-muted-foreground">
-                    <Building2 className="mr-1 inline h-4 w-4" />
+                    <Building2 className="me-1 inline h-4 w-4" />
                     {t('department')}
                   </p>
                   <p className="text-sm">{appointment.department.name}</p>
@@ -378,7 +378,7 @@ export default function AppointmentDetailPage() {
             {appointment.cancelReason && (
               <div>
                 <p className="text-sm font-medium text-muted-foreground">
-                  <XCircle className="mr-1 inline h-4 w-4 text-destructive" />
+                  <XCircle className="me-1 inline h-4 w-4 text-destructive" />
                   {t('cancelReason')}
                 </p>
                 <p className="text-sm">{appointment.cancelReason}</p>
@@ -397,7 +397,7 @@ export default function AppointmentDetailPage() {
                       navigate(`/medical-records/${appointment.medicalRecord!.id}`)
                     }
                   >
-                    <FileText className="mr-2 h-4 w-4" />
+                    <FileText className="me-2 h-4 w-4" />
                     {t('viewMedicalRecord')}
                   </Button>
                 ) : (
@@ -410,7 +410,7 @@ export default function AppointmentDetailPage() {
                       )
                     }
                   >
-                    <FileText className="mr-2 h-4 w-4" />
+                    <FileText className="me-2 h-4 w-4" />
                     {t('createMedicalRecord')}
                   </Button>
                 )}

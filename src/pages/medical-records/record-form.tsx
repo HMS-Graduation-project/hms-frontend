@@ -134,7 +134,7 @@ export default function RecordFormPage() {
           onClick={() => navigate(-1)}
           aria-label={t('backToList')}
         >
-          <ArrowLeft className="h-4 w-4" />
+          <ArrowLeft className="h-4 w-4 rtl:rotate-180" />
         </Button>
         <div>
           <h1 className="text-2xl font-bold tracking-tight">
@@ -262,7 +262,7 @@ export default function RecordFormPage() {
             {tCommon('cancel')}
           </Button>
           <Button type="submit" disabled={isPending}>
-            <Save className="mr-2 h-4 w-4" />
+            <Save className="me-2 h-4 w-4" />
             {isPending ? tCommon('loading') : tCommon('save')}
           </Button>
         </div>

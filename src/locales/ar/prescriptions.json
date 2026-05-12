@@ -1,0 +1,40 @@
+{
+  "title": "الوصفات الطبية",
+  "subtitle": "إدارة الوصفات والصرف",
+  "createPrescription": "إنشاء وصفة طبية",
+  "prescriptionDetail": "تفاصيل الوصفة",
+  "medication": "الدواء",
+  "dosage": "الجرعة",
+  "frequency": "التكرار",
+  "duration": "المدة",
+  "quantity": "الكمية",
+  "instructions": "التعليمات",
+  "addMedication": "إضافة دواء",
+  "removeMedication": "إزالة",
+  "medications": "الأدوية",
+  "noMedications": "لم تتم إضافة أدوية",
+  "status": "الحالة",
+  "statuses": {
+    "PENDING": "قيد الانتظار",
+    "DISPENSED": "تم الصرف",
+    "PARTIALLY_DISPENSED": "صرف جزئي",
+    "CANCELLED": "ملغاة"
+  },
+  "actions": {
+    "dispense": "صرف",
+    "cancel": "إلغاء"
+  },
+  "notes": "ملاحظات",
+  "patient": "المريض",
+  "doctor": "الطبيب",
+  "date": "التاريخ",
+  "prescriptionCreated": "تم إنشاء الوصفة بنجاح",
+  "statusUpdated": "تم تحديث حالة الوصفة",
+  "backToList": "رجوع",
+  "allStatuses": "كل الحالات",
+  "filterByStatus": "تصفية حسب الحالة",
+  "print": "طباعة",
+  "prescribedBy": "وصفها",
+  "prescribedFor": "موصوفة لـ",
+  "prescriptionDate": "التاريخ"
+}

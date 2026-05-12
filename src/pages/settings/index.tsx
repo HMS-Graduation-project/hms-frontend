@@ -170,9 +170,9 @@ function GeneralTab() {
         <div className="flex justify-end">
           <Button onClick={handleSave} disabled={saving}>
             {saving ? (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              <Loader2 className="me-2 h-4 w-4 animate-spin" />
             ) : (
-              <Save className="mr-2 h-4 w-4" />
+              <Save className="me-2 h-4 w-4" />
             )}
             {t('saveSettings')}
           </Button>
@@ -281,13 +281,13 @@ function WorkingHoursTab() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b bg-muted/50">
-                  <th className="px-4 py-3 text-left font-medium text-muted-foreground">
+                  <th className="px-4 py-3 text-start font-medium text-muted-foreground">
                     {t('weekday')}
                   </th>
-                  <th className="px-4 py-3 text-left font-medium text-muted-foreground">
+                  <th className="px-4 py-3 text-start font-medium text-muted-foreground">
                     {t('startTime')}
                   </th>
-                  <th className="px-4 py-3 text-left font-medium text-muted-foreground">
+                  <th className="px-4 py-3 text-start font-medium text-muted-foreground">
                     {t('endTime')}
                   </th>
                 </tr>
@@ -366,9 +366,9 @@ function WorkingHoursTab() {
         <div className="flex justify-end">
           <Button onClick={handleSave} disabled={saving}>
             {saving ? (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              <Loader2 className="me-2 h-4 w-4 animate-spin" />
             ) : (
-              <Save className="mr-2 h-4 w-4" />
+              <Save className="me-2 h-4 w-4" />
             )}
             {t('saveSettings')}
           </Button>
@@ -447,7 +447,7 @@ function HolidaysTab() {
           <Dialog open={addOpen} onOpenChange={setAddOpen}>
             <DialogTrigger asChild>
               <Button size="sm">
-                <Plus className="mr-2 h-4 w-4" />
+                <Plus className="me-2 h-4 w-4" />
                 {t('addHoliday')}
               </Button>
             </DialogTrigger>
@@ -490,7 +490,7 @@ function HolidaysTab() {
                   }
                 >
                   {createHoliday.isPending && (
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    <Loader2 className="me-2 h-4 w-4 animate-spin" />
                   )}
                   {t('addHoliday')}
                 </Button>
@@ -560,7 +560,7 @@ function HolidaysTab() {
               disabled={deleteHoliday.isPending}
             >
               {deleteHoliday.isPending && (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                <Loader2 className="me-2 h-4 w-4 animate-spin" />
               )}
               {t('deleteHoliday')}
             </Button>

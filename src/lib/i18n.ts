@@ -24,6 +24,7 @@ import enNotifications from '@/locales/en/notifications.json';
 import enAi from '@/locales/en/ai.json';
 import enAnalytics from '@/locales/en/analytics.json';
 import enReporting from '@/locales/en/reporting.json';
+import enPortal from '@/locales/en/portal.json';
 import trCommon from '@/locales/tr/common.json';
 import trAuth from '@/locales/tr/auth.json';
 import trNavigation from '@/locales/tr/navigation.json';
@@ -46,6 +47,46 @@ import trNotifications from '@/locales/tr/notifications.json';
 import trAi from '@/locales/tr/ai.json';
 import trAnalytics from '@/locales/tr/analytics.json';
 import trReporting from '@/locales/tr/reporting.json';
+import trPortal from '@/locales/tr/portal.json';
+import arCommon from '@/locales/ar/common.json';
+import arAuth from '@/locales/ar/auth.json';
+import arNavigation from '@/locales/ar/navigation.json';
+import arDashboard from '@/locales/ar/dashboard.json';
+import arUsers from '@/locales/ar/users.json';
+import arDepartments from '@/locales/ar/departments.json';
+import arDoctors from '@/locales/ar/doctors.json';
+import arPatients from '@/locales/ar/patients.json';
+import arAppointments from '@/locales/ar/appointments.json';
+import arEmergency from '@/locales/ar/emergency.json';
+import arInpatient from '@/locales/ar/inpatient.json';
+import arReferrals from '@/locales/ar/referrals.json';
+import arMedicalRecords from '@/locales/ar/medical-records.json';
+import arPrescriptions from '@/locales/ar/prescriptions.json';
+import arLaboratory from '@/locales/ar/laboratory.json';
+import arPharmacy from '@/locales/ar/pharmacy.json';
+import arBilling from '@/locales/ar/billing.json';
+import arSettings from '@/locales/ar/settings.json';
+import arNotifications from '@/locales/ar/notifications.json';
+import arAi from '@/locales/ar/ai.json';
+import arAnalytics from '@/locales/ar/analytics.json';
+import arReporting from '@/locales/ar/reporting.json';
+import arPortal from '@/locales/ar/portal.json';
+
+/** Languages whose UI must render right-to-left. Add others here as needed. */
+export const RTL_LANGUAGES = new Set(['ar', 'he', 'fa', 'ur']);
+
+/**
+ * Sync the document direction with the current language. Called on init AND
+ * after each `languageChanged` event so the whole app flips to RTL when the
+ * user switches to Arabic and back to LTR otherwise.
+ */
+export function applyDocumentDirection(lng: string) {
+  if (typeof document === 'undefined') return;
+  const base = (lng || 'en').split('-')[0];
+  const dir = RTL_LANGUAGES.has(base) ? 'rtl' : 'ltr';
+  document.documentElement.dir = dir;
+  document.documentElement.lang = base;
+}
 
 i18n
   .use(LanguageDetector)
@@ -75,6 +116,7 @@ i18n
         ai: enAi,
         analytics: enAnalytics,
         reporting: enReporting,
+        portal: enPortal,
       },
       tr: {
         common: trCommon,
@@ -99,10 +141,38 @@ i18n
         ai: trAi,
         analytics: trAnalytics,
         reporting: trReporting,
+        portal: trPortal,
+      },
+      ar: {
+        common: arCommon,
+        auth: arAuth,
+        navigation: arNavigation,
+        dashboard: arDashboard,
+        users: arUsers,
+        departments: arDepartments,
+        doctors: arDoctors,
+        patients: arPatients,
+        appointments: arAppointments,
+        emergency: arEmergency,
+        inpatient: arInpatient,
+        referrals: arReferrals,
+        'medical-records': arMedicalRecords,
+        prescriptions: arPrescriptions,
+        laboratory: arLaboratory,
+        pharmacy: arPharmacy,
+        billing: arBilling,
+        settings: arSettings,
+        notifications: arNotifications,
+        ai: arAi,
+        analytics: arAnalytics,
+        reporting: arReporting,
+        portal: arPortal,
       },
     },
     fallbackLng: 'en',
-    ns: ['common', 'auth', 'navigation', 'dashboard', 'users', 'departments', 'doctors', 'patients', 'appointments', 'emergency', 'inpatient', 'referrals', 'medical-records', 'prescriptions', 'laboratory', 'pharmacy', 'billing', 'settings', 'notifications', 'ai', 'analytics', 'reporting'],
+    supportedLngs: ['en', 'tr', 'ar'],
+    nonExplicitSupportedLngs: true,
+    ns: ['common', 'auth', 'navigation', 'dashboard', 'users', 'departments', 'doctors', 'patients', 'appointments', 'emergency', 'inpatient', 'referrals', 'medical-records', 'prescriptions', 'laboratory', 'pharmacy', 'billing', 'settings', 'notifications', 'ai', 'analytics', 'reporting', 'portal'],
     defaultNS: 'common',
     interpolation: {
       escapeValue: false,
@@ -112,6 +182,13 @@ i18n
       lookupLocalStorage: 'hms-language',
       caches: ['localStorage'],
     },
+  })
+  .then(() => {
+    applyDocumentDirection(i18n.language);
   });
+
+i18n.on('languageChanged', (lng) => {
+  applyDocumentDirection(lng);
+});
 
 export default i18n;

@@ -23,8 +23,8 @@ interface AuthContextType {
   hospital: Hospital | null;
   token: string | null;
   isAuthenticated: boolean;
-  login: (email: string, password: string) => Promise<void>;
-  register: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<User>;
+  register: (email: string, password: string) => Promise<User>;
   logout: () => void;
 }
 
@@ -77,6 +77,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setToken(res.accessToken);
       setUser(res.user);
       await loadHospital(res.user);
+      return res.user;
     },
     [loadHospital],
   );
@@ -88,6 +89,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setToken(res.accessToken);
       setUser(res.user);
       await loadHospital(res.user);
+      return res.user;
     },
     [loadHospital],
   );

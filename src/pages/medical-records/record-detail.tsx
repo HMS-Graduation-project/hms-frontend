@@ -81,7 +81,7 @@ export default function RecordDetailPage() {
             onClick={() => navigate(-1)}
             aria-label={t('backToList')}
           >
-            <ArrowLeft className="h-4 w-4" />
+            <ArrowLeft className="h-4 w-4 rtl:rotate-180" />
           </Button>
           <div>
             <h1 className="text-2xl font-bold tracking-tight">
@@ -95,7 +95,7 @@ export default function RecordDetailPage() {
           onClick={() => navigate(`/medical-records/${id}/edit`)}
           className="w-full sm:w-auto"
         >
-          <Pencil className="mr-2 h-4 w-4" />
+          <Pencil className="me-2 h-4 w-4" />
           {t('editRecord')}
         </Button>
       </div>
@@ -295,7 +295,7 @@ export default function RecordDetailPage() {
             size="sm"
             onClick={() => setVitalsDialogOpen(true)}
           >
-            <Activity className="mr-2 h-4 w-4" />
+            <Activity className="me-2 h-4 w-4" />
             {latestVitals ? t('updateVitals') : t('addVitals')}
           </Button>
         </CardHeader>

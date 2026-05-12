@@ -97,7 +97,7 @@ export default function AdmissionsPage() {
         </div>
         {canAdmit && (
           <Button onClick={() => setAdmitOpen(true)}>
-            <Plus className="mr-2 h-4 w-4" />
+            <Plus className="me-2 h-4 w-4" />
             {t('admissions.admitPatient')}
           </Button>
         )}
@@ -139,7 +139,7 @@ export default function AdmissionsPage() {
           action={
             canAdmit ? (
               <Button onClick={() => setAdmitOpen(true)}>
-                <Plus className="mr-2 h-4 w-4" />
+                <Plus className="me-2 h-4 w-4" />
                 {t('admissions.admitPatient')}
               </Button>
             ) : undefined
@@ -156,7 +156,7 @@ export default function AdmissionsPage() {
                 <TableHead>{t('admissions.columns.admittedBy')}</TableHead>
                 <TableHead>{t('admissions.columns.admissionDate')}</TableHead>
                 <TableHead>{t('admissions.columns.status')}</TableHead>
-                <TableHead className="text-right">{tCommon('actions')}</TableHead>
+                <TableHead className="text-end">{tCommon('actions')}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -194,7 +194,7 @@ export default function AdmissionsPage() {
                     <TableCell>
                       <AdmissionStatusBadge status={adm.status} />
                     </TableCell>
-                    <TableCell className="text-right">
+                    <TableCell className="text-end">
                       <Button
                         variant="ghost"
                         size="icon"
@@ -399,8 +399,8 @@ function AdmitDialog({ onClose }: { onClose: () => void }) {
               {t('cancel', { ns: 'common' })}
             </Button>
             <Button type="submit" disabled={!formValid || admit.isPending}>
-              {admit.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              <Stethoscope className="mr-2 h-4 w-4" />
+              {admit.isPending && <Loader2 className="me-2 h-4 w-4 animate-spin" />}
+              <Stethoscope className="me-2 h-4 w-4" />
               {t('admissions.admit')}
             </Button>
           </DialogFooter>

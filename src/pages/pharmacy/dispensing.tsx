@@ -86,7 +86,7 @@ export default function DispensingPage() {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">
-            <Package className="mr-2 inline-block h-6 w-6" />
+            <Package className="me-2 inline-block h-6 w-6" />
             {t('dispensingQueue')}
           </h1>
           <p className="text-muted-foreground">{t('dispensingSubtitle')}</p>
@@ -271,7 +271,7 @@ function PrescriptionCard({
           className="w-full"
           onClick={() => onDispense(prescription)}
         >
-          <CheckCircle className="mr-2 h-4 w-4" />
+          <CheckCircle className="me-2 h-4 w-4" />
           {t('dispense')}
         </Button>
       </CardFooter>

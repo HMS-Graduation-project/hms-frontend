@@ -1,0 +1,13 @@
+{
+  "title": "الإشعارات",
+  "markAllRead": "تعيين الكل كمقروء",
+  "markAsRead": "تعيين كمقروء",
+  "noNotifications": "لا توجد إشعارات",
+  "unread": "غير مقروءة",
+  "all": "الكل",
+  "viewAll": "عرض كل الإشعارات",
+  "justNow": "الآن",
+  "minutesAgo": "منذ {{count}} د",
+  "hoursAgo": "منذ {{count}} س",
+  "daysAgo": "منذ {{count}} ي"
+}

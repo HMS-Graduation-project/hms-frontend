@@ -120,7 +120,7 @@ export function VitalsForm({
                   value={formData.temperature}
                   onChange={(e) => handleChange('temperature', e.target.value)}
                 />
-                <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">
+                <span className="pointer-events-none absolute end-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">
                   {t('celsius')}
                 </span>
               </div>
@@ -139,7 +139,7 @@ export function VitalsForm({
                   value={formData.heartRate}
                   onChange={(e) => handleChange('heartRate', e.target.value)}
                 />
-                <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">
+                <span className="pointer-events-none absolute end-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">
                   {t('bpm')}
                 </span>
               </div>
@@ -162,7 +162,7 @@ export function VitalsForm({
                     handleChange('bloodPressureSystolic', e.target.value)
                   }
                 />
-                <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">
+                <span className="pointer-events-none absolute end-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">
                   {t('mmHg')}
                 </span>
               </div>
@@ -185,7 +185,7 @@ export function VitalsForm({
                     handleChange('bloodPressureDiastolic', e.target.value)
                   }
                 />
-                <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">
+                <span className="pointer-events-none absolute end-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">
                   {t('mmHg')}
                 </span>
               </div>
@@ -206,7 +206,7 @@ export function VitalsForm({
                     handleChange('respiratoryRate', e.target.value)
                   }
                 />
-                <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">
+                <span className="pointer-events-none absolute end-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">
                   {t('breaths')}
                 </span>
               </div>
@@ -228,7 +228,7 @@ export function VitalsForm({
                     handleChange('oxygenSaturation', e.target.value)
                   }
                 />
-                <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">
+                <span className="pointer-events-none absolute end-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">
                   {t('percent')}
                 </span>
               </div>
@@ -248,7 +248,7 @@ export function VitalsForm({
                   value={formData.weight}
                   onChange={(e) => handleChange('weight', e.target.value)}
                 />
-                <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">
+                <span className="pointer-events-none absolute end-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">
                   {t('kg')}
                 </span>
               </div>
@@ -268,7 +268,7 @@ export function VitalsForm({
                   value={formData.height}
                   onChange={(e) => handleChange('height', e.target.value)}
                 />
-                <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">
+                <span className="pointer-events-none absolute end-3 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">
                   {t('cm')}
                 </span>
               </div>
