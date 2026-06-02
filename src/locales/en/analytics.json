@@ -31,5 +31,9 @@
   "procedure": "Procedure",
   "chartError": "Failed to load chart data",
   "noAppointmentData": "No appointment data for this period",
-  "noRevenueData": "No revenue data for this period"
+  "noRevenueData": "No revenue data for this period",
+  "noDepartmentData": "No department data available",
+  "sortBy": "Sort by",
+  "topDepartment": "Top Department",
+  "retry": "Retry"
 }

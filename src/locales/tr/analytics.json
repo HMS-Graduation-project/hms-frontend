@@ -31,5 +31,9 @@
   "procedure": "Prosedür",
   "chartError": "Grafik verileri yüklenemedi",
   "noAppointmentData": "Bu dönem için randevu verisi yok",
-  "noRevenueData": "Bu dönem için gelir verisi yok"
+  "noRevenueData": "Bu dönem için gelir verisi yok",
+  "noDepartmentData": "Departman verisi mevcut değil",
+  "sortBy": "Sırala",
+  "topDepartment": "En İyi Departman",
+  "retry": "Tekrar Dene"
 }

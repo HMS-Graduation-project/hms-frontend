@@ -50,6 +50,7 @@ export interface DepartmentStat {
   doctorCount: number;
   appointmentCount: number;
   patientCount: number;
+  revenue: number;
 }
 
 // ── Hooks ───────────────────────────────────────────────────────────────────
