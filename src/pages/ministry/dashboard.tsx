@@ -28,6 +28,7 @@ import { PatientVolumeChart } from '@/components/reporting/patient-volume-chart'
 import { TopDiagnosesChart } from '@/components/reporting/top-diagnoses-chart';
 import { ReferralFlowTable } from '@/components/reporting/referral-flow-table';
 import { DiseaseTrendsChart } from '@/components/reporting/disease-trends-chart';
+import { BedOccupancyCard } from '@/components/reporting/bed-occupancy-card';
 import {
   useNationalSummary,
   useReferralFlow,
@@ -168,6 +169,8 @@ export default function MinistryDashboardPage() {
           isLoading={isLoading}
         />
       </div>
+
+      <BedOccupancyCard cities={data?.cities ?? []} isLoading={isLoading} />
 
       <div className="grid gap-6 lg:grid-cols-2">
         <ReferralFlowTable data={flow} isLoading={flowLoading} />

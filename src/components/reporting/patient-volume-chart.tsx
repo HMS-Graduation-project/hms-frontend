@@ -8,6 +8,7 @@ import {
   CartesianGrid,
   Tooltip,
 } from 'recharts';
+import { Users } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -28,6 +29,11 @@ export function PatientVolumeChart({ data, isLoading }: PatientVolumeChartProps)
       <CardContent>
         {isLoading ? (
           <Skeleton className="h-[260px] w-full" />
+        ) : data.length === 0 ? (
+          <div className="flex h-[260px] flex-col items-center justify-center text-muted-foreground">
+            <Users className="mb-2 h-10 w-10" />
+            <p className="text-sm">{t('noPatientVolume')}</p>
+          </div>
         ) : (
           <ResponsiveContainer width="100%" height={260}>
             <AreaChart data={data}>
@@ -44,6 +50,7 @@ export function PatientVolumeChart({ data, isLoading }: PatientVolumeChartProps)
               />
               <YAxis
                 className="text-xs"
+                allowDecimals={false}
                 tick={{ fill: 'hsl(var(--muted-foreground))' }}
                 tickLine={{ stroke: 'hsl(var(--border))' }}
                 axisLine={{ stroke: 'hsl(var(--border))' }}

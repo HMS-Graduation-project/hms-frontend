@@ -50,5 +50,12 @@
 
   "loadFailed": "Kontrol paneli yüklenemedi",
   "noData": "Bu pencere için veri yok.",
-  "noHospitalsInScope": "Kapsamda hastane yok."
+  "noHospitalsInScope": "Kapsamda hastane yok.",
+  "noPatientVolume": "Bu dönem için hasta hacim verisi yok.",
+  "noBedData": "Yatak verisi mevcut değil.",
+  "totalBeds": "Toplam Yatak",
+  "occupiedBeds": "Dolu",
+  "availableBeds": "Boş",
+  "occupancyRate": "Doluluk Oranı",
+  "patients": "Hastalar"
 }

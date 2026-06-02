@@ -50,5 +50,12 @@
 
   "loadFailed": "Failed to load dashboard",
   "noData": "No data for this window.",
-  "noHospitalsInScope": "No hospitals in scope."
+  "noHospitalsInScope": "No hospitals in scope.",
+  "noPatientVolume": "No patient volume data for this period.",
+  "noBedData": "No bed data available.",
+  "totalBeds": "Total Beds",
+  "occupiedBeds": "Occupied",
+  "availableBeds": "Available",
+  "occupancyRate": "Occupancy Rate",
+  "patients": "Patients"
 }

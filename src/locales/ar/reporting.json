@@ -50,5 +50,12 @@
 
   "loadFailed": "فشل تحميل لوحة التحكم",
   "noData": "لا توجد بيانات لهذه الفترة.",
-  "noHospitalsInScope": "لا توجد مستشفيات في النطاق."
+  "noHospitalsInScope": "لا توجد مستشفيات في النطاق.",
+  "noPatientVolume": "لا توجد بيانات حجم مرضى لهذه الفترة.",
+  "noBedData": "لا توجد بيانات أسرة متاحة.",
+  "totalBeds": "إجمالي الأسرة",
+  "occupiedBeds": "مشغولة",
+  "availableBeds": "متاحة",
+  "occupancyRate": "نسبة الإشغال",
+  "patients": "مرضى"
 }
