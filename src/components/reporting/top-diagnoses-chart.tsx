@@ -66,6 +66,7 @@ export function TopDiagnosesChart({ data, isLoading }: TopDiagnosesChartProps) {
                 tick={{ fill: 'hsl(var(--muted-foreground))' }}
                 tickLine={{ stroke: 'hsl(var(--border))' }}
                 axisLine={{ stroke: 'hsl(var(--border))' }}
+                tickFormatter={(v: string) => v.length > 20 ? `${v.slice(0, 18)}…` : v}
               />
               <Tooltip
                 contentStyle={{

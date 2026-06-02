@@ -5,6 +5,8 @@ import {
   Globe2,
   Activity,
   ArrowRightLeft,
+  Siren,
+  AlertCircle,
 } from 'lucide-react';
 import { StatCard } from '@/components/dashboard/stat-card';
 import {
@@ -15,6 +17,7 @@ import {
 } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Badge } from '@/components/ui/badge';
 import {
   Table,
   TableBody,
@@ -55,6 +58,9 @@ export default function MinistryDashboardPage() {
     );
   }
 
+  const trendProp = (val: number | null | undefined) =>
+    val != null ? { value: Math.abs(val), isPositive: val >= 0 } : undefined;
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
@@ -67,14 +73,15 @@ export default function MinistryDashboardPage() {
         <PeriodSelect value={period} onChange={setPeriod} />
       </div>
 
+      {/* KPI Cards with Trends */}
       {isLoading || !data ? (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {Array.from({ length: 4 }).map((_, i) => (
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+          {Array.from({ length: 5 }).map((_, i) => (
             <Skeleton key={i} className="h-[120px]" />
           ))}
         </div>
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
           <StatCard
             title={t('citiesCovered')}
             value={data.national.totalCities.toLocaleString()}
@@ -89,16 +96,95 @@ export default function MinistryDashboardPage() {
             title={t('nationalPatients')}
             value={data.national.nationalPatients.toLocaleString()}
             icon={Activity}
+            trend={trendProp(data.trends?.patientsTrend)}
             description={t('unifiedIdentity')}
           />
           <StatCard
             title={t('activeReferrals')}
             value={data.national.activeReferralsInPeriod.toLocaleString()}
             icon={ArrowRightLeft}
+            trend={trendProp(data.trends?.referralsTrend)}
+          />
+          <StatCard
+            title={t('emergencyCases')}
+            value={data.emergency?.activeCases?.toLocaleString() ?? '0'}
+            icon={Siren}
+            trend={trendProp(data.trends?.erTrend)}
+            description={t('activeErCases')}
           />
         </div>
       )}
 
+      {/* Emergency Load Card */}
+      {!isLoading && data && (data.emergency?.totalVisits ?? 0) > 0 && (
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base font-semibold">
+              {t('emergencyLoad')}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="mb-4 flex flex-wrap gap-4">
+              <div className="text-center">
+                <p className="text-2xl font-bold text-destructive">
+                  {data.emergency.activeCases}
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  {t('activeErCases')}
+                </p>
+              </div>
+              <div className="text-center">
+                <p className="text-2xl font-bold">
+                  {data.emergency.totalVisits}
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  {t('totalErVisits')}
+                </p>
+              </div>
+            </div>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>{t('city')}</TableHead>
+                  <TableHead className="text-end">{t('erVisitsShort')}</TableHead>
+                  <TableHead className="text-end">{t('erLoadStatus')}</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {data.cities
+                  .filter((c) => c.erVisitsInPeriod > 0)
+                  .sort((a, b) => b.erVisitsInPeriod - a.erVisitsInPeriod)
+                  .map((c) => {
+                    // High load: city ER visits > 2x average across cities
+                    const avg =
+                      data.emergency.totalVisits / Math.max(data.cities.length, 1);
+                    const isOverloaded = c.erVisitsInPeriod > avg * 2;
+                    return (
+                      <TableRow key={c.city.id}>
+                        <TableCell className="font-medium">{c.city.name}</TableCell>
+                        <TableCell className="text-end tabular-nums">
+                          {c.erVisitsInPeriod}
+                        </TableCell>
+                        <TableCell className="text-end">
+                          {isOverloaded ? (
+                            <Badge variant="destructive" className="gap-1">
+                              <AlertCircle className="h-3 w-3" />
+                              {t('highLoad')}
+                            </Badge>
+                          ) : (
+                            <Badge variant="secondary">{t('normal')}</Badge>
+                          )}
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Cities Breakdown Table */}
       <Card>
         <CardHeader className="pb-2">
           <CardTitle className="text-base font-semibold">
@@ -159,6 +245,7 @@ export default function MinistryDashboardPage() {
         </CardContent>
       </Card>
 
+      {/* Charts Row 1 */}
       <div className="grid gap-6 lg:grid-cols-2">
         <PatientVolumeChart
           data={data?.dailyPatientVolume ?? []}
@@ -170,8 +257,10 @@ export default function MinistryDashboardPage() {
         />
       </div>
 
+      {/* Bed Occupancy */}
       <BedOccupancyCard cities={data?.cities ?? []} isLoading={isLoading} />
 
+      {/* Charts Row 2 */}
       <div className="grid gap-6 lg:grid-cols-2">
         <ReferralFlowTable data={flow} isLoading={flowLoading} />
         <DiseaseTrendsChart data={trends} isLoading={trendsLoading} />

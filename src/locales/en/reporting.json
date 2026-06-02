@@ -57,5 +57,12 @@
   "occupiedBeds": "Occupied",
   "availableBeds": "Available",
   "occupancyRate": "Occupancy Rate",
-  "patients": "Patients"
+  "patients": "Patients",
+  "emergencyCases": "Emergency Cases",
+  "activeErCases": "Active ER cases",
+  "emergencyLoad": "Emergency Load by City",
+  "totalErVisits": "Total ER visits in period",
+  "erLoadStatus": "Status",
+  "highLoad": "High Load",
+  "normal": "Normal"
 }

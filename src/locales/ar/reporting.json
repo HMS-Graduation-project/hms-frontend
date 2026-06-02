@@ -57,5 +57,12 @@
   "occupiedBeds": "مشغولة",
   "availableBeds": "متاحة",
   "occupancyRate": "نسبة الإشغال",
-  "patients": "مرضى"
+  "patients": "مرضى",
+  "emergencyCases": "حالات الطوارئ",
+  "activeErCases": "حالات طوارئ نشطة",
+  "emergencyLoad": "حمل الطوارئ حسب المدينة",
+  "totalErVisits": "إجمالي زيارات الطوارئ في الفترة",
+  "erLoadStatus": "الحالة",
+  "highLoad": "حمل عالي",
+  "normal": "طبيعي"
 }

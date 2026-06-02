@@ -57,5 +57,12 @@
   "occupiedBeds": "Dolu",
   "availableBeds": "Boş",
   "occupancyRate": "Doluluk Oranı",
-  "patients": "Hastalar"
+  "patients": "Hastalar",
+  "emergencyCases": "Acil Vakalar",
+  "activeErCases": "Aktif acil vakalar",
+  "emergencyLoad": "Şehre Göre Acil Yükü",
+  "totalErVisits": "Dönemdeki toplam acil ziyaretleri",
+  "erLoadStatus": "Durum",
+  "highLoad": "Yüksek Yük",
+  "normal": "Normal"
 }

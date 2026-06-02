@@ -88,6 +88,15 @@ export interface NationalSummary {
     nationalPatients: number;
     activeReferralsInPeriod: number;
   };
+  trends: {
+    patientsTrend: number | null;
+    referralsTrend: number | null;
+    erTrend: number | null;
+  };
+  emergency: {
+    activeCases: number;
+    totalVisits: number;
+  };
   cities: CityRollupRow[];
   topDiagnoses: Array<{ diagnosis: string; count: number }>;
   dailyPatientVolume: Array<{ day: string; visits: number }>;

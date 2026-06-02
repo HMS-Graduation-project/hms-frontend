@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   ResponsiveContainer,
@@ -17,8 +18,27 @@ interface PatientVolumeChartProps {
   isLoading?: boolean;
 }
 
+/** Fill gaps so every day between min and max appears on the chart. */
+function fillDateGaps(data: Array<{ day: string; visits: number }>) {
+  if (data.length <= 1) return data;
+  const map = new Map(data.map((d) => [d.day, d.visits]));
+  const sorted = [...data].sort((a, b) => a.day.localeCompare(b.day));
+  const start = new Date(sorted[0].day);
+  const end = new Date(sorted[sorted.length - 1].day);
+  const filled: Array<{ day: string; visits: number }> = [];
+  const cursor = new Date(start);
+  while (cursor <= end) {
+    const key = cursor.toISOString().slice(0, 10);
+    filled.push({ day: key, visits: map.get(key) ?? 0 });
+    cursor.setDate(cursor.getDate() + 1);
+  }
+  return filled;
+}
+
 export function PatientVolumeChart({ data, isLoading }: PatientVolumeChartProps) {
   const { t } = useTranslation('reporting');
+  const filled = useMemo(() => fillDateGaps(data), [data]);
+
   return (
     <Card>
       <CardHeader className="pb-2">
@@ -29,14 +49,14 @@ export function PatientVolumeChart({ data, isLoading }: PatientVolumeChartProps)
       <CardContent>
         {isLoading ? (
           <Skeleton className="h-[260px] w-full" />
-        ) : data.length === 0 ? (
+        ) : filled.length === 0 ? (
           <div className="flex h-[260px] flex-col items-center justify-center text-muted-foreground">
             <Users className="mb-2 h-10 w-10" />
             <p className="text-sm">{t('noPatientVolume')}</p>
           </div>
         ) : (
           <ResponsiveContainer width="100%" height={260}>
-            <AreaChart data={data}>
+            <AreaChart data={filled}>
               <CartesianGrid
                 strokeDasharray="3 3"
                 className="stroke-border"
