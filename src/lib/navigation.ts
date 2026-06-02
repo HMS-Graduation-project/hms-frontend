@@ -18,6 +18,7 @@ import {
   ArrowRightLeft,
   Globe2,
   Map,
+  MapPin,
 } from 'lucide-react';
 
 export interface NavItem {
@@ -64,5 +65,6 @@ export const navigationItems: NavItem[] = [
   { label: 'analytics', icon: BarChart3, href: '/analytics', roles: ['SUPER_ADMIN', 'ADMIN', 'HOSPITAL_ADMIN'] },
   { label: 'users', icon: Users, href: '/admin/users', roles: ['SUPER_ADMIN', 'ADMIN', 'HOSPITAL_ADMIN'] },
   { label: 'nationalRegistry', icon: ShieldCheck, href: '/admin/national-registry', roles: ['SUPER_ADMIN', 'MINISTRY_ADMIN'] },
+  { label: 'cities', icon: MapPin, href: '/admin/cities', roles: ['SUPER_ADMIN', 'MINISTRY_ADMIN'] },
   { label: 'settings', icon: Settings, href: '/settings', roles: ['SUPER_ADMIN', 'ADMIN', 'HOSPITAL_ADMIN'] },
 ];
