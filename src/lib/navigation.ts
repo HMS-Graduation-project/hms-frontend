@@ -47,7 +47,7 @@ const STAFF_ALL = [
 
 export const navigationItems: NavItem[] = [
   { label: 'dashboard', icon: LayoutDashboard, href: '/dashboard', roles: STAFF_ALL },
-  { label: 'ministryDashboard', icon: Globe2, href: '/ministry', roles: ['SUPER_ADMIN', 'MINISTRY_ADMIN'] },
+  { label: 'ministryDashboard', icon: Globe2, href: '/ministry', roles: ['SUPER_ADMIN'] },
   { label: 'regionalDashboard', icon: Map, href: '/regional', roles: ['SUPER_ADMIN', 'MINISTRY_ADMIN', 'REGIONAL_ADMIN'] },
   { label: 'patients', icon: UserRound, href: '/patients', roles: ['SUPER_ADMIN', 'ADMIN', 'HOSPITAL_ADMIN', 'DOCTOR', 'NURSE', 'RECEPTIONIST'] },
   { label: 'doctors', icon: Stethoscope, href: '/doctors', roles: ['SUPER_ADMIN', 'ADMIN', 'HOSPITAL_ADMIN', 'RECEPTIONIST'] },
