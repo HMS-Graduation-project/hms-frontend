@@ -81,6 +81,21 @@ function buildQueryString(
  * Search the national registry. The query is enabled only when at least one
  * of `syrianNationalId`, `q`, or `dateOfBirth` is provided and non-empty.
  */
+export interface RegistryStats {
+  totalPatients: number;
+  newThisMonth: number;
+  multiHospitalPatients: number;
+  potentialDuplicates: number;
+}
+
+export function useRegistryStats() {
+  return useQuery<RegistryStats>({
+    queryKey: ['national-registry', 'stats'],
+    queryFn: () =>
+      api.get<RegistryStats>('/v1/national-registry/patients/stats'),
+  });
+}
+
 export function useNationalPatientSearch(params: SearchNationalPatientParams) {
   const { syrianNationalId, q, dateOfBirth } = params;
   const hasQuery =

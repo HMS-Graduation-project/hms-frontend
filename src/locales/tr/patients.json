@@ -117,5 +117,11 @@
   "changeSelection": "Değiştir",
   "clear": "Temizle",
   "loserPreviewHeading": "Kaybedenin hastane profilleri",
-  "loserPreviewDesc": "Bu {{count}} profil kazanana aktarılacak (kazananın aynı hastanede zaten profili varsa birleştirilecek)."
+  "loserPreviewDesc": "Bu {{count}} profil kazanana aktarılacak (kazananın aynı hastanede zaten profili varsa birleştirilecek).",
+  "registryTotalPatients": "Toplam Ulusal Hasta",
+  "registryNewThisMonth": "Bu Ay Yeni",
+  "registryMultiHospital": "Çok Hastaneli Hastalar",
+  "registryMultiHospitalDesc": "2+ hastaneye bağlı",
+  "registryDuplicates": "Olası Tekrarlar",
+  "registryDuplicatesDesc": "Aynı ad + doğum tarihi, farklı NHID"
 }

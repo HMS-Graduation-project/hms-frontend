@@ -117,5 +117,11 @@
   "changeSelection": "Change",
   "clear": "Clear",
   "loserPreviewHeading": "Loser's hospital profiles",
-  "loserPreviewDesc": "These {{count}} profile(s) will be reassigned to the winner (or merged if the winner already has a profile at the same hospital)."
+  "loserPreviewDesc": "These {{count}} profile(s) will be reassigned to the winner (or merged if the winner already has a profile at the same hospital).",
+  "registryTotalPatients": "Total National Patients",
+  "registryNewThisMonth": "New This Month",
+  "registryMultiHospital": "Multi-Hospital Patients",
+  "registryMultiHospitalDesc": "Linked to 2+ hospitals",
+  "registryDuplicates": "Potential Duplicates",
+  "registryDuplicatesDesc": "Same name + DOB, different NHID"
 }

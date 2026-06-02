@@ -117,5 +117,11 @@
   "changeSelection": "تغيير",
   "clear": "مسح",
   "loserPreviewHeading": "ملفات المستشفيات للسجل الخاسر",
-  "loserPreviewDesc": "سيتم إعادة تعيين هذه الملفات البالغة {{count}} إلى السجل الفائز (أو دمجها إذا كان لدى الفائز ملف في نفس المستشفى)."
+  "loserPreviewDesc": "سيتم إعادة تعيين هذه الملفات البالغة {{count}} إلى السجل الفائز (أو دمجها إذا كان لدى الفائز ملف في نفس المستشفى).",
+  "registryTotalPatients": "إجمالي المرضى الوطنيين",
+  "registryNewThisMonth": "جدد هذا الشهر",
+  "registryMultiHospital": "مرضى متعددو المستشفيات",
+  "registryMultiHospitalDesc": "مرتبطون بأكثر من مستشفى",
+  "registryDuplicates": "سجلات مكررة محتملة",
+  "registryDuplicatesDesc": "نفس الاسم وتاريخ الميلاد، هوية مختلفة"
 }

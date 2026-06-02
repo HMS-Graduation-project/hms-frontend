@@ -10,9 +10,14 @@ import {
   Calendar,
   IdCard,
   Hospital,
+  Users,
+  UserPlus,
+  Building2,
+  Copy,
 } from 'lucide-react';
 import {
   useNationalPatient,
+  useRegistryStats,
   useMergeNationalPatient,
   type NationalPatient,
   type NationalPatientWithProfiles,
@@ -21,6 +26,7 @@ import {
   NationalPatientSearch,
   type NationalPatientSearchResult,
 } from '@/components/patients/national-patient-search';
+import { StatCard } from '@/components/dashboard/stat-card';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
@@ -32,6 +38,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
+import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   Dialog,
@@ -41,15 +48,13 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { useToast } from '@/components/ui/use-toast';
-import { Skeleton } from '@/components/ui/skeleton';
 
 export default function NationalRegistryPage() {
   const { t } = useTranslation('patients');
   const [searchParams] = useSearchParams();
   const [detailNhid, setDetailNhid] = useState<string | null>(null);
+  const { data: stats, isLoading: statsLoading } = useRegistryStats();
 
-  // Allow ?nhid=<id> to open the detail dialog directly (used by the
-  // "Edit in National Registry" link from patient-form).
   useEffect(() => {
     const nhid = searchParams.get('nhid');
     if (nhid) setDetailNhid(nhid);
@@ -71,6 +76,40 @@ export default function NationalRegistryPage() {
           </p>
         </div>
       </div>
+
+      {/* KPI Cards */}
+      {statsLoading ? (
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <Skeleton key={i} className="h-[120px]" />
+          ))}
+        </div>
+      ) : stats ? (
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <StatCard
+            title={t('registryTotalPatients')}
+            value={stats.totalPatients.toLocaleString()}
+            icon={Users}
+          />
+          <StatCard
+            title={t('registryNewThisMonth')}
+            value={stats.newThisMonth.toLocaleString()}
+            icon={UserPlus}
+          />
+          <StatCard
+            title={t('registryMultiHospital')}
+            value={stats.multiHospitalPatients.toLocaleString()}
+            icon={Building2}
+            description={t('registryMultiHospitalDesc')}
+          />
+          <StatCard
+            title={t('registryDuplicates')}
+            value={stats.potentialDuplicates.toLocaleString()}
+            icon={Copy}
+            description={t('registryDuplicatesDesc')}
+          />
+        </div>
+      ) : null}
 
       <Tabs defaultValue="search">
         <TabsList>
@@ -135,7 +174,7 @@ export default function NationalRegistryPage() {
 }
 
 /* ------------------------------------------------------------------------- */
-/*  Detail view (shown in dialog)                                            */
+/*  Detail view                                                              */
 /* ------------------------------------------------------------------------- */
 
 function NationalPatientDetail({ nhid }: { nhid: string }) {
@@ -178,7 +217,6 @@ function NationalPatientDetailCard({
 
   return (
     <div className="space-y-4">
-      {/* Header */}
       <div className="flex items-start gap-3">
         <div className="rounded-md bg-muted p-2">
           <User className="h-5 w-5" />
@@ -208,7 +246,6 @@ function NationalPatientDetailCard({
 
       <Separator />
 
-      {/* Demographics grid */}
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <DetailField label={t('syrianNationalId')} value={patient.syrianNationalId} />
         <DetailField
@@ -223,21 +260,12 @@ function NationalPatientDetailCard({
         <DetailField label={t('bloodType')} value={patient.bloodType} />
         <DetailField label={t('phone')} value={patient.phone} />
         <DetailField label={t('address')} value={patient.address} />
-        <DetailField
-          label={t('allergies')}
-          value={patient.allergies}
-          span2
-        />
-        <DetailField
-          label={t('chronicConditions')}
-          value={patient.chronicConditions}
-          span2
-        />
+        <DetailField label={t('allergies')} value={patient.allergies} span2 />
+        <DetailField label={t('chronicConditions')} value={patient.chronicConditions} span2 />
       </div>
 
       <Separator />
 
-      {/* Profiles */}
       <div>
         <div className="flex items-center gap-2 mb-2">
           <Hospital className="h-4 w-4 text-muted-foreground" />
@@ -260,10 +288,7 @@ function NationalPatientDetailCard({
                 <div>
                   <p className="font-medium">{p.hospital.name}</p>
                   {p.hospital.nameAr && (
-                    <p
-                      className="text-xs text-muted-foreground"
-                      dir="rtl"
-                    >
+                    <p className="text-xs text-muted-foreground" dir="rtl">
                       {p.hospital.nameAr}
                     </p>
                   )}
@@ -308,8 +333,6 @@ function MergeDuplicatesPanel() {
 
   const [winner, setWinner] = useState<NationalPatient | null>(null);
   const [loser, setLoser] = useState<NationalPatient | null>(null);
-
-  // Modal state for picker
   const [pickerOpen, setPickerOpen] = useState<null | 'winner' | 'loser'>(null);
 
   const merge = useMergeNationalPatient();
@@ -317,10 +340,7 @@ function MergeDuplicatesPanel() {
   const handleMerge = async () => {
     if (!winner || !loser) return;
     if (winner.id === loser.id) {
-      toast({
-        title: t('mergeSameIdError'),
-        variant: 'destructive',
-      });
+      toast({ title: t('mergeSameIdError'), variant: 'destructive' });
       return;
     }
     try {
@@ -338,9 +358,9 @@ function MergeDuplicatesPanel() {
       });
       setWinner(null);
       setLoser(null);
-    } catch {
+    } catch (err) {
       toast({
-        title: tCommon('error'),
+        title: err instanceof Error ? err.message : tCommon('error'),
         variant: 'destructive',
       });
     }
@@ -354,7 +374,6 @@ function MergeDuplicatesPanel() {
           <CardDescription>{t('mergeDescription')}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          {/* Warning */}
           <div className="flex items-start gap-2 rounded-md border border-warning/50 bg-warning/10 px-3 py-2 text-warning-foreground">
             <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-warning" />
             <p className="text-sm">{t('mergeWarning')}</p>
@@ -379,10 +398,8 @@ function MergeDuplicatesPanel() {
             />
           </div>
 
-          {/* Loser profile preview */}
           {loser && <LoserProfilePreview nhid={loser.id} />}
 
-          {/* Merge button */}
           <div className="flex justify-end gap-2 pt-2">
             <Button
               onClick={handleMerge}
@@ -394,7 +411,6 @@ function MergeDuplicatesPanel() {
         </CardContent>
       </Card>
 
-      {/* Picker dialog */}
       <Dialog
         open={!!pickerOpen}
         onOpenChange={(open) => {
@@ -436,14 +452,7 @@ interface MergeSideProps {
   tone: 'success' | 'destructive';
 }
 
-function MergeSide({
-  title,
-  description,
-  selected,
-  onOpen,
-  onClear,
-  tone,
-}: MergeSideProps) {
+function MergeSide({ title, description, selected, onOpen, onClear, tone }: MergeSideProps) {
   const { t } = useTranslation('patients');
   const fullName = selected
     ? [selected.firstName, selected.lastName].filter(Boolean).join(' ')
@@ -501,9 +510,7 @@ function LoserProfilePreview({ nhid }: { nhid: string }) {
   const { t } = useTranslation('patients');
   const { data, isLoading } = useNationalPatient(nhid);
 
-  if (isLoading) {
-    return <Skeleton className="h-24 w-full" />;
-  }
+  if (isLoading) return <Skeleton className="h-24 w-full" />;
   if (!data) return null;
 
   return (
