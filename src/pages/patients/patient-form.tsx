@@ -326,8 +326,11 @@ function PatientFormInner({
         toast({ title: t('patientCreated'), variant: 'success' });
       }
       onSuccess();
-    } catch {
-      toast({ title: tCommon('error'), variant: 'destructive' });
+    } catch (err) {
+      toast({
+        title: err instanceof Error ? err.message : tCommon('error'),
+        variant: 'destructive',
+      });
     }
   };
 

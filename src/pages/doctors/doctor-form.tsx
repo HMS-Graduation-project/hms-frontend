@@ -159,9 +159,9 @@ export function DoctorForm({ doctor, onSuccess }: DoctorFormProps) {
         });
       }
       onSuccess();
-    } catch {
+    } catch (err) {
       toast({
-        title: tCommon('error'),
+        title: err instanceof Error ? err.message : tCommon('error'),
         variant: 'destructive',
       });
     }
