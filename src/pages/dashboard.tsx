@@ -1,11 +1,12 @@
 import { useTranslation } from 'react-i18next';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '@/providers/auth-provider';
-import { Users, Stethoscope, CalendarDays, FlaskConical } from 'lucide-react';
+import { Users, Stethoscope, CalendarDays, FlaskConical, AlertCircle } from 'lucide-react';
 import { StatCard } from '@/components/dashboard/stat-card';
 import { RecentAppointments } from '@/components/dashboard/recent-appointments';
 import { QuickActions } from '@/components/dashboard/quick-actions';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { useDashboardStats } from '@/hooks/use-analytics';
 
 export default function DashboardPage() {
@@ -30,7 +31,7 @@ export default function DashboardPage() {
 function HospitalDashboard() {
   const { t } = useTranslation('dashboard');
   const { user } = useAuth();
-  const { data: stats, isLoading } = useDashboardStats();
+  const { data: stats, isLoading, isError } = useDashboardStats();
 
   return (
     <div className="space-y-6">
@@ -45,6 +46,15 @@ function HospitalDashboard() {
       </div>
 
       {/* Stat cards grid */}
+      {isError ? (
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>{t('statsErrorTitle', 'Failed to load statistics')}</AlertTitle>
+          <AlertDescription>
+            {t('statsErrorDescription', 'Could not fetch dashboard data. Please try refreshing the page.')}
+          </AlertDescription>
+        </Alert>
+      ) : (
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {isLoading ? (
           Array.from({ length: 4 }).map((_, i) => (
@@ -54,7 +64,7 @@ function HospitalDashboard() {
           <>
             <StatCard
               title={t('totalPatients')}
-              value={stats?.totalPatients?.toLocaleString() ?? '0'}
+              value={stats?.totalPatients?.toLocaleString() ?? '—'}
               icon={Users}
               trend={
                 stats?.patientsTrend != null
@@ -67,7 +77,7 @@ function HospitalDashboard() {
             />
             <StatCard
               title={t('totalDoctors')}
-              value={stats?.totalDoctors?.toLocaleString() ?? '0'}
+              value={stats?.totalDoctors?.toLocaleString() ?? '—'}
               icon={Stethoscope}
               trend={
                 stats?.doctorsTrend != null
@@ -80,7 +90,7 @@ function HospitalDashboard() {
             />
             <StatCard
               title={t('todayAppointments')}
-              value={stats?.todayAppointments?.toLocaleString() ?? '0'}
+              value={stats?.todayAppointments?.toLocaleString() ?? '—'}
               icon={CalendarDays}
               trend={
                 stats?.appointmentsTrend != null
@@ -93,12 +103,13 @@ function HospitalDashboard() {
             />
             <StatCard
               title={t('pendingLabResults')}
-              value={stats?.pendingLabOrders?.toLocaleString() ?? '0'}
+              value={stats?.pendingLabOrders?.toLocaleString() ?? '—'}
               icon={FlaskConical}
             />
           </>
         )}
       </div>
+      )}
 
       {/* Quick Actions */}
       <QuickActions />

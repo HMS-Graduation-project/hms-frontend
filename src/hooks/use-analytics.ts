@@ -34,7 +34,7 @@ export interface DepartmentStat {
 export function useDashboardStats() {
   return useQuery<DashboardStats>({
     queryKey: ['analytics', 'dashboard-stats'],
-    queryFn: () => api.get<DashboardStats>('/v1/analytics/dashboard-stats'),
+    queryFn: () => api.get<DashboardStats>('/v1/analytics/dashboard'),
   });
 }
 
