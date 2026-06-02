@@ -9,8 +9,10 @@ import {
   Tooltip,
   Legend,
 } from 'recharts';
+import { AlertCircle, CalendarDays } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import {
   Select,
   SelectContent,
@@ -27,7 +29,9 @@ interface AppointmentChartProps {
 
 export function AppointmentChart({ period, onPeriodChange }: AppointmentChartProps) {
   const { t } = useTranslation('analytics');
-  const { data, isLoading } = useAppointmentStats(period);
+  const { data, isLoading, isError } = useAppointmentStats(period);
+
+  const chartData = data?.data ?? [];
 
   return (
     <Card>
@@ -40,6 +44,7 @@ export function AppointmentChart({ period, onPeriodChange }: AppointmentChartPro
             <SelectValue placeholder={t('period')} />
           </SelectTrigger>
           <SelectContent>
+            <SelectItem value="daily">{t('daily')}</SelectItem>
             <SelectItem value="week">{t('week')}</SelectItem>
             <SelectItem value="month">{t('month')}</SelectItem>
             <SelectItem value="year">{t('year')}</SelectItem>
@@ -49,15 +54,25 @@ export function AppointmentChart({ period, onPeriodChange }: AppointmentChartPro
       <CardContent>
         {isLoading ? (
           <Skeleton className="h-[300px] w-full" />
+        ) : isError ? (
+          <Alert variant="destructive">
+            <AlertCircle className="h-4 w-4" />
+            <AlertDescription>{t('chartError')}</AlertDescription>
+          </Alert>
+        ) : chartData.length === 0 ? (
+          <div className="flex h-[300px] flex-col items-center justify-center text-muted-foreground">
+            <CalendarDays className="mb-2 h-10 w-10" />
+            <p className="text-sm">{t('noAppointmentData')}</p>
+          </div>
         ) : (
           <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={data ?? []}>
+            <LineChart data={chartData}>
               <CartesianGrid
                 strokeDasharray="3 3"
                 className="stroke-border"
               />
               <XAxis
-                dataKey="date"
+                dataKey="label"
                 className="text-xs"
                 tick={{ fill: 'hsl(var(--muted-foreground))' }}
                 tickLine={{ stroke: 'hsl(var(--border))' }}
@@ -65,6 +80,7 @@ export function AppointmentChart({ period, onPeriodChange }: AppointmentChartPro
               />
               <YAxis
                 className="text-xs"
+                allowDecimals={false}
                 tick={{ fill: 'hsl(var(--muted-foreground))' }}
                 tickLine={{ stroke: 'hsl(var(--border))' }}
                 axisLine={{ stroke: 'hsl(var(--border))' }}
@@ -80,12 +96,37 @@ export function AppointmentChart({ period, onPeriodChange }: AppointmentChartPro
               <Legend />
               <Line
                 type="monotone"
-                dataKey="count"
-                name={t('appointments')}
+                dataKey="total"
+                name={t('totalAppointments')}
                 stroke="hsl(var(--primary))"
                 strokeWidth={2}
-                dot={{ fill: 'hsl(var(--primary))', r: 4 }}
-                activeDot={{ r: 6 }}
+                dot={{ fill: 'hsl(var(--primary))', r: 3 }}
+                activeDot={{ r: 5 }}
+              />
+              <Line
+                type="monotone"
+                dataKey="confirmed"
+                name={t('confirmed')}
+                stroke="hsl(var(--chart-2, 220 70% 50%))"
+                strokeWidth={2}
+                dot={{ r: 2 }}
+              />
+              <Line
+                type="monotone"
+                dataKey="completed"
+                name={t('completedStatus')}
+                stroke="hsl(var(--chart-3, 150 60% 50%))"
+                strokeWidth={2}
+                dot={{ r: 2 }}
+              />
+              <Line
+                type="monotone"
+                dataKey="cancelled"
+                name={t('cancelledStatus')}
+                stroke="hsl(var(--destructive, 0 84% 60%))"
+                strokeWidth={2}
+                strokeDasharray="5 5"
+                dot={{ r: 2 }}
               />
             </LineChart>
           </ResponsiveContainer>

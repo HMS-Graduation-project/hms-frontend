@@ -11,10 +11,16 @@
   "revenueBreakdown": "توزيع الإيرادات",
   "departmentPerformance": "أداء الأقسام",
   "period": "الفترة",
+  "daily": "يومي",
   "week": "أسبوع",
   "month": "شهر",
+  "quarter": "ربع سنة",
   "year": "سنة",
   "appointments": "المواعيد",
+  "totalAppointments": "الإجمالي",
+  "confirmed": "مؤكد",
+  "completedStatus": "مكتمل",
+  "cancelledStatus": "ملغي",
   "revenue": "الإيرادات",
   "doctors": "الأطباء",
   "patients": "المرضى",
@@ -22,5 +28,8 @@
   "consultation": "استشارة",
   "labTest": "فحص مختبر",
   "medication": "دواء",
-  "procedure": "إجراء"
+  "procedure": "إجراء",
+  "chartError": "فشل في تحميل بيانات الرسم البياني",
+  "noAppointmentData": "لا توجد بيانات مواعيد لهذه الفترة",
+  "noRevenueData": "لا توجد بيانات إيرادات لهذه الفترة"
 }

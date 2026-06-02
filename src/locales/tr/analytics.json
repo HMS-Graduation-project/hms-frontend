@@ -11,10 +11,16 @@
   "revenueBreakdown": "Gelir Dağılımı",
   "departmentPerformance": "Departman Performansı",
   "period": "Dönem",
+  "daily": "Günlük",
   "week": "Hafta",
   "month": "Ay",
+  "quarter": "Çeyrek",
   "year": "Yıl",
   "appointments": "Randevular",
+  "totalAppointments": "Toplam",
+  "confirmed": "Onaylandı",
+  "completedStatus": "Tamamlandı",
+  "cancelledStatus": "İptal Edildi",
   "revenue": "Gelir",
   "doctors": "Doktorlar",
   "patients": "Hastalar",
@@ -22,5 +28,8 @@
   "consultation": "Konsültasyon",
   "labTest": "Laboratuvar Testi",
   "medication": "İlaç",
-  "procedure": "Prosedür"
+  "procedure": "Prosedür",
+  "chartError": "Grafik verileri yüklenemedi",
+  "noAppointmentData": "Bu dönem için randevu verisi yok",
+  "noRevenueData": "Bu dönem için gelir verisi yok"
 }

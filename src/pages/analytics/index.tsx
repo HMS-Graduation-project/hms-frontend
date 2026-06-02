@@ -17,7 +17,8 @@ import { useDashboardStats } from '@/hooks/use-analytics';
 
 export default function AnalyticsPage() {
   const { t } = useTranslation('analytics');
-  const [appointmentPeriod, setAppointmentPeriod] = useState('month');
+  const [appointmentPeriod, setAppointmentPeriod] = useState('week');
+  const [revenuePeriod, setRevenuePeriod] = useState('month');
   const { data: stats, isLoading: statsLoading } = useDashboardStats();
 
   return (
@@ -102,7 +103,7 @@ export default function AnalyticsPage() {
           period={appointmentPeriod}
           onPeriodChange={setAppointmentPeriod}
         />
-        <RevenueChart period={appointmentPeriod} />
+        <RevenueChart period={revenuePeriod} onPeriodChange={setRevenuePeriod} />
       </div>
 
       <DepartmentChart />

@@ -11,10 +11,16 @@
   "revenueBreakdown": "Revenue Breakdown",
   "departmentPerformance": "Department Performance",
   "period": "Period",
+  "daily": "Daily",
   "week": "Week",
   "month": "Month",
+  "quarter": "Quarter",
   "year": "Year",
   "appointments": "Appointments",
+  "totalAppointments": "Total",
+  "confirmed": "Confirmed",
+  "completedStatus": "Completed",
+  "cancelledStatus": "Cancelled",
   "revenue": "Revenue",
   "doctors": "Doctors",
   "patients": "Patients",
@@ -22,5 +28,8 @@
   "consultation": "Consultation",
   "labTest": "Lab Test",
   "medication": "Medication",
-  "procedure": "Procedure"
+  "procedure": "Procedure",
+  "chartError": "Failed to load chart data",
+  "noAppointmentData": "No appointment data for this period",
+  "noRevenueData": "No revenue data for this period"
 }
