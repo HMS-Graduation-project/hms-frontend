@@ -185,16 +185,33 @@ export default function PneumoniaPage() {
                   <span className={`text-xs font-semibold px-2 py-0.5 rounded-full border ${risk ? RISK_COLORS[risk] : ''}`}>{t(`risk_${risk}`)}</span>
                 </div>
 
-                <div className="relative">
-                  <div className="flex justify-between text-xs mb-1">
-                    <span className="text-muted-foreground">{t('pneumoniaProbability')}</span>
-                    <span className="font-semibold">{probStr}%</span>
+                {/* Probability + threshold — grid layout avoids RTL overlap */}
+                <div className="rounded-md border bg-muted/20 p-3 space-y-2">
+                  <div className="grid grid-cols-2 gap-2 text-sm">
+                    <div>
+                      <p className="text-xs text-muted-foreground">{t('pneumoniaProbability')}</p>
+                      <p className="text-xl font-bold tabular-nums">{probStr}%</p>
+                    </div>
+                    <div className="text-end">
+                      <p className="text-xs text-muted-foreground">{t('pneumoniaThreshold')}</p>
+                      <p className="text-xl font-bold tabular-nums text-muted-foreground">{threshStr}%</p>
+                    </div>
                   </div>
-                  <div className="h-3 rounded-full bg-muted overflow-hidden">
-                    <div className={`h-full rounded-full transition-all ${risk ? RISK_BAR[risk] : 'bg-green-500'}`} style={{ width: `${result.probability * 100}%` }} />
+                  {/* Progress bar with threshold tick */}
+                  <div className="relative h-4">
+                    <div className="absolute inset-0 rounded-full bg-muted overflow-hidden">
+                      <div className={`h-full rounded-full transition-all ${risk ? RISK_BAR[risk] : 'bg-green-500'}`}
+                        style={{ width: `${result.probability * 100}%` }} />
+                    </div>
+                    {/* Threshold tick — uses inset-inline-start for RTL compat */}
+                    <div className="absolute top-0 h-4 w-0.5 bg-foreground/80 rounded-full"
+                      style={{ insetInlineStart: `${result.threshold * 100}%` }} />
                   </div>
-                  <div className="absolute top-5 h-3 w-0.5 bg-foreground/70" style={{ left: `${result.threshold * 100}%` }} />
-                  <div className="absolute top-0 text-[9px] text-muted-foreground" style={{ left: `${result.threshold * 100}%`, transform: 'translateX(-50%)' }}>{threshStr}%</div>
+                  <div className="flex justify-between text-[10px] text-muted-foreground tabular-nums">
+                    <span>0%</span>
+                    <span>50%</span>
+                    <span>100%</span>
+                  </div>
                 </div>
               </CardContent>
             </Card>
