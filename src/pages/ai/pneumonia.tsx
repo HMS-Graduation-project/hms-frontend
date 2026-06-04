@@ -1,19 +1,9 @@
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-  Upload,
-  Scan,
-  Eye,
-  Trash2,
-  AlertTriangle,
-  CheckCircle2,
-  XCircle,
-  Loader2,
-  Info,
-  ChevronDown,
-  ChevronUp,
-  ShieldAlert,
-  Stethoscope,
+  Upload, Scan, Eye, Trash2, AlertTriangle, CheckCircle2, XCircle,
+  Loader2, Info, ChevronDown, ChevronUp, ShieldAlert, Stethoscope,
+  Activity, BarChart3, FileText, Brain,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -23,36 +13,49 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/components/ui/use-toast';
 import {
-  usePneumoniaPredict,
-  usePneumoniaExplain,
-  type PneumoniaPrediction,
-  type PneumoniaExplanation,
+  Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
+} from '@/components/ui/table';
+import {
+  usePneumoniaPredict, usePneumoniaExplain,
+  type PneumoniaPrediction, type PneumoniaExplanation,
 } from '@/hooks/use-pneumonia';
 
 const MAX_SIZE_MB = 10;
 const ACCEPTED = '.jpg,.jpeg,.png';
 
-// UI-only risk levels derived from probability (does not change model logic)
-function getRiskLevel(probability: number): 'low' | 'moderate' | 'elevated' | 'high' {
-  if (probability >= 0.94) return 'high';
-  if (probability >= 0.70) return 'elevated';
-  if (probability >= 0.30) return 'moderate';
+// ── Helpers (UI-only, no model logic) ───────────────────────────────
+
+type Risk = 'low' | 'moderate' | 'elevated' | 'high';
+
+function getRiskLevel(prob: number): Risk {
+  if (prob >= 0.94) return 'high';
+  if (prob >= 0.70) return 'elevated';
+  if (prob >= 0.30) return 'moderate';
   return 'low';
 }
 
-const RISK_COLORS = {
+const RISK_COLORS: Record<Risk, string> = {
   low: 'bg-green-100 text-green-800 border-green-300',
   moderate: 'bg-yellow-100 text-yellow-800 border-yellow-300',
   elevated: 'bg-orange-100 text-orange-800 border-orange-300',
   high: 'bg-red-100 text-red-800 border-red-300',
 };
 
-const RISK_BAR_COLORS = {
-  low: 'bg-green-500',
-  moderate: 'bg-yellow-500',
-  elevated: 'bg-orange-500',
-  high: 'bg-red-500',
+const RISK_BAR: Record<Risk, string> = {
+  low: 'bg-green-500', moderate: 'bg-yellow-500',
+  elevated: 'bg-orange-500', high: 'bg-red-500',
 };
+
+const pct = (v: number) => (v * 100).toFixed(1);
+
+// ── Static benchmark data (from model comparison study) ─────────────
+
+const BENCHMARK = {
+  densenet121: { recall: '97.9%', specificity: '87.0%', f1: '95.2%', auc: '97.75%', size: '80.5 MB', speed: '1.7 ms', role: 'liveDefault' },
+  efficientnet_b0: { recall: '96.9%', specificity: '84.4%', f1: '94.0%', auc: '94.57%', size: '46.4 MB', speed: '0.9 ms', role: 'benchmarkResearch' },
+};
+
+// ═════════════════════════════════════════════════════════════════════
 
 export default function PneumoniaPage() {
   const { t } = useTranslation('ai');
@@ -63,6 +66,7 @@ export default function PneumoniaPage() {
   const [preview, setPreview] = useState<string | null>(null);
   const [result, setResult] = useState<PneumoniaPrediction | PneumoniaExplanation | null>(null);
   const [showDetails, setShowDetails] = useState(false);
+  const [showBenchmark, setShowBenchmark] = useState(false);
 
   const predict = usePneumoniaPredict();
   const explain = usePneumoniaExplain();
@@ -71,61 +75,41 @@ export default function PneumoniaPage() {
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    if (file.size > MAX_SIZE_MB * 1024 * 1024) {
-      toast({ title: t('pneumoniaFileTooLarge'), variant: 'destructive' });
-      return;
-    }
-    if (!file.type.match(/^image\/(jpeg|png|jpg)$/)) {
-      toast({ title: t('pneumoniaInvalidType'), variant: 'destructive' });
-      return;
-    }
-    setSelectedFile(file);
-    setPreview(URL.createObjectURL(file));
-    setResult(null);
-    setShowDetails(false);
+    if (file.size > MAX_SIZE_MB * 1024 * 1024) { toast({ title: t('pneumoniaFileTooLarge'), variant: 'destructive' }); return; }
+    if (!file.type.match(/^image\/(jpeg|png|jpg)$/)) { toast({ title: t('pneumoniaInvalidType'), variant: 'destructive' }); return; }
+    setSelectedFile(file); setPreview(URL.createObjectURL(file)); setResult(null); setShowDetails(false);
   };
 
   const handleClear = () => {
-    setSelectedFile(null);
-    if (preview) URL.revokeObjectURL(preview);
-    setPreview(null);
-    setResult(null);
-    setShowDetails(false);
+    setSelectedFile(null); if (preview) URL.revokeObjectURL(preview);
+    setPreview(null); setResult(null); setShowDetails(false);
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
   const handlePredict = async () => {
     if (!selectedFile) return;
-    try {
-      setResult(await predict.mutateAsync(selectedFile));
-    } catch (err) {
-      toast({ title: err instanceof Error ? err.message : t('pneumoniaError'), variant: 'destructive' });
-    }
+    try { setResult(await predict.mutateAsync(selectedFile)); }
+    catch (err) { toast({ title: err instanceof Error ? err.message : t('pneumoniaError'), variant: 'destructive' }); }
   };
 
   const handleExplain = async () => {
     if (!selectedFile) return;
-    try {
-      setResult(await explain.mutateAsync(selectedFile));
-    } catch (err) {
-      toast({ title: err instanceof Error ? err.message : t('pneumoniaError'), variant: 'destructive' });
-    }
+    try { setResult(await explain.mutateAsync(selectedFile)); }
+    catch (err) { toast({ title: err instanceof Error ? err.message : t('pneumoniaError'), variant: 'destructive' }); }
   };
 
   const hasExplanation = result && 'explainability' in result;
   const risk = result ? getRiskLevel(result.probability) : null;
-  const probPct = result ? (result.probability * 100).toFixed(1) : '0';
-  const threshPct = result ? (result.threshold * 100).toFixed(0) : '94';
+  const probStr = result ? pct(result.probability) : '0';
+  const threshStr = result ? pct(result.threshold) : '94';
 
   return (
     <div className="space-y-6">
-      {/* Header */}
       <div>
         <h1 className="text-2xl font-bold tracking-tight">{t('pneumoniaTitle')}</h1>
         <p className="text-muted-foreground">{t('pneumoniaSubtitle')}</p>
       </div>
 
-      {/* Clinical disclaimer */}
       <Alert variant="warning">
         <AlertTriangle className="h-4 w-4" />
         <AlertTitle>{t('pneumoniaDisclaimerTitle')}</AlertTitle>
@@ -133,234 +117,244 @@ export default function PneumoniaPage() {
       </Alert>
 
       <div className="grid gap-6 lg:grid-cols-2">
-        {/* Upload section */}
+        {/* ── Upload ─────────────────────────────────────────────── */}
         <Card>
           <CardHeader>
             <CardTitle className="text-base font-semibold flex items-center gap-2">
-              <Upload className="h-4 w-4" />
-              {t('pneumoniaUpload')}
+              <Upload className="h-4 w-4" />{t('pneumoniaUpload')}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept={ACCEPTED}
-              onChange={handleFileSelect}
-              className="block w-full text-sm text-muted-foreground file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90 cursor-pointer"
-            />
+            <input ref={fileInputRef} type="file" accept={ACCEPTED} onChange={handleFileSelect}
+              className="block w-full text-sm text-muted-foreground file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90 cursor-pointer" />
             <p className="text-xs text-muted-foreground">{t('pneumoniaFileHelp')}</p>
-
             {preview && (
               <div className="relative rounded-lg overflow-hidden border bg-muted">
-                <img src={preview} alt="Chest X-ray preview" className="w-full h-auto max-h-[300px] object-contain" />
+                <img src={preview} alt="X-ray" className="w-full h-auto max-h-[300px] object-contain" />
               </div>
             )}
-
             <div className="flex gap-2 flex-wrap">
               <Button onClick={handlePredict} disabled={!selectedFile || isPending} className="gap-2">
-                {predict.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Scan className="h-4 w-4" />}
-                {t('pneumoniaAnalyze')}
+                {predict.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Scan className="h-4 w-4" />}{t('pneumoniaAnalyze')}
               </Button>
               <Button onClick={handleExplain} disabled={!selectedFile || isPending} variant="outline" className="gap-2">
-                {explain.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Eye className="h-4 w-4" />}
-                {t('pneumoniaExplain')}
+                {explain.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Eye className="h-4 w-4" />}{t('pneumoniaExplain')}
               </Button>
               <Button onClick={handleClear} disabled={isPending} variant="ghost" className="gap-2">
-                <Trash2 className="h-4 w-4" />
-                {t('pneumoniaClear')}
+                <Trash2 className="h-4 w-4" />{t('pneumoniaClear')}
               </Button>
             </div>
           </CardContent>
         </Card>
 
-        {/* Result section */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base font-semibold">{t('pneumoniaResult')}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            {isPending ? (
-              <div className="space-y-3">
-                <Skeleton className="h-16 w-full" />
-                <Skeleton className="h-10 w-3/4" />
-                <Skeleton className="h-8 w-1/2" />
-                <Skeleton className="h-[200px] w-full" />
-              </div>
-            ) : result ? (
-              <div className="space-y-4">
-                {/* 1. Screening Status */}
+        {/* ── Results ────────────────────────────────────────────── */}
+        <div className="space-y-4">
+          {isPending ? (
+            <Card><CardContent className="p-6 space-y-3">
+              <Skeleton className="h-16 w-full" /><Skeleton className="h-10 w-3/4" />
+              <Skeleton className="h-8 w-1/2" /><Skeleton className="h-[200px] w-full" />
+            </CardContent></Card>
+          ) : result ? (<>
+
+            {/* ── S1: Final AI Decision ─────────────────────────── */}
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm font-semibold flex items-center gap-2">
+                  <Activity className="h-4 w-4" />{t('cds_finalDecision')}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
                 <div className={`rounded-lg border p-4 ${result.isPositive ? 'border-destructive/50 bg-destructive/5' : 'border-green-500/50 bg-green-50 dark:bg-green-950/20'}`}>
                   <div className="flex items-start gap-3">
-                    {result.isPositive ? (
-                      <XCircle className="h-8 w-8 text-destructive shrink-0 mt-0.5" />
-                    ) : (
-                      <CheckCircle2 className="h-8 w-8 text-green-600 shrink-0 mt-0.5" />
-                    )}
+                    {result.isPositive ? <XCircle className="h-7 w-7 text-destructive shrink-0 mt-0.5" /> : <CheckCircle2 className="h-7 w-7 text-green-600 shrink-0 mt-0.5" />}
                     <div className="space-y-1">
-                      <p className="font-bold text-lg">
-                        {result.isPositive ? t('aiScreeningPositive') : t('aiScreeningNegative')}
-                      </p>
-                      <p className="text-sm text-muted-foreground">
-                        {result.isPositive ? t('positiveExplanation') : t('negativeExplanation')}
-                      </p>
+                      <p className="font-bold text-base">{result.isPositive ? t('aiScreeningPositive') : t('aiScreeningNegative')}</p>
+                      <p className="text-sm text-muted-foreground">{result.isPositive
+                        ? t('probabilityAboveThreshold', { prob: probStr, threshold: threshStr })
+                        : t('probabilityBelowThreshold', { prob: probStr, threshold: threshStr })}</p>
                     </div>
                   </div>
                 </div>
 
-                {/* 2. Risk Level */}
-                {risk && (
-                  <div className="flex items-center gap-2">
-                    <ShieldAlert className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-sm text-muted-foreground">{t('riskLevel')}:</span>
-                    <span className={`text-xs font-semibold px-2 py-0.5 rounded-full border ${RISK_COLORS[risk]}`}>
-                      {t(`risk_${risk}`)}
-                    </span>
-                  </div>
-                )}
+                {/* Risk + probability bar */}
+                <div className="flex items-center gap-2">
+                  <ShieldAlert className="h-4 w-4 text-muted-foreground" />
+                  <span className="text-sm text-muted-foreground">{t('riskLevel')}:</span>
+                  <span className={`text-xs font-semibold px-2 py-0.5 rounded-full border ${risk ? RISK_COLORS[risk] : ''}`}>{t(`risk_${risk}`)}</span>
+                </div>
 
-                {/* 3. Probability with threshold marker */}
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm">
+                <div className="relative">
+                  <div className="flex justify-between text-xs mb-1">
                     <span className="text-muted-foreground">{t('pneumoniaProbability')}</span>
-                    <span className="font-semibold">{probPct}%</span>
+                    <span className="font-semibold">{probStr}%</span>
                   </div>
-                  <div className="relative">
-                    <div className="h-4 rounded-full bg-muted overflow-hidden">
-                      <div
-                        className={`h-full rounded-full transition-all ${risk ? RISK_BAR_COLORS[risk] : 'bg-green-500'}`}
-                        style={{ width: `${result.probability * 100}%` }}
-                      />
-                    </div>
-                    {/* Threshold marker */}
-                    <div
-                      className="absolute top-0 h-4 w-0.5 bg-foreground/70"
-                      style={{ left: `${result.threshold * 100}%` }}
-                      title={`${t('pneumoniaThreshold')}: ${threshPct}%`}
-                    />
-                    <div
-                      className="absolute -top-5 text-[10px] text-muted-foreground font-medium"
-                      style={{ left: `${result.threshold * 100}%`, transform: 'translateX(-50%)' }}
-                    >
-                      {threshPct}%
-                    </div>
+                  <div className="h-3 rounded-full bg-muted overflow-hidden">
+                    <div className={`h-full rounded-full transition-all ${risk ? RISK_BAR[risk] : 'bg-green-500'}`} style={{ width: `${result.probability * 100}%` }} />
                   </div>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    {result.isPositive
-                      ? t('probabilityAboveThreshold', { prob: probPct, threshold: threshPct })
-                      : t('probabilityBelowThreshold', { prob: probPct, threshold: threshPct })}
-                  </p>
+                  <div className="absolute top-5 h-3 w-0.5 bg-foreground/70" style={{ left: `${result.threshold * 100}%` }} />
+                  <div className="absolute top-0 text-[9px] text-muted-foreground" style={{ left: `${result.threshold * 100}%`, transform: 'translateX(-50%)' }}>{threshStr}%</div>
                 </div>
+              </CardContent>
+            </Card>
 
-                <Separator />
+            {/* ── S4: Medical Interpretation ────────────────────── */}
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm font-semibold flex items-center gap-2">
+                  <Brain className="h-4 w-4" />{t('cds_medicalInterpretation')}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">{t(`cds_interp_${risk}`)}</p>
+              </CardContent>
+            </Card>
 
-                {/* 4. Clinical Recommendation */}
-                <div className="rounded-md border bg-muted/30 p-3">
-                  <div className="flex items-start gap-2">
-                    <Stethoscope className="h-4 w-4 text-primary mt-0.5 shrink-0" />
-                    <div className="space-y-1">
-                      <p className="text-sm font-semibold">{t('clinicalRecommendation')}</p>
-                      <p className="text-xs text-muted-foreground">
-                        {result.isPositive
-                          ? t('recommendationPositive')
-                          : risk === 'elevated'
-                            ? t('recommendationElevated')
-                            : t('recommendationNegative')}
-                      </p>
+            {/* ── S5: Radiology Summary ─────────────────────────── */}
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm font-semibold flex items-center gap-2">
+                  <FileText className="h-4 w-4" />{t('cds_radiologySummary')}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2 text-sm">
+                <div>
+                  <p className="font-medium text-xs text-muted-foreground">{t('cds_findings')}</p>
+                  <p className="text-muted-foreground">{result.isPositive ? t('cds_findingsPositive') : t('cds_findingsNegative')}</p>
+                </div>
+                <div>
+                  <p className="font-medium text-xs text-muted-foreground">{t('cds_impression')}</p>
+                  <p className="text-muted-foreground">{result.isPositive ? t('cds_impressionPositive') : t('cds_impressionNegative')}</p>
+                </div>
+                <div>
+                  <p className="font-medium text-xs text-muted-foreground">{t('cds_significance')}</p>
+                  <p className="text-muted-foreground">{result.isPositive ? t('cds_significancePositive') : t('cds_significanceNegative')}</p>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* ── S7: Clinical Recommendation ───────────────────── */}
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm font-semibold flex items-center gap-2">
+                  <Stethoscope className="h-4 w-4" />{t('clinicalRecommendation')}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">
+                  {result.isPositive ? t('cds_rec_high') : risk === 'elevated' ? t('cds_rec_elevated') : risk === 'moderate' ? t('cds_rec_moderate') : t('cds_rec_low')}
+                </p>
+              </CardContent>
+            </Card>
+
+            {/* ── S6: Grad-CAM ──────────────────────────────────── */}
+            {hasExplanation && (
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm font-semibold flex items-center gap-2">
+                    <Eye className="h-4 w-4" />{t('cds_gradcamTitle')}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <Badge variant="outline" className="text-[10px]">DenseNet121 Grad-CAM</Badge>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <p className="text-xs text-muted-foreground mb-1">{t('pneumoniaOverlay')}</p>
+                      <img src={`data:image/png;base64,${(result as PneumoniaExplanation).explainability.overlayImageBase64}`} alt="Overlay" className="w-full rounded-lg border" />
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground mb-1">{t('pneumoniaHeatmap')}</p>
+                      <img src={`data:image/png;base64,${(result as PneumoniaExplanation).explainability.heatmapImageBase64}`} alt="Heatmap" className="w-full rounded-lg border" />
                     </div>
                   </div>
-                </div>
+                  <Alert variant="default">
+                    <Info className="h-3 w-3" />
+                    <AlertDescription className="text-[11px]">{t('gradcamInterpretationWarning')}</AlertDescription>
+                  </Alert>
+                </CardContent>
+              </Card>
+            )}
 
-                {/* 5. Grad-CAM */}
-                {hasExplanation && (
-                  <>
-                    <Separator />
-                    <div className="space-y-3">
-                      <h4 className="text-sm font-semibold flex items-center gap-2">
-                        <Eye className="h-4 w-4" />
-                        {t('pneumoniaGradCAM')}
-                      </h4>
-                      <p className="text-xs text-muted-foreground">
-                        {(result as PneumoniaExplanation).explainability.clinicalNote}
-                      </p>
-                      <div className="grid grid-cols-2 gap-3">
-                        <div>
-                          <p className="text-xs text-muted-foreground mb-1">{t('pneumoniaOverlay')}</p>
-                          <img
-                            src={`data:image/png;base64,${(result as PneumoniaExplanation).explainability.overlayImageBase64}`}
-                            alt="Grad-CAM overlay"
-                            className="w-full rounded-lg border"
-                          />
-                        </div>
-                        <div>
-                          <p className="text-xs text-muted-foreground mb-1">{t('pneumoniaHeatmap')}</p>
-                          <img
-                            src={`data:image/png;base64,${(result as PneumoniaExplanation).explainability.heatmapImageBase64}`}
-                            alt="Grad-CAM heatmap"
-                            className="w-full rounded-lg border"
-                          />
-                        </div>
-                      </div>
-                      <Alert variant="default">
-                        <Info className="h-3 w-3" />
-                        <AlertDescription className="text-[11px]">
-                          {t('gradcamInterpretationWarning')}
-                        </AlertDescription>
-                      </Alert>
-                    </div>
-                  </>
-                )}
-
-                <Separator />
-
-                {/* 6. Technical Details (collapsible) */}
-                <button
-                  onClick={() => setShowDetails(!showDetails)}
-                  className="flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground transition-colors w-full"
-                >
-                  {showDetails ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
-                  {t('modelDetails')}
+            {/* ── S2: Multi-Model Benchmark ─────────────────────── */}
+            <Card>
+              <CardHeader className="pb-2">
+                <button onClick={() => setShowBenchmark(!showBenchmark)}
+                  className="flex items-center gap-2 text-sm font-semibold w-full">
+                  <BarChart3 className="h-4 w-4" />
+                  {t('cds_modelComparison')}
+                  {showBenchmark ? <ChevronUp className="h-3 w-3 ms-auto" /> : <ChevronDown className="h-3 w-3 ms-auto" />}
                 </button>
-                {showDetails && (
-                  <div className="grid grid-cols-2 gap-2 text-xs bg-muted/30 rounded-md p-3">
-                    <div>
-                      <p className="text-muted-foreground">{t('rawProbability')}</p>
-                      <p className="font-mono">{result.probability}</p>
-                    </div>
-                    <div>
-                      <p className="text-muted-foreground">{t('rawConfidence')}</p>
-                      <p className="font-mono">{result.confidence}</p>
-                    </div>
-                    <div>
-                      <p className="text-muted-foreground">{t('pneumoniaModel')}</p>
-                      <p className="font-mono">{result.modelVersion}</p>
-                    </div>
-                    <div>
-                      <p className="text-muted-foreground">{t('pneumoniaDevice')}</p>
-                      <p className="font-mono">{result.device}</p>
-                    </div>
-                    <div className="col-span-2">
-                      <p className="text-muted-foreground">{t('confidenceNote')}</p>
-                    </div>
+              </CardHeader>
+              {showBenchmark && (
+                <CardContent className="space-y-3">
+                  <p className="text-xs text-muted-foreground">{t('cds_benchmarkNote')}</p>
+                  <div className="overflow-x-auto">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead className="text-xs">{t('pneumoniaModel')}</TableHead>
+                          <TableHead className="text-xs">{t('cds_role')}</TableHead>
+                          <TableHead className="text-xs text-end">{t('cds_recall')}</TableHead>
+                          <TableHead className="text-xs text-end">{t('cds_spec')}</TableHead>
+                          <TableHead className="text-xs text-end">F1</TableHead>
+                          <TableHead className="text-xs text-end">AUC</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        <TableRow className="bg-primary/5">
+                          <TableCell className="text-xs font-medium">DenseNet121</TableCell>
+                          <TableCell><Badge variant="success" className="text-[9px]">{t('cds_liveDefault')}</Badge></TableCell>
+                          <TableCell className="text-xs text-end">{BENCHMARK.densenet121.recall}</TableCell>
+                          <TableCell className="text-xs text-end">{BENCHMARK.densenet121.specificity}</TableCell>
+                          <TableCell className="text-xs text-end">{BENCHMARK.densenet121.f1}</TableCell>
+                          <TableCell className="text-xs text-end">{BENCHMARK.densenet121.auc}</TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell className="text-xs font-medium">EfficientNet-B0</TableCell>
+                          <TableCell><Badge variant="secondary" className="text-[9px]">{t('cds_benchmark')}</Badge></TableCell>
+                          <TableCell className="text-xs text-end">{BENCHMARK.efficientnet_b0.recall}</TableCell>
+                          <TableCell className="text-xs text-end">{BENCHMARK.efficientnet_b0.specificity}</TableCell>
+                          <TableCell className="text-xs text-end">{BENCHMARK.efficientnet_b0.f1}</TableCell>
+                          <TableCell className="text-xs text-end">{BENCHMARK.efficientnet_b0.auc}</TableCell>
+                        </TableRow>
+                      </TableBody>
+                    </Table>
                   </div>
-                )}
+                  <p className="text-[11px] text-muted-foreground">{t('cds_benchmarkConclusion')}</p>
+                </CardContent>
+              )}
+            </Card>
 
-                {/* 7. Final disclaimer */}
-                <Alert variant="destructive">
-                  <AlertTriangle className="h-4 w-4" />
-                  <AlertDescription className="text-xs">
-                    {t('finalClinicalDisclaimer')}
-                  </AlertDescription>
-                </Alert>
+            {/* ── Technical Details ──────────────────────────────── */}
+            <button onClick={() => setShowDetails(!showDetails)}
+              className="flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground transition-colors w-full px-1">
+              {showDetails ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
+              {t('modelDetails')}
+            </button>
+            {showDetails && (
+              <div className="grid grid-cols-2 gap-2 text-xs bg-muted/30 rounded-md p-3">
+                <div><p className="text-muted-foreground">{t('rawProbability')}</p><p className="font-mono">{result.probability}</p></div>
+                <div><p className="text-muted-foreground">{t('rawConfidence')}</p><p className="font-mono">{result.confidence}</p></div>
+                <div><p className="text-muted-foreground">{t('pneumoniaModel')}</p><p className="font-mono">{result.modelVersion}</p></div>
+                <div><p className="text-muted-foreground">{t('pneumoniaDevice')}</p><p className="font-mono">{result.device}</p></div>
+                <div className="col-span-2"><p className="text-muted-foreground">{t('confidenceNote')}</p></div>
               </div>
-            ) : (
+            )}
+
+            {/* ── Final Disclaimer ──────────────────────────────── */}
+            <Alert variant="destructive">
+              <AlertTriangle className="h-4 w-4" />
+              <AlertDescription className="text-xs">{t('finalClinicalDisclaimer')}</AlertDescription>
+            </Alert>
+
+          </>) : (
+            <Card><CardContent className="p-6">
               <div className="flex flex-col items-center justify-center py-12 text-muted-foreground">
                 <Scan className="h-12 w-12 mb-3" />
                 <p className="text-sm">{t('pneumoniaEmpty')}</p>
               </div>
-            )}
-          </CardContent>
-        </Card>
+            </CardContent></Card>
+          )}
+        </div>
       </div>
     </div>
   );
