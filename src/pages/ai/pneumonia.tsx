@@ -157,74 +157,68 @@ export default function PneumoniaPage() {
             </CardContent></Card>
           ) : result ? (<>
 
-            {/* ── S1: Final AI Decision ─────────────────────────── */}
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-semibold flex items-center gap-2">
-                  <Activity className="h-4 w-4" />{t('cds_finalDecision')}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <p className="text-[10px] text-muted-foreground">{t('cds_liveModelUsed')}: DenseNet121</p>
-                <div className={`rounded-lg border p-4 ${result.isPositive ? 'border-destructive/50 bg-destructive/5' : 'border-green-500/50 bg-green-50 dark:bg-green-950/20'}`}>
-                  <div className="flex items-start gap-3">
-                    {result.isPositive ? <XCircle className="h-7 w-7 text-destructive shrink-0 mt-0.5" /> : <CheckCircle2 className="h-7 w-7 text-green-600 shrink-0 mt-0.5" />}
-                    <div className="space-y-1">
-                      <p className="font-bold text-base">{result.isPositive ? t('aiScreeningPositive') : t('aiScreeningNegative')}</p>
-                      <p className="text-sm text-muted-foreground">{result.isPositive
-                        ? t('probabilityAboveThreshold', { prob: probStr, threshold: threshStr })
-                        : t('probabilityBelowThreshold', { prob: probStr, threshold: threshStr })}</p>
-                    </div>
+            {/* ── Live Model Result Card ──────────────────────── */}
+            <Card className={`border-2 ${result.isPositive ? 'border-destructive/40' : 'border-green-500/40'}`}>
+              <CardContent className="p-4 space-y-4">
+                {/* Header: model name + role + decision */}
+                <div className="flex items-center justify-between gap-2 flex-wrap">
+                  <div className="flex items-center gap-2">
+                    <Activity className="h-4 w-4 text-primary" />
+                    <span className="font-semibold text-sm">DenseNet121</span>
+                    <Badge variant="success" className="text-[9px]">{t('cds_liveDefault')}</Badge>
+                  </div>
+                  <Badge variant={result.isPositive ? 'destructive' : 'success'} className="text-sm px-3 py-1 gap-1.5">
+                    {result.isPositive ? <XCircle className="h-3.5 w-3.5" /> : <CheckCircle2 className="h-3.5 w-3.5" />}
+                    {result.isPositive ? t('aiScreeningPositive') : t('aiScreeningNegative')}
+                  </Badge>
+                </div>
+
+                {/* Decision explanation */}
+                <p className="text-xs text-muted-foreground">
+                  {result.isPositive
+                    ? t('probabilityAboveThreshold', { prob: probStr, threshold: threshStr })
+                    : t('probabilityBelowThreshold', { prob: probStr, threshold: threshStr })}
+                </p>
+
+                {/* KPI row: 4 metrics */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                  <div className="rounded-md border bg-muted/20 p-2.5 text-center">
+                    <p className="text-[10px] text-muted-foreground leading-tight">{t('pneumoniaProbability')}</p>
+                    <p className={`text-lg font-bold tabular-nums ${result.isPositive ? 'text-destructive' : ''}`}>{probStr}%</p>
+                  </div>
+                  <div className="rounded-md border bg-muted/20 p-2.5 text-center">
+                    <p className="text-[10px] text-muted-foreground leading-tight">{t('pneumoniaThreshold')}</p>
+                    <p className="text-lg font-bold tabular-nums text-muted-foreground">{threshStr}%</p>
+                  </div>
+                  <div className="rounded-md border bg-muted/20 p-2.5 text-center">
+                    <p className="text-[10px] text-muted-foreground leading-tight">{t('riskLevel')}</p>
+                    <span className={`text-xs font-semibold px-2 py-0.5 rounded-full border inline-block mt-1 ${risk ? RISK_COLORS[risk] : ''}`}>{t(`risk_${risk}`)}</span>
+                  </div>
+                  <div className="rounded-md border bg-muted/20 p-2.5 text-center">
+                    <p className="text-[10px] text-muted-foreground leading-tight">{t('pneumoniaConfidence')}</p>
+                    <p className="text-lg font-bold tabular-nums">{pct(result.confidence)}%</p>
                   </div>
                 </div>
 
-                {/* Risk + probability bar */}
-                <div className="flex items-center gap-2">
-                  <ShieldAlert className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-sm text-muted-foreground">{t('riskLevel')}:</span>
-                  <span className={`text-xs font-semibold px-2 py-0.5 rounded-full border ${risk ? RISK_COLORS[risk] : ''}`}>{t(`risk_${risk}`)}</span>
-                </div>
-
-                {/* Probability + threshold — grid layout avoids RTL overlap */}
-                <div className="rounded-md border bg-muted/20 p-3 space-y-2">
-                  <div className="grid grid-cols-2 gap-2 text-sm">
-                    <div>
-                      <p className="text-xs text-muted-foreground">{t('pneumoniaProbability')}</p>
-                      <p className="text-xl font-bold tabular-nums">{probStr}%</p>
-                    </div>
-                    <div className="text-end">
-                      <p className="text-xs text-muted-foreground">{t('pneumoniaThreshold')}</p>
-                      <p className="text-xl font-bold tabular-nums text-muted-foreground">{threshStr}%</p>
-                    </div>
-                  </div>
-                  {/* Progress bar with threshold tick */}
-                  <div className="relative h-4">
+                {/* Probability bar with threshold tick */}
+                <div className="space-y-1">
+                  <div className="relative h-3">
                     <div className="absolute inset-0 rounded-full bg-muted overflow-hidden">
                       <div className={`h-full rounded-full transition-all ${risk ? RISK_BAR[risk] : 'bg-green-500'}`}
                         style={{ width: `${result.probability * 100}%` }} />
                     </div>
-                    {/* Threshold tick — uses inset-inline-start for RTL compat */}
-                    <div className="absolute top-0 h-4 w-0.5 bg-foreground/80 rounded-full"
+                    <div className="absolute top-0 h-3 w-0.5 bg-foreground/80 rounded-full"
                       style={{ insetInlineStart: `${result.threshold * 100}%` }} />
                   </div>
-                  <div className="flex justify-between text-[10px] text-muted-foreground tabular-nums">
-                    <span>0%</span>
-                    <span>50%</span>
-                    <span>100%</span>
+                  <div className="flex justify-between text-[9px] text-muted-foreground tabular-nums">
+                    <span>0%</span><span>50%</span><span>100%</span>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
 
-            {/* ── S4: Medical Interpretation ────────────────────── */}
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-semibold flex items-center gap-2">
-                  <Brain className="h-4 w-4" />{t('cds_medicalInterpretation')}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">{t(`cds_interp_${risk}`)}</p>
+                {/* Medical interpretation */}
+                <div className="rounded-md bg-muted/30 p-2.5">
+                  <p className="text-xs text-muted-foreground">{t(`cds_interp_${risk}`)}</p>
+                </div>
               </CardContent>
             </Card>
 
