@@ -16,6 +16,7 @@
   "users": "User Management",
   "nationalRegistry": "National Registry",
   "cities": "Cities",
+  "pneumoniaDetection": "Pneumonia AI",
   "regionalDashboard": "Regional",
   "ministryDashboard": "Ministry",
   "settings": "Settings"

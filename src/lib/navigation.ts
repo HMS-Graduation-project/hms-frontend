@@ -62,6 +62,7 @@ export const navigationItems: NavItem[] = [
   { label: 'laboratory', icon: FlaskConical, href: '/laboratory', roles: ['SUPER_ADMIN', 'ADMIN', 'HOSPITAL_ADMIN', 'DOCTOR', 'NURSE', 'LAB_TECHNICIAN'] },
   { label: 'billing', icon: Receipt, href: '/billing', roles: ['SUPER_ADMIN', 'ADMIN', 'HOSPITAL_ADMIN', 'RECEPTIONIST'] },
   { label: 'aiTools', icon: Brain, href: '/ai/symptom-checker', roles: ['DOCTOR', 'ADMIN', 'HOSPITAL_ADMIN', 'SUPER_ADMIN'] },
+  { label: 'pneumoniaDetection', icon: Stethoscope, href: '/ai/pneumonia', roles: ['DOCTOR', 'ADMIN', 'HOSPITAL_ADMIN', 'SUPER_ADMIN'] },
   { label: 'analytics', icon: BarChart3, href: '/analytics', roles: ['SUPER_ADMIN', 'ADMIN', 'HOSPITAL_ADMIN'] },
   { label: 'users', icon: Users, href: '/admin/users', roles: ['SUPER_ADMIN', 'ADMIN', 'HOSPITAL_ADMIN'] },
   { label: 'nationalRegistry', icon: ShieldCheck, href: '/admin/national-registry', roles: ['SUPER_ADMIN', 'MINISTRY_ADMIN'] },
