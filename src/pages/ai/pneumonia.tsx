@@ -51,8 +51,9 @@ const pct = (v: number) => (v * 100).toFixed(1);
 // ── Static benchmark data (from model comparison study) ─────────────
 
 const BENCHMARK = {
-  densenet121: { recall: '97.9%', specificity: '87.0%', f1: '95.2%', auc: '97.75%', size: '80.5 MB', speed: '1.7 ms', role: 'liveDefault' },
-  efficientnet_b0: { recall: '96.9%', specificity: '84.4%', f1: '94.0%', auc: '94.57%', size: '46.4 MB', speed: '0.9 ms', role: 'benchmarkResearch' },
+  densenet121: { recall: '97.9%', specificity: '87.0%', f1: '95.2%', auc: '97.75%', size: '80.5 MB', speed: '1.7 ms', fn: '8', fp: '30', role: 'liveDefault', verdict: 'cds_verdictDense' },
+  efficientnet_b0: { recall: '96.9%', specificity: '84.4%', f1: '94.0%', auc: '94.57%', size: '46.4 MB', speed: '0.9 ms', fn: '12', fp: '36', role: 'benchmarkResearch', verdict: 'cds_verdictEff' },
+  resnet50: { recall: '96.9%', specificity: '82.7%', f1: '93.5%', auc: '94.70%', size: '269.5 MB', speed: '0.5 ms', fn: '12', fp: '40', role: 'benchmarkResearch', verdict: 'cds_verdictRes' },
 };
 
 // ═════════════════════════════════════════════════════════════════════
@@ -164,6 +165,7 @@ export default function PneumoniaPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
+                <p className="text-[10px] text-muted-foreground">{t('cds_liveModelUsed')}: DenseNet121</p>
                 <div className={`rounded-lg border p-4 ${result.isPositive ? 'border-destructive/50 bg-destructive/5' : 'border-green-500/50 bg-green-50 dark:bg-green-950/20'}`}>
                   <div className="flex items-start gap-3">
                     {result.isPositive ? <XCircle className="h-7 w-7 text-destructive shrink-0 mt-0.5" /> : <CheckCircle2 className="h-7 w-7 text-green-600 shrink-0 mt-0.5" />}
@@ -297,25 +299,29 @@ export default function PneumoniaPage() {
                           <TableHead className="text-xs text-end">{t('cds_spec')}</TableHead>
                           <TableHead className="text-xs text-end">F1</TableHead>
                           <TableHead className="text-xs text-end">AUC</TableHead>
+                          <TableHead className="text-xs text-end">FN</TableHead>
+                          <TableHead className="text-xs text-end">FP</TableHead>
+                          <TableHead className="text-xs">{t('cds_clinicalVerdict')}</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        <TableRow className="bg-primary/5">
-                          <TableCell className="text-xs font-medium">DenseNet121</TableCell>
-                          <TableCell><Badge variant="success" className="text-[9px]">{t('cds_liveDefault')}</Badge></TableCell>
-                          <TableCell className="text-xs text-end">{BENCHMARK.densenet121.recall}</TableCell>
-                          <TableCell className="text-xs text-end">{BENCHMARK.densenet121.specificity}</TableCell>
-                          <TableCell className="text-xs text-end">{BENCHMARK.densenet121.f1}</TableCell>
-                          <TableCell className="text-xs text-end">{BENCHMARK.densenet121.auc}</TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell className="text-xs font-medium">EfficientNet-B0</TableCell>
-                          <TableCell><Badge variant="secondary" className="text-[9px]">{t('cds_benchmark')}</Badge></TableCell>
-                          <TableCell className="text-xs text-end">{BENCHMARK.efficientnet_b0.recall}</TableCell>
-                          <TableCell className="text-xs text-end">{BENCHMARK.efficientnet_b0.specificity}</TableCell>
-                          <TableCell className="text-xs text-end">{BENCHMARK.efficientnet_b0.f1}</TableCell>
-                          <TableCell className="text-xs text-end">{BENCHMARK.efficientnet_b0.auc}</TableCell>
-                        </TableRow>
+                        {Object.entries(BENCHMARK).map(([key, b]) => (
+                          <TableRow key={key} className={b.role === 'liveDefault' ? 'bg-primary/5' : ''}>
+                            <TableCell className="text-xs font-medium">{key === 'densenet121' ? 'DenseNet121' : key === 'efficientnet_b0' ? 'EfficientNet-B0' : 'ResNet50'}</TableCell>
+                            <TableCell>
+                              <Badge variant={b.role === 'liveDefault' ? 'success' : 'secondary'} className="text-[9px]">
+                                {t(b.role === 'liveDefault' ? 'cds_liveDefault' : 'cds_benchmark')}
+                              </Badge>
+                            </TableCell>
+                            <TableCell className="text-xs text-end">{b.recall}</TableCell>
+                            <TableCell className="text-xs text-end">{b.specificity}</TableCell>
+                            <TableCell className="text-xs text-end">{b.f1}</TableCell>
+                            <TableCell className="text-xs text-end">{b.auc}</TableCell>
+                            <TableCell className="text-xs text-end font-medium">{b.fn}</TableCell>
+                            <TableCell className="text-xs text-end">{b.fp}</TableCell>
+                            <TableCell className="text-[10px] text-muted-foreground">{t(b.verdict)}</TableCell>
+                          </TableRow>
+                        ))}
                       </TableBody>
                     </Table>
                   </div>

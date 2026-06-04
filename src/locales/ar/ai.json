@@ -94,5 +94,10 @@
   "cds_spec": "الخصوصية",
   "cds_liveDefault": "حي / افتراضي",
   "cds_benchmark": "مرجعي",
-  "cds_benchmarkConclusion": "DenseNet121 هو النموذج الافتراضي المختار لأنه يتميز باستدعاء أعلى وأداء F1 أفضل."
+  "cds_benchmarkConclusion": "DenseNet121 هو النموذج الافتراضي المختار لأنه يتميز باستدعاء أعلى وأقل حالات فائتة وأفضل F1 وAUC بين النماذج الثلاثة.",
+  "cds_clinicalVerdict": "الحكم",
+  "cds_verdictDense": "الافتراضي / الأكثر أمانا للفحص",
+  "cds_verdictEff": "مرجعي سريع وخفيف",
+  "cds_verdictRes": "مرجعي أساسي مستقر",
+  "cds_liveModelUsed": "النموذج الحي"
 }

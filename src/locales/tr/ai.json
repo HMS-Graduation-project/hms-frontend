@@ -94,5 +94,10 @@
   "cds_spec": "Ozgunluk",
   "cds_liveDefault": "Canli / Varsayilan",
   "cds_benchmark": "Referans",
-  "cds_benchmarkConclusion": "DenseNet121, daha yuksek geri cagirma ve daha iyi F1 performansi nedeniyle varsayilan model olarak secilmistir."
+  "cds_benchmarkConclusion": "DenseNet121, uc model arasinda en yuksek geri cagirma, en iyi F1 ve en iyi AUC ile varsayilan model olarak secilmistir.",
+  "cds_clinicalVerdict": "Karar",
+  "cds_verdictDense": "Varsayilan / en guvenli tarama",
+  "cds_verdictEff": "Hizli hafif referans",
+  "cds_verdictRes": "Kararli temel referans",
+  "cds_liveModelUsed": "Canli model"
 }

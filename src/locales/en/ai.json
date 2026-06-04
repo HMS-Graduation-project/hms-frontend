@@ -94,5 +94,10 @@
   "cds_spec": "Specificity",
   "cds_liveDefault": "Live / Default",
   "cds_benchmark": "Benchmark",
-  "cds_benchmarkConclusion": "DenseNet121 is the selected default model because it has higher recall (fewer missed pneumonia cases) and better overall F1 performance."
+  "cds_benchmarkConclusion": "DenseNet121 is the selected default model because it has higher recall (fewer missed pneumonia cases), best F1, and best AUC across all three models.",
+  "cds_clinicalVerdict": "Verdict",
+  "cds_verdictDense": "Default / safest screening",
+  "cds_verdictEff": "Fast lightweight benchmark",
+  "cds_verdictRes": "Stable baseline benchmark",
+  "cds_liveModelUsed": "Live model"
 }
