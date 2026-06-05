@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import {
   Search, Filter, Eye, Clock, CheckCircle2, XCircle, ShieldCheck,
-  ChevronLeft, ChevronRight, Brain, Calendar,
+  ChevronLeft, ChevronRight, Brain, Calendar, Layers, Activity,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -130,6 +130,7 @@ export default function AiAnalysesPage() {
                 <TableHeader>
                   <TableRow>
                     <TableHead className="text-xs">{t('colPatient')}</TableHead>
+                    <TableHead className="text-xs">{t('analysisMode')}</TableHead>
                     <TableHead className="text-xs">{t('colPrediction')}</TableHead>
                     <TableHead className="text-xs text-end">{t('pneumoniaProbability')}</TableHead>
                     <TableHead className="text-xs">{t('riskLevel')}</TableHead>
@@ -143,6 +144,17 @@ export default function AiAnalysesPage() {
                   {analyses.map((a) => (
                     <TableRow key={a.id}>
                       <TableCell className="text-sm font-medium">{getPatientName(a)}</TableCell>
+                      <TableCell>
+                        {a.analysisMode === 'ENSEMBLE' ? (
+                          <Badge variant="default" className="text-[10px] gap-1">
+                            <Layers className="h-2.5 w-2.5" />{t('ensembleBadge')}
+                          </Badge>
+                        ) : (
+                          <Badge variant="outline" className="text-[10px] gap-1">
+                            <Activity className="h-2.5 w-2.5" />{t('singleModelBadge')}
+                          </Badge>
+                        )}
+                      </TableCell>
                       <TableCell>
                         <Badge variant={a.prediction === 'PNEUMONIA' ? 'destructive' : 'success'} className="text-xs">
                           {a.prediction}

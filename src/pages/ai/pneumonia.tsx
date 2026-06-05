@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import {
   Upload, Scan, Eye, Trash2, AlertTriangle, CheckCircle2, XCircle,
   Loader2, Info, ChevronDown, ChevronUp, ShieldAlert, Stethoscope,
-  Activity, BarChart3, FileText, Brain, Save, Search, User,
+  Activity, BarChart3, FileText, Brain, Save, Search, User, Layers,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -100,6 +100,7 @@ export default function PneumoniaPage() {
   const [showDetails, setShowDetails] = useState(false);
   const [showBenchmark, setShowBenchmark] = useState(false);
   const [savedRecordId, setSavedRecordId] = useState<string | null>(null);
+  const [analysisMode, setAnalysisMode] = useState<'SINGLE_MODEL' | 'ENSEMBLE'>('ENSEMBLE');
 
   const predict = usePneumoniaPredict();
   const explain = usePneumoniaExplain();
@@ -137,13 +138,13 @@ export default function PneumoniaPage() {
   };
 
   const handleSaveToRecord = async () => {
-    if (!selectedFile || !selectedPatientId || !result) return;
-    const hasExpl = 'explainability' in result;
+    if (!selectedFile || !selectedPatientId) return;
     try {
       const record = await saveAnalysis.mutateAsync({
         file: selectedFile,
         patientProfileId: selectedPatientId,
-        includeGradcam: hasExpl,
+        includeGradcam: true,
+        analysisMode,
       });
       setSavedRecordId(record.id);
       toast({ title: t('saveSuccess'), description: t('saveSuccessDesc') });
@@ -244,6 +245,34 @@ export default function PneumoniaPage() {
                   <img src={preview} alt="X-ray" className="w-full h-auto max-h-[300px] object-contain" />
                 </div>
               )}
+              {/* Analysis mode selector */}
+              <div className="space-y-2">
+                <Label className="text-xs text-muted-foreground">{t('analysisMode')}</Label>
+                <div className="flex gap-2">
+                  <Button
+                    variant={analysisMode === 'ENSEMBLE' ? 'default' : 'outline'}
+                    size="sm"
+                    className="gap-1.5 flex-1"
+                    onClick={() => setAnalysisMode('ENSEMBLE')}
+                  >
+                    <Layers className="h-3.5 w-3.5" />{t('ensembleMode')}
+                  </Button>
+                  <Button
+                    variant={analysisMode === 'SINGLE_MODEL' ? 'default' : 'outline'}
+                    size="sm"
+                    className="gap-1.5 flex-1"
+                    onClick={() => setAnalysisMode('SINGLE_MODEL')}
+                  >
+                    <Activity className="h-3.5 w-3.5" />{t('singleModelMode')}
+                  </Button>
+                </div>
+                <p className="text-[10px] text-muted-foreground">
+                  {analysisMode === 'ENSEMBLE' ? t('ensembleModeDesc') : t('singleModelModeDesc')}
+                </p>
+              </div>
+
+              <Separator />
+
               <div className="flex gap-2 flex-wrap">
                 <Button onClick={handlePredict} disabled={!selectedFile || isPending} className="gap-2">
                   {predict.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Scan className="h-4 w-4" />}{t('pneumoniaAnalyze')}
@@ -278,6 +307,9 @@ export default function PneumoniaPage() {
                       <p className="text-xs text-muted-foreground">
                         {t('saveToRecordDesc', { patient: selectedPatient ? getPatientName(selectedPatient) : '' })}
                       </p>
+                      <Badge variant="outline" className="mt-1 text-[10px]">
+                        {analysisMode === 'ENSEMBLE' ? t('ensembleMode') : t('singleModelMode')}
+                      </Badge>
                     </div>
                     <Button
                       onClick={handleSaveToRecord}
@@ -287,9 +319,12 @@ export default function PneumoniaPage() {
                       {saveAnalysis.isPending
                         ? <Loader2 className="h-4 w-4 animate-spin" />
                         : <Save className="h-4 w-4" />}
-                      {t('saveAnalysis')}
+                      {analysisMode === 'ENSEMBLE' ? t('saveEnsembleAnalysis') : t('saveAnalysis')}
                     </Button>
                   </div>
+                  {saveAnalysis.isPending && analysisMode === 'ENSEMBLE' && (
+                    <p className="text-[10px] text-muted-foreground mt-2">{t('ensembleRunning')}</p>
+                  )}
                 </CardContent>
               </Card>
             )}

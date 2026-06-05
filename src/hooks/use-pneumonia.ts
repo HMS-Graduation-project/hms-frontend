@@ -88,6 +88,17 @@ export function usePneumoniaExplain() {
 
 // ── AI Analysis Records (persisted to DB with patient link) ─────────
 
+export interface ModelResult {
+  modelName: string;
+  modelVersion: string;
+  prediction: string;
+  probability: number;
+  confidence: number;
+  threshold: number;
+  isPositive: boolean;
+  device: string;
+}
+
 export interface AiAnalysisRecord {
   id: string;
   hospitalId: string;
@@ -118,6 +129,13 @@ export interface AiAnalysisRecord {
       syrianNationalId: string | null;
     };
   };
+  // Ensemble fields
+  analysisMode: string | null;
+  ensembleMethod: string | null;
+  modelAgreement: string | null;
+  agreementScore: number | null;
+  modelResultsJson: ModelResult[] | null;
+  ensembleWeightsJson: Record<string, number> | null;
   createdAt: string;
 }
 
@@ -130,6 +148,7 @@ interface CreatePneumoniaAnalysisInput {
   file: File;
   patientProfileId: string;
   includeGradcam: boolean;
+  analysisMode?: 'SINGLE_MODEL' | 'ENSEMBLE';
 }
 
 interface QueryAiAnalysesParams {
@@ -145,10 +164,11 @@ export function useCreatePneumoniaAnalysis() {
   const queryClient = useQueryClient();
 
   return useMutation<AiAnalysisRecord, Error, CreatePneumoniaAnalysisInput>({
-    mutationFn: ({ file, patientProfileId, includeGradcam }) =>
+    mutationFn: ({ file, patientProfileId, includeGradcam, analysisMode }) =>
       uploadFileWithFields<AiAnalysisRecord>('/v1/ai-analyses/pneumonia', file, {
         patientProfileId,
         includeGradcam: String(includeGradcam),
+        analysisMode: analysisMode || 'SINGLE_MODEL',
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['ai-analyses'] });

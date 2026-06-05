@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import {
   ArrowLeft, Eye, CheckCircle2, XCircle, Clock, ShieldCheck,
   User, Activity, FileText, Stethoscope, AlertTriangle, Info,
-  Loader2,
+  Loader2, Layers, BarChart3,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -29,8 +29,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import {
+  Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
+} from '@/components/ui/table';
 import { useToast } from '@/components/ui/use-toast';
-import { useAiAnalysis, useReviewAiAnalysis } from '@/hooks/use-pneumonia';
+import { useAiAnalysis, useReviewAiAnalysis, type ModelResult } from '@/hooks/use-pneumonia';
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || '/api';
 
@@ -118,6 +121,10 @@ export default function AiAnalysisDetailPage() {
     ? [record.reviewedBy.firstName, record.reviewedBy.lastName].filter(Boolean).join(' ') || record.reviewedBy.email
     : null;
 
+  const isEnsemble = record.analysisMode === 'ENSEMBLE';
+  const modelResults = (record.modelResultsJson as ModelResult[] | null) ?? [];
+  const ensembleWeights = (record.ensembleWeightsJson as Record<string, number> | null) ?? {};
+
   const canReview = record.status === 'PENDING_REVIEW' || record.status === 'REVIEWED';
 
   const allowedTransitions: Record<string, string[]> = {
@@ -159,6 +166,15 @@ export default function AiAnalysisDetailPage() {
           <h1 className="text-xl font-bold tracking-tight">{t('analysisDetail')}</h1>
           <p className="text-sm text-muted-foreground truncate">ID: {record.id}</p>
         </div>
+        {record.analysisMode === 'ENSEMBLE' ? (
+          <Badge variant="default" className="text-xs gap-1">
+            <Layers className="h-3 w-3" />{t('ensembleBadge')}
+          </Badge>
+        ) : (
+          <Badge variant="outline" className="text-xs gap-1">
+            <Activity className="h-3 w-3" />{t('singleModelBadge')}
+          </Badge>
+        )}
         <Badge variant={STATUS_BADGE[record.status] || 'secondary'} className="text-sm gap-1.5 px-3 py-1">
           {STATUS_ICON[record.status]}
           {t(`status_${record.status}`)}
@@ -202,6 +218,11 @@ export default function AiAnalysisDetailPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
+                {isEnsemble && (
+                  <Badge variant="outline" className="text-[10px]">
+                    {t('gradcamSourceModel')}: DenseNet121
+                  </Badge>
+                )}
                 <div className="grid grid-cols-2 gap-3">
                   {record.overlayImageUrl && (
                     <div>
@@ -329,6 +350,81 @@ export default function AiAnalysisDetailPage() {
               </div>
             </CardContent>
           </Card>
+
+          {/* Ensemble Breakdown (only for ensemble records) */}
+          {isEnsemble && modelResults.length > 0 && (
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm font-semibold flex items-center gap-2">
+                  <BarChart3 className="h-4 w-4" />{t('modelBreakdown')}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {/* Agreement & Method */}
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                  <div className="rounded-md border bg-muted/20 p-2.5 text-center">
+                    <p className="text-[10px] text-muted-foreground leading-tight">{t('modelAgreement')}</p>
+                    <p className="text-sm font-semibold mt-1">
+                      {record.modelAgreement ? t(`agreement_${record.modelAgreement}`) : '---'}
+                    </p>
+                  </div>
+                  <div className="rounded-md border bg-muted/20 p-2.5 text-center">
+                    <p className="text-[10px] text-muted-foreground leading-tight">{t('agreementScore')}</p>
+                    <p className="text-sm font-semibold mt-1 tabular-nums">
+                      {record.agreementScore != null ? `${(record.agreementScore * 100).toFixed(0)}%` : '---'}
+                    </p>
+                  </div>
+                  <div className="rounded-md border bg-muted/20 p-2.5 text-center">
+                    <p className="text-[10px] text-muted-foreground leading-tight">{t('ensembleMethodLabel')}</p>
+                    <p className="text-sm font-semibold mt-1">{t('weightedAverage')}</p>
+                  </div>
+                </div>
+
+                {/* Individual model results table */}
+                <div className="overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="text-xs">{t('pneumoniaModel')}</TableHead>
+                        <TableHead className="text-xs text-end">{t('pneumoniaProbability')}</TableHead>
+                        <TableHead className="text-xs">{t('colPrediction')}</TableHead>
+                        <TableHead className="text-xs text-end">{t('ensembleWeights')}</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {modelResults.map((m) => (
+                        <TableRow key={m.modelName}>
+                          <TableCell className="text-xs font-medium">{m.modelName}</TableCell>
+                          <TableCell className="text-xs text-end tabular-nums">
+                            {(m.probability * 100).toFixed(1)}%
+                          </TableCell>
+                          <TableCell>
+                            <Badge
+                              variant={m.prediction === 'PNEUMONIA' ? 'destructive' : 'success'}
+                              className="text-[10px]"
+                            >
+                              {m.prediction}
+                            </Badge>
+                          </TableCell>
+                          <TableCell className="text-xs text-end tabular-nums">
+                            {ensembleWeights[m.modelName] != null
+                              ? `${(ensembleWeights[m.modelName] * 100).toFixed(0)}%`
+                              : '---'}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+
+                {/* Final consensus summary */}
+                <div className="rounded-md bg-muted/30 p-2.5 text-xs text-muted-foreground">
+                  <span className="font-medium">{t('finalConsensus')}:</span>{' '}
+                  {prob}% ({t('weightedAverage')})
+                </div>
+              </CardContent>
+            </Card>
+          )}
 
           {/* Clinical Recommendation */}
           <Card>
