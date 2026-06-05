@@ -8,6 +8,7 @@ import {
   ResponsiveContainer, LineChart, Line, BarChart, Bar,
   XAxis, YAxis, CartesianGrid, Tooltip,
 } from 'recharts';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
@@ -30,10 +31,14 @@ const pctStr = (v: number | null) => v != null ? `${(v * 100).toFixed(1)}%` : '-
 export default function AiAnalyticsPage() {
   const { t } = useTranslation('ai');
 
-  const [fromDate, setFromDate] = useState(daysAgo(30));
-  const [toDate, setToDate] = useState(daysAgo(0));
+  const [fromDate, setFromDate] = useState('');
+  const [toDate, setToDate] = useState('');
 
-  const { data, isLoading } = useAiAnalytics({ fromDate, toDate });
+  const hasFilters = !!(fromDate || toDate);
+  const { data, isLoading, isError } = useAiAnalytics({
+    fromDate: fromDate || undefined,
+    toDate: toDate || undefined,
+  });
 
   const ov = data?.overview;
   const usage = data?.usage;
@@ -77,6 +82,11 @@ export default function AiAnalyticsPage() {
               <label className="text-xs text-muted-foreground">{t('filterTo')}</label>
               <Input type="date" value={toDate} onChange={(e) => setToDate(e.target.value)} className="w-[160px]" />
             </div>
+            {hasFilters && (
+              <Button variant="ghost" size="sm" onClick={() => { setFromDate(''); setToDate(''); }}>
+                {t('clearFilters')}
+              </Button>
+            )}
           </div>
         </CardContent>
       </Card>
@@ -85,10 +95,20 @@ export default function AiAnalyticsPage() {
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {Array.from({ length: 6 }).map((_, i) => <Skeleton key={i} className="h-28" />)}
         </div>
+      ) : isError ? (
+        <Card><CardContent className="flex flex-col items-center justify-center py-16 text-muted-foreground">
+          <AlertTriangle className="h-12 w-12 mb-3" />
+          <p className="text-sm">{t('analytics_error')}</p>
+        </CardContent></Card>
       ) : !data || ov?.totalAnalyses === 0 ? (
         <Card><CardContent className="flex flex-col items-center justify-center py-16 text-muted-foreground">
           <Brain className="h-12 w-12 mb-3" />
-          <p className="text-sm">{t('analytics_noData')}</p>
+          <p className="text-sm">{hasFilters ? t('analytics_noFilteredData') : t('analytics_noData')}</p>
+          {hasFilters && (
+            <Button variant="outline" size="sm" className="mt-3" onClick={() => { setFromDate(''); setToDate(''); }}>
+              {t('clearFilters')}
+            </Button>
+          )}
         </CardContent></Card>
       ) : (<>
 

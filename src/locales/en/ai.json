@@ -227,5 +227,7 @@
   "analytics_noData": "No analytics data available for the selected period.",
   "analytics_insufficientData": "Insufficient reviewed data to calculate performance metrics.",
   "analytics_clinicalPerfNote": "These metrics are estimates based only on physician-reviewed records and do not represent a final clinical evaluation of the model.",
-  "analytics_disclaimer": "These analytics are for usage monitoring and quality support. They do not represent a final clinical evaluation of the AI models."
+  "analytics_disclaimer": "These analytics are for usage monitoring and quality support. They do not represent a final clinical evaluation of the AI models.",
+  "analytics_noFilteredData": "No analytics data matching the selected filters.",
+  "analytics_error": "Failed to load analytics data."
 }

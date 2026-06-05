@@ -227,5 +227,7 @@
   "analytics_noData": "Secilen donem icin analitik verisi bulunamadi.",
   "analytics_insufficientData": "Performans metriklerini hesaplamak icin yeterli incelenmis veri yok.",
   "analytics_clinicalPerfNote": "Bu metrikler yalnizca hekim tarafindan incelenen kayitlara dayanmaktadir ve modelin nihai klinik degerlendirmesini temsil etmemektedir.",
-  "analytics_disclaimer": "Bu analitikler kullanim izleme ve kalite destegi icindir. AI modellerinin nihai klinik degerlendirmesini temsil etmemektedir."
+  "analytics_disclaimer": "Bu analitikler kullanim izleme ve kalite destegi icindir. AI modellerinin nihai klinik degerlendirmesini temsil etmemektedir.",
+  "analytics_noFilteredData": "Secilen filtrelere uygun analitik verisi bulunamadi.",
+  "analytics_error": "Analitik verileri yuklenemedi."
 }
