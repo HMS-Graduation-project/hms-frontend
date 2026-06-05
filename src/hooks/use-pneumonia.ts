@@ -1,4 +1,5 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { api } from '@/lib/api';
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || '/api';
 
@@ -10,6 +11,32 @@ async function uploadFile<T>(endpoint: string, file: File): Promise<T> {
   const token = getToken();
   const formData = new FormData();
   formData.append('file', file);
+
+  const response = await fetch(`${API_BASE}${endpoint}`, {
+    method: 'POST',
+    headers: token ? { Authorization: `Bearer ${token}` } : {},
+    body: formData,
+  });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ message: response.statusText }));
+    throw new Error(error.message || 'Request failed');
+  }
+
+  return response.json();
+}
+
+async function uploadFileWithFields<T>(
+  endpoint: string,
+  file: File,
+  fields: Record<string, string>,
+): Promise<T> {
+  const token = getToken();
+  const formData = new FormData();
+  formData.append('file', file);
+  for (const [key, value] of Object.entries(fields)) {
+    formData.append(key, value);
+  }
 
   const response = await fetch(`${API_BASE}${endpoint}`, {
     method: 'POST',
@@ -56,5 +83,111 @@ export function usePneumoniaExplain() {
   return useMutation<PneumoniaExplanation, Error, File>({
     mutationFn: (file) =>
       uploadFile<PneumoniaExplanation>('/v1/ai/pneumonia/explain', file),
+  });
+}
+
+// ── AI Analysis Records (persisted to DB with patient link) ─────────
+
+export interface AiAnalysisRecord {
+  id: string;
+  hospitalId: string;
+  patientProfileId: string;
+  analysisType: string;
+  prediction: string;
+  probability: number;
+  confidence: number;
+  threshold: number;
+  riskLevel: string;
+  modelVersion: string;
+  device: string;
+  clinicalNote: string | null;
+  originalImageUrl: string | null;
+  heatmapImageUrl: string | null;
+  overlayImageUrl: string | null;
+  status: 'PENDING_REVIEW' | 'REVIEWED' | 'APPROVED' | 'REJECTED';
+  doctorComment: string | null;
+  requestedBy: { id: string; firstName: string | null; lastName: string | null; email: string };
+  reviewedBy: { id: string; firstName: string | null; lastName: string | null; email: string } | null;
+  reviewedAt: string | null;
+  patientProfile: {
+    id: string;
+    nationalPatient: {
+      id: string;
+      firstName: string;
+      lastName: string;
+      syrianNationalId: string | null;
+    };
+  };
+  createdAt: string;
+}
+
+interface AiAnalysesPaginated {
+  data: AiAnalysisRecord[];
+  meta: { total: number; page: number; limit: number; totalPages: number };
+}
+
+interface CreatePneumoniaAnalysisInput {
+  file: File;
+  patientProfileId: string;
+  includeGradcam: boolean;
+}
+
+interface QueryAiAnalysesParams {
+  patientProfileId?: string;
+  status?: string;
+  fromDate?: string;
+  toDate?: string;
+  page?: number;
+  limit?: number;
+}
+
+export function useCreatePneumoniaAnalysis() {
+  const queryClient = useQueryClient();
+
+  return useMutation<AiAnalysisRecord, Error, CreatePneumoniaAnalysisInput>({
+    mutationFn: ({ file, patientProfileId, includeGradcam }) =>
+      uploadFileWithFields<AiAnalysisRecord>('/v1/ai-analyses/pneumonia', file, {
+        patientProfileId,
+        includeGradcam: String(includeGradcam),
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['ai-analyses'] });
+    },
+  });
+}
+
+export function useAiAnalyses(params: QueryAiAnalysesParams = {}) {
+  const { page = 1, limit = 10, patientProfileId, status, fromDate, toDate } = params;
+  const searchParams = new URLSearchParams();
+  searchParams.set('page', String(page));
+  searchParams.set('limit', String(limit));
+  if (patientProfileId) searchParams.set('patientProfileId', patientProfileId);
+  if (status) searchParams.set('status', status);
+  if (fromDate) searchParams.set('fromDate', fromDate);
+  if (toDate) searchParams.set('toDate', toDate);
+
+  return useQuery<AiAnalysesPaginated>({
+    queryKey: ['ai-analyses', { page, limit, patientProfileId, status, fromDate, toDate }],
+    queryFn: () => api.get<AiAnalysesPaginated>(`/v1/ai-analyses?${searchParams.toString()}`),
+  });
+}
+
+export function useAiAnalysis(id: string | undefined) {
+  return useQuery<AiAnalysisRecord>({
+    queryKey: ['ai-analyses', id],
+    queryFn: () => api.get<AiAnalysisRecord>(`/v1/ai-analyses/${id}`),
+    enabled: !!id,
+  });
+}
+
+export function useReviewAiAnalysis() {
+  const queryClient = useQueryClient();
+
+  return useMutation<AiAnalysisRecord, Error, { id: string; status: string; doctorComment?: string }>({
+    mutationFn: ({ id, ...body }) =>
+      api.patch<AiAnalysisRecord>(`/v1/ai-analyses/${id}/review`, body),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['ai-analyses'] });
+    },
   });
 }

@@ -59,6 +59,8 @@ import NotificationsPage from '@/pages/notifications';
 import SymptomCheckerPage from '@/pages/ai/symptom-checker';
 import DrugInteractionsPage from '@/pages/ai/drug-interactions';
 import PneumoniaPage from '@/pages/ai/pneumonia';
+import AiAnalysesPage from '@/pages/ai/ai-analyses';
+import AiAnalysisDetailPage from '@/pages/ai/ai-analysis-detail';
 import AnalyticsPage from '@/pages/analytics';
 import RegionalDashboardPage from '@/pages/regional/dashboard';
 import MinistryDashboardPage from '@/pages/ministry/dashboard';
@@ -163,6 +165,8 @@ export default function App() {
               <Route path="/ai/symptom-checker" element={<SymptomCheckerPage />} />
               <Route path="/ai/drug-interactions" element={<DrugInteractionsPage />} />
               <Route path="/ai/pneumonia" element={<PneumoniaPage />} />
+              <Route path="/ai/analyses" element={<AiAnalysesPage />} />
+              <Route path="/ai/analyses/:id" element={<AiAnalysisDetailPage />} />
               <Route path="/analytics" element={<AnalyticsPage />} />
               <Route path="/regional" element={<RegionalDashboardPage />} />
               <Route path="/ministry" element={<MinistryDashboardPage />} />

@@ -123,5 +123,12 @@
   "registryMultiHospital": "Multi-Hospital Patients",
   "registryMultiHospitalDesc": "Linked to 2+ hospitals",
   "registryDuplicates": "Potential Duplicates",
-  "registryDuplicatesDesc": "Same name + DOB, different NHID"
+  "registryDuplicatesDesc": "Same name + DOB, different NHID",
+  "aiAnalyses": "AI Analyses",
+  "aiAnalysesTab": {
+    "title": "AI Screening Results",
+    "subtitle": "Pneumonia AI analysis history for this patient",
+    "newAnalysis": "New Analysis",
+    "empty": "No AI analyses found for this patient"
+  }
 }

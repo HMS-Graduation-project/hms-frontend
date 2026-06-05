@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import {
   Upload, Scan, Eye, Trash2, AlertTriangle, CheckCircle2, XCircle,
   Loader2, Info, ChevronDown, ChevronUp, ShieldAlert, Stethoscope,
-  Activity, BarChart3, FileText, Brain,
+  Activity, BarChart3, FileText, Brain, Save, Search, User,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -11,14 +11,25 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Separator } from '@/components/ui/separator';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { useToast } from '@/components/ui/use-toast';
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from '@/components/ui/table';
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import {
   usePneumoniaPredict, usePneumoniaExplain,
+  useCreatePneumoniaAnalysis,
   type PneumoniaPrediction, type PneumoniaExplanation,
 } from '@/hooks/use-pneumonia';
+import { usePatients, type PatientProfile } from '@/hooks/use-patients';
 
 const MAX_SIZE_MB = 10;
 const ACCEPTED = '.jpg,.jpeg,.png';
@@ -48,6 +59,17 @@ const RISK_BAR: Record<Risk, string> = {
 
 const pct = (v: number) => (v * 100).toFixed(1);
 
+function getPatientName(patient: PatientProfile): string {
+  const fromNational = [
+    patient.nationalPatient?.firstName,
+    patient.nationalPatient?.lastName,
+  ].filter(Boolean).join(' ');
+  if (fromNational) return fromNational;
+  const fromUser = [patient.user?.firstName, patient.user?.lastName]
+    .filter(Boolean).join(' ');
+  return fromUser || patient.user?.email || '---';
+}
+
 // ── Static benchmark data (from model comparison study) ─────────────
 
 const BENCHMARK = {
@@ -60,43 +82,77 @@ const BENCHMARK = {
 
 export default function PneumoniaPage() {
   const { t } = useTranslation('ai');
+  const { t: tCommon } = useTranslation('common');
   const { toast } = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Patient selection
+  const [patientSearch, setPatientSearch] = useState('');
+  const [selectedPatientId, setSelectedPatientId] = useState('');
+  const { data: patientsData, isLoading: patientsLoading } = usePatients({
+    limit: 100,
+    search: patientSearch || undefined,
+  });
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [result, setResult] = useState<PneumoniaPrediction | PneumoniaExplanation | null>(null);
   const [showDetails, setShowDetails] = useState(false);
   const [showBenchmark, setShowBenchmark] = useState(false);
+  const [savedRecordId, setSavedRecordId] = useState<string | null>(null);
 
   const predict = usePneumoniaPredict();
   const explain = usePneumoniaExplain();
+  const saveAnalysis = useCreatePneumoniaAnalysis();
   const isPending = predict.isPending || explain.isPending;
+
+  const selectedPatient = patientsData?.data?.find((p) => p.id === selectedPatientId);
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
     if (file.size > MAX_SIZE_MB * 1024 * 1024) { toast({ title: t('pneumoniaFileTooLarge'), variant: 'destructive' }); return; }
     if (!file.type.match(/^image\/(jpeg|png|jpg)$/)) { toast({ title: t('pneumoniaInvalidType'), variant: 'destructive' }); return; }
-    setSelectedFile(file); setPreview(URL.createObjectURL(file)); setResult(null); setShowDetails(false);
+    setSelectedFile(file); setPreview(URL.createObjectURL(file)); setResult(null); setShowDetails(false); setSavedRecordId(null);
   };
 
   const handleClear = () => {
     setSelectedFile(null); if (preview) URL.revokeObjectURL(preview);
-    setPreview(null); setResult(null); setShowDetails(false);
+    setPreview(null); setResult(null); setShowDetails(false); setSavedRecordId(null);
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
   const handlePredict = async () => {
     if (!selectedFile) return;
+    setSavedRecordId(null);
     try { setResult(await predict.mutateAsync(selectedFile)); }
     catch (err) { toast({ title: err instanceof Error ? err.message : t('pneumoniaError'), variant: 'destructive' }); }
   };
 
   const handleExplain = async () => {
     if (!selectedFile) return;
+    setSavedRecordId(null);
     try { setResult(await explain.mutateAsync(selectedFile)); }
     catch (err) { toast({ title: err instanceof Error ? err.message : t('pneumoniaError'), variant: 'destructive' }); }
+  };
+
+  const handleSaveToRecord = async () => {
+    if (!selectedFile || !selectedPatientId || !result) return;
+    const hasExpl = 'explainability' in result;
+    try {
+      const record = await saveAnalysis.mutateAsync({
+        file: selectedFile,
+        patientProfileId: selectedPatientId,
+        includeGradcam: hasExpl,
+      });
+      setSavedRecordId(record.id);
+      toast({ title: t('saveSuccess'), description: t('saveSuccessDesc') });
+    } catch (err) {
+      toast({
+        title: err instanceof Error ? err.message : t('pneumoniaError'),
+        variant: 'destructive',
+      });
+    }
   };
 
   const hasExplanation = result && 'explainability' in result;
@@ -118,35 +174,90 @@ export default function PneumoniaPage() {
       </Alert>
 
       <div className="grid gap-6 lg:grid-cols-2">
-        {/* ── Upload ─────────────────────────────────────────────── */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base font-semibold flex items-center gap-2">
-              <Upload className="h-4 w-4" />{t('pneumoniaUpload')}
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <input ref={fileInputRef} type="file" accept={ACCEPTED} onChange={handleFileSelect}
-              className="block w-full text-sm text-muted-foreground file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90 cursor-pointer" />
-            <p className="text-xs text-muted-foreground">{t('pneumoniaFileHelp')}</p>
-            {preview && (
-              <div className="relative rounded-lg overflow-hidden border bg-muted">
-                <img src={preview} alt="X-ray" className="w-full h-auto max-h-[300px] object-contain" />
+        {/* ── Upload + Patient ──────────────────────────────────── */}
+        <div className="space-y-4">
+          {/* Patient selector */}
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-base font-semibold flex items-center gap-2">
+                <User className="h-4 w-4" />{t('selectPatient')}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <div className="relative">
+                <Search className="absolute start-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  placeholder={t('searchPatient')}
+                  value={patientSearch}
+                  onChange={(e) => setPatientSearch(e.target.value)}
+                  className="ps-9"
+                />
               </div>
-            )}
-            <div className="flex gap-2 flex-wrap">
-              <Button onClick={handlePredict} disabled={!selectedFile || isPending} className="gap-2">
-                {predict.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Scan className="h-4 w-4" />}{t('pneumoniaAnalyze')}
-              </Button>
-              <Button onClick={handleExplain} disabled={!selectedFile || isPending} variant="outline" className="gap-2">
-                {explain.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Eye className="h-4 w-4" />}{t('pneumoniaExplain')}
-              </Button>
-              <Button onClick={handleClear} disabled={isPending} variant="ghost" className="gap-2">
-                <Trash2 className="h-4 w-4" />{t('pneumoniaClear')}
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
+              <Select value={selectedPatientId} onValueChange={setSelectedPatientId}>
+                <SelectTrigger>
+                  <SelectValue placeholder={t('selectPatientPlaceholder')} />
+                </SelectTrigger>
+                <SelectContent>
+                  {patientsLoading ? (
+                    <div className="p-2 text-sm text-muted-foreground">{tCommon('loading')}</div>
+                  ) : patientsData?.data?.length ? (
+                    patientsData.data.map((p) => (
+                      <SelectItem key={p.id} value={p.id}>
+                        {getPatientName(p)}
+                        {p.nationalPatient?.syrianNationalId && (
+                          <span className="text-muted-foreground ms-2 text-xs">
+                            ({p.nationalPatient.syrianNationalId})
+                          </span>
+                        )}
+                      </SelectItem>
+                    ))
+                  ) : (
+                    <div className="p-2 text-sm text-muted-foreground">{t('noPatients')}</div>
+                  )}
+                </SelectContent>
+              </Select>
+              {selectedPatient && (
+                <div className="text-xs text-muted-foreground flex items-center gap-1.5">
+                  <CheckCircle2 className="h-3 w-3 text-green-500" />
+                  {getPatientName(selectedPatient)}
+                  {selectedPatient.nationalPatient?.syrianNationalId && (
+                    <span> - {selectedPatient.nationalPatient.syrianNationalId}</span>
+                  )}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Upload card */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-base font-semibold flex items-center gap-2">
+                <Upload className="h-4 w-4" />{t('pneumoniaUpload')}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <input ref={fileInputRef} type="file" accept={ACCEPTED} onChange={handleFileSelect}
+                className="block w-full text-sm text-muted-foreground file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90 cursor-pointer" />
+              <p className="text-xs text-muted-foreground">{t('pneumoniaFileHelp')}</p>
+              {preview && (
+                <div className="relative rounded-lg overflow-hidden border bg-muted">
+                  <img src={preview} alt="X-ray" className="w-full h-auto max-h-[300px] object-contain" />
+                </div>
+              )}
+              <div className="flex gap-2 flex-wrap">
+                <Button onClick={handlePredict} disabled={!selectedFile || isPending} className="gap-2">
+                  {predict.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Scan className="h-4 w-4" />}{t('pneumoniaAnalyze')}
+                </Button>
+                <Button onClick={handleExplain} disabled={!selectedFile || isPending} variant="outline" className="gap-2">
+                  {explain.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Eye className="h-4 w-4" />}{t('pneumoniaExplain')}
+                </Button>
+                <Button onClick={handleClear} disabled={isPending} variant="ghost" className="gap-2">
+                  <Trash2 className="h-4 w-4" />{t('pneumoniaClear')}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
 
         {/* ── Results ────────────────────────────────────────────── */}
         <div className="space-y-4">
@@ -156,6 +267,51 @@ export default function PneumoniaPage() {
               <Skeleton className="h-8 w-1/2" /><Skeleton className="h-[200px] w-full" />
             </CardContent></Card>
           ) : result ? (<>
+
+            {/* ── Save to Patient Record ─────────────────────── */}
+            {selectedPatientId && !savedRecordId && (
+              <Card className="border-primary/30 bg-primary/5">
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between gap-3 flex-wrap">
+                    <div className="text-sm">
+                      <p className="font-medium">{t('saveToRecord')}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {t('saveToRecordDesc', { patient: selectedPatient ? getPatientName(selectedPatient) : '' })}
+                      </p>
+                    </div>
+                    <Button
+                      onClick={handleSaveToRecord}
+                      disabled={saveAnalysis.isPending}
+                      className="gap-2"
+                    >
+                      {saveAnalysis.isPending
+                        ? <Loader2 className="h-4 w-4 animate-spin" />
+                        : <Save className="h-4 w-4" />}
+                      {t('saveAnalysis')}
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {savedRecordId && (
+              <Alert variant="default" className="border-green-300 bg-green-50">
+                <CheckCircle2 className="h-4 w-4 text-green-600" />
+                <AlertTitle className="text-green-800">{t('saveSuccess')}</AlertTitle>
+                <AlertDescription className="text-green-700 text-xs">
+                  {t('saveSuccessDesc')}
+                </AlertDescription>
+              </Alert>
+            )}
+
+            {!selectedPatientId && (
+              <Alert variant="default">
+                <Info className="h-4 w-4" />
+                <AlertDescription className="text-xs">
+                  {t('selectPatientToSave')}
+                </AlertDescription>
+              </Alert>
+            )}
 
             {/* ── Live Model Result Card ──────────────────────── */}
             <Card className={`border-2 ${result.isPositive ? 'border-destructive/40' : 'border-green-500/40'}`}>

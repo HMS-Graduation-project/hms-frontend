@@ -123,5 +123,12 @@
   "registryMultiHospital": "مرضى متعددو المستشفيات",
   "registryMultiHospitalDesc": "مرتبطون بأكثر من مستشفى",
   "registryDuplicates": "سجلات مكررة محتملة",
-  "registryDuplicatesDesc": "نفس الاسم وتاريخ الميلاد، هوية مختلفة"
+  "registryDuplicatesDesc": "نفس الاسم وتاريخ الميلاد، هوية مختلفة",
+  "aiAnalyses": "تحليلات الذكاء الاصطناعي",
+  "aiAnalysesTab": {
+    "title": "نتائج الفحص بالذكاء الاصطناعي",
+    "subtitle": "سجل تحليلات الالتهاب الرئوي بالذكاء الاصطناعي لهذا المريض",
+    "newAnalysis": "تحليل جديد",
+    "empty": "لم يتم العثور على تحليلات لهذا المريض"
+  }
 }

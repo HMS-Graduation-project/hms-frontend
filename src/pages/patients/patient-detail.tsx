@@ -20,11 +20,17 @@ import {
   IdCard,
   Hospital as HospitalIcon,
   AlertTriangle,
+  Brain,
+  Clock,
+  CheckCircle2,
+  XCircle,
+  Activity,
 } from 'lucide-react';
 import { usePatient } from '@/hooks/use-patients';
 import { usePatientMedicalRecords } from '@/hooks/use-medical-records';
 import { usePatientPrescriptions, type PrescriptionStatus } from '@/hooks/use-prescriptions';
 import { usePatientReferrals } from '@/hooks/use-referrals';
+import { useAiAnalyses, type AiAnalysisRecord } from '@/hooks/use-pneumonia';
 import { useAuth } from '@/providers/auth-provider';
 import { PatientTimeline } from '@/components/medical-records/patient-timeline';
 import { Button } from '@/components/ui/button';
@@ -155,6 +161,7 @@ export default function PatientDetailPage() {
           <TabsTrigger value="lab-results">{t('labResults')}</TabsTrigger>
           <TabsTrigger value="billing">{t('billing')}</TabsTrigger>
           <TabsTrigger value="referrals">{t('referrals')}</TabsTrigger>
+          <TabsTrigger value="ai-analyses">{t('aiAnalyses')}</TabsTrigger>
         </TabsList>
 
         {/* Profile Tab */}
@@ -511,6 +518,11 @@ export default function PatientDetailPage() {
             patientName={`${national.firstName} ${national.lastName}`}
           />
         </TabsContent>
+
+        {/* AI Analyses Tab */}
+        <TabsContent value="ai-analyses">
+          <PatientAiAnalysesTab patientProfileId={patient.id} />
+        </TabsContent>
       </Tabs>
 
       {/* Edit Dialog */}
@@ -622,6 +634,106 @@ function PatientReferralsTab({
               </li>
             ))}
           </ul>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
+
+function PatientAiAnalysesTab({
+  patientProfileId,
+}: {
+  patientProfileId: string;
+}) {
+  const { t } = useTranslation('patients');
+  const { t: tAi } = useTranslation('ai');
+  const navigate = useNavigate();
+  const { data, isLoading } = useAiAnalyses({
+    patientProfileId,
+    limit: 20,
+  });
+
+  const STATUS_BADGE_MAP: Record<string, 'warning' | 'secondary' | 'success' | 'destructive'> = {
+    PENDING_REVIEW: 'warning',
+    REVIEWED: 'secondary',
+    APPROVED: 'success',
+    REJECTED: 'destructive',
+  };
+
+  const STATUS_ICON_MAP: Record<string, React.ReactNode> = {
+    PENDING_REVIEW: <Clock className="h-3 w-3" />,
+    REVIEWED: <Eye className="h-3 w-3" />,
+    APPROVED: <CheckCircle2 className="h-3 w-3" />,
+    REJECTED: <XCircle className="h-3 w-3" />,
+  };
+
+  if (isLoading) return <Skeleton className="h-48 w-full" />;
+
+  const analyses = data?.data ?? [];
+
+  return (
+    <Card>
+      <CardHeader>
+        <div className="flex items-center justify-between">
+          <div>
+            <CardTitle className="flex items-center gap-2 text-lg">
+              <Brain className="h-5 w-5" />
+              {t('aiAnalysesTab.title')}
+            </CardTitle>
+            <CardDescription>{t('aiAnalysesTab.subtitle')}</CardDescription>
+          </div>
+          <Button
+            size="sm"
+            onClick={() => navigate('/ai/pneumonia')}
+          >
+            {t('aiAnalysesTab.newAnalysis')}
+          </Button>
+        </div>
+      </CardHeader>
+      <CardContent>
+        {analyses.length === 0 ? (
+          <p className="py-6 text-center text-sm text-muted-foreground">
+            {t('aiAnalysesTab.empty')}
+          </p>
+        ) : (
+          <div className="space-y-2">
+            {analyses.map((a) => {
+              const isPositive = a.prediction === 'PNEUMONIA';
+              return (
+                <div
+                  key={a.id}
+                  className="flex items-center justify-between rounded-md border p-3 hover:bg-muted/30 cursor-pointer transition-colors"
+                  onClick={() => navigate(`/ai/analyses/${a.id}`)}
+                >
+                  <div className="flex items-center gap-3 min-w-0">
+                    <Activity className={`h-4 w-4 shrink-0 ${isPositive ? 'text-destructive' : 'text-green-600'}`} />
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2">
+                        <p className="text-sm font-medium">
+                          {new Date(a.createdAt).toLocaleDateString()}
+                        </p>
+                        <Badge variant={isPositive ? 'destructive' : 'success'} className="text-[10px]">
+                          {a.prediction}
+                        </Badge>
+                      </div>
+                      <p className="text-xs text-muted-foreground">
+                        {tAi('pneumoniaProbability')}: {(a.probability * 100).toFixed(1)}%
+                        {' | '}
+                        {a.modelVersion}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 shrink-0">
+                    <Badge variant={STATUS_BADGE_MAP[a.status] || 'secondary'} className="text-xs gap-1">
+                      {STATUS_ICON_MAP[a.status]}
+                      {tAi(`status_${a.status}`)}
+                    </Badge>
+                    <Eye className="h-4 w-4 text-muted-foreground" />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         )}
       </CardContent>
     </Card>

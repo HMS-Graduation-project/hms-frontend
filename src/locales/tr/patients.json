@@ -123,5 +123,12 @@
   "registryMultiHospital": "Çok Hastaneli Hastalar",
   "registryMultiHospitalDesc": "2+ hastaneye bağlı",
   "registryDuplicates": "Olası Tekrarlar",
-  "registryDuplicatesDesc": "Aynı ad + doğum tarihi, farklı NHID"
+  "registryDuplicatesDesc": "Aynı ad + doğum tarihi, farklı NHID",
+  "aiAnalyses": "AI Analizleri",
+  "aiAnalysesTab": {
+    "title": "AI Tarama Sonuclari",
+    "subtitle": "Bu hasta icin pnomoni AI analiz gecmisi",
+    "newAnalysis": "Yeni Analiz",
+    "empty": "Bu hasta icin AI analizi bulunamadi"
+  }
 }
