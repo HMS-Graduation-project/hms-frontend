@@ -75,7 +75,7 @@ function imageUrl(path: string | null): string | null {
 export default function AiAnalysisDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { t } = useTranslation('ai');
+  const { t, i18n } = useTranslation('ai');
   const { t: tCommon } = useTranslation('common');
   const { toast } = useToast();
 
@@ -140,7 +140,8 @@ export default function AiAnalysisDetailPage() {
     setPdfLoading(true);
     try {
       const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
-      const res = await fetch(`${API_BASE_URL}/v1/ai-analyses/${id}/report/pdf`, {
+      const lang = i18n.language?.slice(0, 2) || 'en';
+      const res = await fetch(`${API_BASE_URL}/v1/ai-analyses/${id}/report/pdf?lang=${lang}`, {
         credentials: 'include',
       });
       if (!res.ok) throw new Error(res.statusText);
