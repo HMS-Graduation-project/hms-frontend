@@ -146,5 +146,6 @@
   "doctorCommentLabel": "التعليق السريري (اختياري)",
   "doctorCommentPlaceholder": "أضف تقييمك السريري أو ملاحظاتك...",
   "submitReview": "إرسال المراجعة",
-  "reviewSuccess": "تم إرسال المراجعة بنجاح"
+  "reviewSuccess": "تم إرسال المراجعة بنجاح",
+  "rejectRequiresComment": "يجب إضافة تعليق سريري عند رفض التحليل."
 }

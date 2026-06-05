@@ -146,5 +146,6 @@
   "doctorCommentLabel": "Clinical Comment (optional)",
   "doctorCommentPlaceholder": "Add your clinical assessment or notes...",
   "submitReview": "Submit Review",
-  "reviewSuccess": "Review submitted successfully"
+  "reviewSuccess": "Review submitted successfully",
+  "rejectRequiresComment": "A clinical comment is required when rejecting an analysis."
 }

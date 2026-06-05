@@ -146,5 +146,6 @@
   "doctorCommentLabel": "Klinik Yorum (istege bagli)",
   "doctorCommentPlaceholder": "Klinik degerlendirmenizi veya notlarinizi ekleyin...",
   "submitReview": "Incelemeyi Gonder",
-  "reviewSuccess": "Inceleme basariyla gonderildi"
+  "reviewSuccess": "Inceleme basariyla gonderildi",
+  "rejectRequiresComment": "Analiz reddedilirken klinik yorum zorunludur."
 }

@@ -73,6 +73,7 @@ export default function AiAnalysisDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { t } = useTranslation('ai');
+  const { t: tCommon } = useTranslation('common');
   const { toast } = useToast();
 
   const { data: record, isLoading } = useAiAnalysis(id);
@@ -127,6 +128,10 @@ export default function AiAnalysisDetailPage() {
 
   const handleReview = async () => {
     if (!reviewStatus || !id) return;
+    if (reviewStatus === 'REJECTED' && !doctorComment.trim()) {
+      toast({ title: t('rejectRequiresComment'), variant: 'destructive' });
+      return;
+    }
     try {
       await reviewMutation.mutateAsync({
         id,
