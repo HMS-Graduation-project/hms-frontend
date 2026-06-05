@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import {
   ArrowLeft, Eye, CheckCircle2, XCircle, Clock, ShieldCheck,
   User, Activity, FileText, Stethoscope, AlertTriangle, Info,
-  Loader2, Layers, BarChart3,
+  Loader2, Layers, BarChart3, ChevronDown, ChevronUp,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -85,6 +85,7 @@ export default function AiAnalysisDetailPage() {
   const [reviewOpen, setReviewOpen] = useState(false);
   const [reviewStatus, setReviewStatus] = useState<string>('');
   const [doctorComment, setDoctorComment] = useState('');
+  const [showDetails, setShowDetails] = useState(false);
 
   if (isLoading) {
     return (
@@ -246,218 +247,184 @@ export default function AiAnalysisDetailPage() {
           )}
         </div>
 
-        {/* Right: Details */}
+        {/* Right: Report */}
         <div className="space-y-4">
-          {/* Patient info */}
+          {/* Patient & Request Info */}
           <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-semibold flex items-center gap-2">
-                <User className="h-4 w-4" />{t('patientInfo')}
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-2 text-sm">
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">{t('colPatient')}</span>
-                <span className="font-medium">{patientName}</span>
-              </div>
+            <CardContent className="p-4 space-y-2 text-sm">
+              <div className="flex justify-between"><span className="text-muted-foreground">{t('colPatient')}</span><span className="font-medium">{patientName}</span></div>
               {np?.syrianNationalId && (
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">{t('nationalId')}</span>
-                  <span className="font-mono text-xs">{np.syrianNationalId}</span>
-                </div>
+                <div className="flex justify-between"><span className="text-muted-foreground">{t('nationalId')}</span><span className="font-mono text-xs">{np.syrianNationalId}</span></div>
               )}
               <Separator />
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">{t('colRequestedBy')}</span>
-                <span>{requestedBy}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">{t('colDate')}</span>
-                <span>{new Date(record.createdAt).toLocaleString()}</span>
-              </div>
+              <div className="flex justify-between"><span className="text-muted-foreground">{t('colRequestedBy')}</span><span>{requestedBy}</span></div>
+              <div className="flex justify-between"><span className="text-muted-foreground">{t('colDate')}</span><span>{new Date(record.createdAt).toLocaleString()}</span></div>
               {reviewedBy && (
                 <>
                   <Separator />
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">{t('reviewedBy')}</span>
-                    <span>{reviewedBy}</span>
-                  </div>
+                  <div className="flex justify-between"><span className="text-muted-foreground">{t('reviewedBy')}</span><span>{reviewedBy}</span></div>
                   {record.reviewedAt && (
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">{t('reviewedAt')}</span>
-                      <span>{new Date(record.reviewedAt).toLocaleString()}</span>
-                    </div>
+                    <div className="flex justify-between"><span className="text-muted-foreground">{t('reviewedAt')}</span><span>{new Date(record.reviewedAt).toLocaleString()}</span></div>
                   )}
                 </>
               )}
             </CardContent>
           </Card>
 
-          {/* AI Result */}
+          {/* ═══ AI RADIOLOGY REPORT ═══ */}
+
+          {/* Report Header + Clinical Summary */}
           <Card className={`border-2 ${isPositive ? 'border-destructive/40' : 'border-green-500/40'}`}>
-            <CardContent className="p-4 space-y-4">
+            <CardContent className="p-4 space-y-3">
               <div className="flex items-center justify-between gap-2 flex-wrap">
-                <div className="flex items-center gap-2">
-                  <Activity className="h-4 w-4 text-primary" />
-                  <span className="font-semibold text-sm">{record.modelVersion}</span>
-                </div>
+                <h2 className="text-base font-bold flex items-center gap-2">
+                  <FileText className="h-4 w-4" />{t('report_title')}
+                </h2>
                 <Badge variant={isPositive ? 'destructive' : 'success'} className="text-sm px-3 py-1 gap-1.5">
                   {isPositive ? <XCircle className="h-3.5 w-3.5" /> : <CheckCircle2 className="h-3.5 w-3.5" />}
                   {isPositive ? t('aiScreeningPositive') : t('aiScreeningNegative')}
                 </Badge>
               </div>
-
-              {/* KPI row */}
+              <Separator />
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                <div className="rounded-md border bg-muted/20 p-2.5 text-center">
-                  <p className="text-[10px] text-muted-foreground leading-tight">{t('pneumoniaProbability')}</p>
+                <div className="rounded-md border bg-muted/20 p-2 text-center">
+                  <p className="text-[10px] text-muted-foreground leading-tight">{isEnsemble ? t('finalConsensus') : t('pneumoniaProbability')}</p>
                   <p className={`text-lg font-bold tabular-nums ${isPositive ? 'text-destructive' : ''}`}>{prob}%</p>
                 </div>
-                <div className="rounded-md border bg-muted/20 p-2.5 text-center">
+                <div className="rounded-md border bg-muted/20 p-2 text-center">
+                  <p className="text-[10px] text-muted-foreground leading-tight">{t('riskLevel')}</p>
+                  <span className={`text-xs font-semibold px-2 py-0.5 rounded-full border inline-block mt-1 ${RISK_COLORS[risk] || ''}`}>{t(`risk_${risk.toLowerCase()}`)}</span>
+                </div>
+                <div className="rounded-md border bg-muted/20 p-2 text-center">
                   <p className="text-[10px] text-muted-foreground leading-tight">{t('pneumoniaThreshold')}</p>
                   <p className="text-lg font-bold tabular-nums text-muted-foreground">{thresh}%</p>
                 </div>
-                <div className="rounded-md border bg-muted/20 p-2.5 text-center">
-                  <p className="text-[10px] text-muted-foreground leading-tight">{t('riskLevel')}</p>
-                  <span className={`text-xs font-semibold px-2 py-0.5 rounded-full border inline-block mt-1 ${RISK_COLORS[risk] || ''}`}>
-                    {t(`risk_${risk.toLowerCase()}`)}
-                  </span>
-                </div>
-                <div className="rounded-md border bg-muted/20 p-2.5 text-center">
-                  <p className="text-[10px] text-muted-foreground leading-tight">{t('pneumoniaConfidence')}</p>
-                  <p className="text-lg font-bold tabular-nums">{conf}%</p>
-                </div>
+                {isEnsemble && record.modelAgreement ? (
+                  <div className="rounded-md border bg-muted/20 p-2 text-center">
+                    <p className="text-[10px] text-muted-foreground leading-tight">{t('modelAgreement')}</p>
+                    <p className="text-sm font-semibold mt-1">{t(`agreement_${record.modelAgreement}`)}</p>
+                  </div>
+                ) : (
+                  <div className="rounded-md border bg-muted/20 p-2 text-center">
+                    <p className="text-[10px] text-muted-foreground leading-tight">{t('pneumoniaConfidence')}</p>
+                    <p className="text-lg font-bold tabular-nums">{conf}%</p>
+                  </div>
+                )}
               </div>
-
               {/* Probability bar */}
               <div className="space-y-1">
-                <div className="relative h-3">
+                <div className="relative h-2.5">
                   <div className="absolute inset-0 rounded-full bg-muted overflow-hidden">
-                    <div className={`h-full rounded-full transition-all ${RISK_BAR[risk] || 'bg-green-500'}`}
-                      style={{ width: `${record.probability * 100}%` }} />
+                    <div className={`h-full rounded-full transition-all ${RISK_BAR[risk] || 'bg-green-500'}`} style={{ width: `${record.probability * 100}%` }} />
                   </div>
-                  <div className="absolute top-0 h-3 w-0.5 bg-foreground/80 rounded-full"
-                    style={{ insetInlineStart: `${record.threshold * 100}%` }} />
+                  <div className="absolute top-0 h-2.5 w-0.5 bg-foreground/80 rounded-full" style={{ insetInlineStart: `${record.threshold * 100}%` }} />
                 </div>
-                <div className="flex justify-between text-[9px] text-muted-foreground tabular-nums">
-                  <span>0%</span><span>50%</span><span>100%</span>
-                </div>
-              </div>
-
-              {/* Interpretation */}
-              <div className="rounded-md bg-muted/30 p-2.5">
-                <p className="text-xs text-muted-foreground">{t(`cds_interp_${risk.toLowerCase()}`)}</p>
+                <div className="flex justify-between text-[9px] text-muted-foreground tabular-nums"><span>0%</span><span>50%</span><span>100%</span></div>
               </div>
             </CardContent>
           </Card>
 
-          {/* Ensemble Breakdown (only for ensemble records) */}
-          {isEnsemble && modelResults.length > 0 && (
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-semibold flex items-center gap-2">
-                  <BarChart3 className="h-4 w-4" />{t('modelBreakdown')}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {/* Agreement & Method */}
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                  <div className="rounded-md border bg-muted/20 p-2.5 text-center">
-                    <p className="text-[10px] text-muted-foreground leading-tight">{t('modelAgreement')}</p>
-                    <p className="text-sm font-semibold mt-1">
-                      {record.modelAgreement ? t(`agreement_${record.modelAgreement}`) : '---'}
-                    </p>
-                  </div>
-                  <div className="rounded-md border bg-muted/20 p-2.5 text-center">
-                    <p className="text-[10px] text-muted-foreground leading-tight">{t('agreementScore')}</p>
-                    <p className="text-sm font-semibold mt-1 tabular-nums">
-                      {record.agreementScore != null ? `${(record.agreementScore * 100).toFixed(0)}%` : '---'}
-                    </p>
-                  </div>
-                  <div className="rounded-md border bg-muted/20 p-2.5 text-center">
-                    <p className="text-[10px] text-muted-foreground leading-tight">{t('ensembleMethodLabel')}</p>
-                    <p className="text-sm font-semibold mt-1">{t('weightedAverage')}</p>
-                  </div>
-                </div>
+          {/* AI Findings */}
+          <Card><CardContent className="p-4 space-y-2">
+            <h3 className="text-sm font-semibold">{t('report_findings')}</h3>
+            <p className="text-sm text-muted-foreground leading-relaxed">{t(`report_findings_${risk.toLowerCase()}`)}</p>
+          </CardContent></Card>
 
-                {/* Individual model results table */}
+          {/* AI Impression */}
+          <Card><CardContent className="p-4 space-y-2">
+            <h3 className="text-sm font-semibold">{t('report_impression')}</h3>
+            <p className="text-sm text-muted-foreground leading-relaxed">{t(`report_impression_${risk.toLowerCase()}`)}</p>
+          </CardContent></Card>
+
+          {/* Clinical Significance */}
+          <Card><CardContent className="p-4 space-y-2">
+            <h3 className="text-sm font-semibold">{t('report_significance')}</h3>
+            <p className="text-sm text-muted-foreground leading-relaxed">{t(`report_significance_${risk.toLowerCase()}`)}</p>
+          </CardContent></Card>
+
+          {/* Recommendation */}
+          <Card><CardContent className="p-4 space-y-2">
+            <h3 className="text-sm font-semibold flex items-center gap-2"><Stethoscope className="h-4 w-4" />{t('report_recommendation')}</h3>
+            <p className="text-sm text-muted-foreground leading-relaxed">{t(`report_rec_${risk.toLowerCase()}`)}</p>
+          </CardContent></Card>
+
+          {/* Model Agreement */}
+          <Card><CardContent className="p-4 space-y-3">
+            <h3 className="text-sm font-semibold">{t('report_modelAgreement')}</h3>
+            {isEnsemble && modelResults.length > 0 ? (
+              <>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {record.modelAgreement ? t(`report_agreement_${record.modelAgreement.toLowerCase()}`) : t('report_agreement_single')}
+                </p>
                 <div className="overflow-x-auto">
                   <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead className="text-xs">{t('pneumoniaModel')}</TableHead>
-                        <TableHead className="text-xs text-end">{t('pneumoniaProbability')}</TableHead>
-                        <TableHead className="text-xs">{t('colPrediction')}</TableHead>
-                        <TableHead className="text-xs text-end">{t('ensembleWeights')}</TableHead>
-                      </TableRow>
-                    </TableHeader>
+                    <TableHeader><TableRow>
+                      <TableHead className="text-xs">{t('pneumoniaModel')}</TableHead>
+                      <TableHead className="text-xs text-end">{t('pneumoniaProbability')}</TableHead>
+                      <TableHead className="text-xs">{t('colPrediction')}</TableHead>
+                      <TableHead className="text-xs text-end">{t('ensembleWeights')}</TableHead>
+                    </TableRow></TableHeader>
                     <TableBody>
                       {modelResults.map((m) => (
                         <TableRow key={m.modelName}>
                           <TableCell className="text-xs font-medium">{m.modelName}</TableCell>
-                          <TableCell className="text-xs text-end tabular-nums">
-                            {(m.probability * 100).toFixed(1)}%
-                          </TableCell>
-                          <TableCell>
-                            <Badge
-                              variant={m.prediction === 'PNEUMONIA' ? 'destructive' : 'success'}
-                              className="text-[10px]"
-                            >
-                              {m.prediction}
-                            </Badge>
-                          </TableCell>
-                          <TableCell className="text-xs text-end tabular-nums">
-                            {ensembleWeights[m.modelName] != null
-                              ? `${(ensembleWeights[m.modelName] * 100).toFixed(0)}%`
-                              : '---'}
-                          </TableCell>
+                          <TableCell className="text-xs text-end tabular-nums">{(m.probability * 100).toFixed(1)}%</TableCell>
+                          <TableCell><Badge variant={m.prediction === 'PNEUMONIA' ? 'destructive' : 'success'} className="text-[10px]">{m.prediction}</Badge></TableCell>
+                          <TableCell className="text-xs text-end tabular-nums">{ensembleWeights[m.modelName] != null ? `${(ensembleWeights[m.modelName] * 100).toFixed(0)}%` : '---'}</TableCell>
                         </TableRow>
                       ))}
                     </TableBody>
                   </Table>
                 </div>
-
-                {/* Final consensus summary */}
-                <div className="rounded-md bg-muted/30 p-2.5 text-xs text-muted-foreground">
-                  <span className="font-medium">{t('finalConsensus')}:</span>{' '}
-                  {prob}% ({t('weightedAverage')})
-                </div>
-              </CardContent>
-            </Card>
-          )}
-
-          {/* Clinical Recommendation */}
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-semibold flex items-center gap-2">
-                <Stethoscope className="h-4 w-4" />{t('clinicalRecommendation')}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">
-                {t(`cds_rec_${risk.toLowerCase()}`)}
-              </p>
-            </CardContent>
-          </Card>
+              </>
+            ) : (
+              <p className="text-sm text-muted-foreground leading-relaxed">{t('report_agreement_single')}</p>
+            )}
+          </CardContent></Card>
 
           {/* Doctor comment */}
           {record.doctorComment && (
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-semibold flex items-center gap-2">
-                  <FileText className="h-4 w-4" />{t('doctorComment')}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm whitespace-pre-wrap">{record.doctorComment}</p>
-              </CardContent>
-            </Card>
+            <Card><CardContent className="p-4 space-y-2">
+              <h3 className="text-sm font-semibold flex items-center gap-2"><FileText className="h-4 w-4" />{t('doctorComment')}</h3>
+              <p className="text-sm whitespace-pre-wrap">{record.doctorComment}</p>
+            </CardContent></Card>
           )}
 
-          {/* Disclaimer */}
+          {/* Technical Details (collapsible) */}
+          <Card><CardContent className="p-0">
+            <button onClick={() => setShowDetails(!showDetails)} className="flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground transition-colors w-full p-4">
+              {showDetails ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
+              {t('report_technicalDetails')}
+            </button>
+            {showDetails && (
+              <div className="px-4 pb-4 space-y-3">
+                <div className="grid grid-cols-2 gap-2 text-xs bg-muted/30 rounded-md p-3">
+                  <div><p className="text-muted-foreground">{t('rawProbability')}</p><p className="font-mono">{record.probability}</p></div>
+                  <div><p className="text-muted-foreground">{t('rawConfidence')}</p><p className="font-mono">{record.confidence}</p></div>
+                  <div><p className="text-muted-foreground">{t('pneumoniaModel')}</p><p className="font-mono">{record.modelVersion}</p></div>
+                  <div><p className="text-muted-foreground">{t('pneumoniaDevice')}</p><p className="font-mono">{record.device || '---'}</p></div>
+                  <div><p className="text-muted-foreground">{t('pneumoniaThreshold')}</p><p className="font-mono">{record.threshold}</p></div>
+                  <div><p className="text-muted-foreground">{t('analysisMode')}</p><p className="font-mono">{record.analysisMode || 'SINGLE_MODEL'}</p></div>
+                </div>
+                {isEnsemble && (
+                  <div className="text-xs bg-muted/30 rounded-md p-3 space-y-1">
+                    <p className="text-muted-foreground font-medium">{t('ensembleWeights')}</p>
+                    {Object.entries(ensembleWeights).map(([name, w]) => (
+                      <p key={name} className="font-mono">{name}: {(w * 100).toFixed(0)}%</p>
+                    ))}
+                    <p className="text-muted-foreground mt-2">{t('ensembleMethodLabel')}: {record.ensembleMethod || 'WEIGHTED_AVERAGE'}</p>
+                    <p className="text-muted-foreground">{t('agreementScore')}: {record.agreementScore != null ? `${(record.agreementScore * 100).toFixed(0)}%` : '---'}</p>
+                  </div>
+                )}
+                <p className="text-[10px] text-muted-foreground">{t('confidenceNote')}</p>
+              </div>
+            )}
+          </CardContent></Card>
+
+          {/* Clinical Disclaimer */}
           <Alert variant="destructive">
             <AlertTriangle className="h-4 w-4" />
-            <AlertDescription className="text-xs">{t('finalClinicalDisclaimer')}</AlertDescription>
+            <AlertDescription className="text-xs">{t('report_disclaimer')}</AlertDescription>
           </Alert>
         </div>
       </div>
