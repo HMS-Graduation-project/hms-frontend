@@ -229,5 +229,12 @@
   "analytics_clinicalPerfNote": "Bu metrikler yalnizca hekim tarafindan incelenen kayitlara dayanmaktadir ve modelin nihai klinik degerlendirmesini temsil etmemektedir.",
   "analytics_disclaimer": "Bu analitikler kullanim izleme ve kalite destegi icindir. AI modellerinin nihai klinik degerlendirmesini temsil etmemektedir.",
   "analytics_noFilteredData": "Secilen filtrelere uygun analitik verisi bulunamadi.",
-  "analytics_error": "Analitik verileri yuklenemedi."
+  "analytics_error": "Analitik verileri yuklenemedi.",
+  "analytics_clinicalOutcome": "Klinik Sonuc Genel Bakisi",
+  "analytics_riskSeverity": "Risk Siddeti Dagilimi",
+  "analytics_analysisType": "Analiz Turu Karsilastirmasi",
+  "analytics_ensembleAgreement": "Topluluk Uyum Analizi",
+  "analytics_avgAgreement": "Ort Uyum",
+  "analytics_notEnoughChartData": "Bu grafigi gosterecek yeterli veri yok.",
+  "analytics_notEnoughEnsembleData": "Model uyumunu gosterecek yeterli topluluk analizi yok."
 }

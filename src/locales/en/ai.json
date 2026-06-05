@@ -229,5 +229,12 @@
   "analytics_clinicalPerfNote": "These metrics are estimates based only on physician-reviewed records and do not represent a final clinical evaluation of the model.",
   "analytics_disclaimer": "These analytics are for usage monitoring and quality support. They do not represent a final clinical evaluation of the AI models.",
   "analytics_noFilteredData": "No analytics data matching the selected filters.",
-  "analytics_error": "Failed to load analytics data."
+  "analytics_error": "Failed to load analytics data.",
+  "analytics_clinicalOutcome": "Clinical Outcome Overview",
+  "analytics_riskSeverity": "Risk Severity Distribution",
+  "analytics_analysisType": "Analysis Type Comparison",
+  "analytics_ensembleAgreement": "Ensemble Agreement Analysis",
+  "analytics_avgAgreement": "Avg Agreement",
+  "analytics_notEnoughChartData": "Not enough data to display this chart.",
+  "analytics_notEnoughEnsembleData": "Not enough ensemble analyses to display model agreement."
 }

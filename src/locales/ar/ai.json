@@ -229,5 +229,12 @@
   "analytics_clinicalPerfNote": "هذه المقاييس تقديرية وتعتمد فقط على السجلات التي تمت مراجعتها من الطبيب، ولا تمثل تقييماً سريرياً نهائياً للنموذج.",
   "analytics_disclaimer": "هذه التحليلات مخصصة لمراقبة الاستخدام ودعم الجودة، ولا تمثل تقييماً سريرياً نهائياً للنماذج.",
   "analytics_noFilteredData": "لا توجد بيانات تحليلية مطابقة للفلاتر المحددة.",
-  "analytics_error": "تعذر تحميل بيانات التحليلات."
+  "analytics_error": "تعذر تحميل بيانات التحليلات.",
+  "analytics_clinicalOutcome": "نظرة سريرية على النتائج",
+  "analytics_riskSeverity": "توزيع شدة الخطورة",
+  "analytics_analysisType": "مقارنة نوع التحليل",
+  "analytics_ensembleAgreement": "تحليل اتفاق النماذج",
+  "analytics_avgAgreement": "متوسط الاتفاق",
+  "analytics_notEnoughChartData": "لا توجد نتائج كافية لعرض هذا الرسم.",
+  "analytics_notEnoughEnsembleData": "لا توجد تحليلات جماعية كافية لعرض اتفاق النماذج."
 }
