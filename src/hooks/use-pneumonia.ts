@@ -3,18 +3,13 @@ import { api } from '@/lib/api';
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || '/api';
 
-function getToken(): string | null {
-  return localStorage.getItem('access_token');
-}
-
 async function uploadFile<T>(endpoint: string, file: File): Promise<T> {
-  const token = getToken();
   const formData = new FormData();
   formData.append('file', file);
 
   const response = await fetch(`${API_BASE}${endpoint}`, {
     method: 'POST',
-    headers: token ? { Authorization: `Bearer ${token}` } : {},
+    credentials: 'include',
     body: formData,
   });
 
@@ -31,7 +26,6 @@ async function uploadFileWithFields<T>(
   file: File,
   fields: Record<string, string>,
 ): Promise<T> {
-  const token = getToken();
   const formData = new FormData();
   formData.append('file', file);
   for (const [key, value] of Object.entries(fields)) {
@@ -40,7 +34,7 @@ async function uploadFileWithFields<T>(
 
   const response = await fetch(`${API_BASE}${endpoint}`, {
     method: 'POST',
-    headers: token ? { Authorization: `Bearer ${token}` } : {},
+    credentials: 'include',
     body: formData,
   });
 

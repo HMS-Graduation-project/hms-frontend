@@ -71,7 +71,8 @@ import MinistryDashboardPage from '@/pages/ministry/dashboard';
  * everyone else → /dashboard.
  */
 function RoleAwareRedirect() {
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, isLoading } = useAuth();
+  if (isLoading) return null;
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }

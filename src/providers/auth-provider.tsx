@@ -21,8 +21,8 @@ export interface Hospital {
 interface AuthContextType {
   user: User | null;
   hospital: Hospital | null;
-  token: string | null;
   isAuthenticated: boolean;
+  isLoading: boolean;
   login: (email: string, password: string) => Promise<User>;
   register: (email: string, password: string) => Promise<User>;
   logout: () => void;
@@ -31,16 +31,14 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | null>(null);
 
 interface AuthResponse {
-  accessToken: string;
   user: User;
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [hospital, setHospital] = useState<Hospital | null>(null);
-  const [token, setToken] = useState<string | null>(() => localStorage.getItem('access_token'));
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Fetch hospital info whenever user has a hospitalId (and clear otherwise).
   const loadHospital = useCallback(async (u: User | null) => {
     if (!u?.hospitalId) {
       setHospital(null);
@@ -55,26 +53,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
-    // On mount, if token exists, fetch current user
-    if (token && !user) {
-      api
-        .get<User>('/v1/me')
-        .then((u) => {
-          setUser(u);
-          void loadHospital(u);
-        })
-        .catch(() => {
-          localStorage.removeItem('access_token');
-          setToken(null);
-        });
-    }
-  }, [token, user, loadHospital]);
+    // On mount, try to restore session from cookie
+    api
+      .get<User>('/v1/me')
+      .then((u) => {
+        setUser(u);
+        void loadHospital(u);
+      })
+      .catch(() => {
+        setUser(null);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, [loadHospital]);
 
   const login = useCallback(
     async (email: string, password: string) => {
       const res = await api.post<AuthResponse>('/v1/auth/login', { email, password });
-      localStorage.setItem('access_token', res.accessToken);
-      setToken(res.accessToken);
       setUser(res.user);
       await loadHospital(res.user);
       return res.user;
@@ -85,8 +81,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const register = useCallback(
     async (email: string, password: string) => {
       const res = await api.post<AuthResponse>('/v1/auth/register', { email, password });
-      localStorage.setItem('access_token', res.accessToken);
-      setToken(res.accessToken);
       setUser(res.user);
       await loadHospital(res.user);
       return res.user;
@@ -94,16 +88,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     [loadHospital],
   );
 
-  const logout = useCallback(() => {
-    localStorage.removeItem('access_token');
-    setToken(null);
+  const logout = useCallback(async () => {
+    try {
+      await fetch(
+        `${import.meta.env.VITE_API_BASE_URL || '/api'}/v1/auth/logout`,
+        { method: 'POST', credentials: 'include' },
+      );
+    } catch {
+      // Best-effort server logout
+    }
     setUser(null);
     setHospital(null);
   }, []);
 
   return (
     <AuthContext.Provider
-      value={{ user, hospital, token, isAuthenticated: !!token, login, register, logout }}
+      value={{ user, hospital, isAuthenticated: !!user, isLoading, login, register, logout }}
     >
       {children}
     </AuthContext.Provider>

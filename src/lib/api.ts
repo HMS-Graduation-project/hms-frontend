@@ -11,6 +11,21 @@ class ApiError extends Error {
   }
 }
 
+let isRefreshing = false;
+let refreshPromise: Promise<boolean> | null = null;
+
+async function tryRefresh(): Promise<boolean> {
+  try {
+    const res = await fetch(`${API_BASE}/v1/auth/refresh`, {
+      method: 'POST',
+      credentials: 'include',
+    });
+    return res.ok;
+  } catch {
+    return false;
+  }
+}
+
 async function request<T>(endpoint: string, options: RequestOptions = {}): Promise<T> {
   const { body, headers: customHeaders, ...rest } = options;
 
@@ -19,19 +34,38 @@ async function request<T>(endpoint: string, options: RequestOptions = {}): Promi
     ...customHeaders as Record<string, string>,
   };
 
-  // Attach JWT token if available
-  // NOTE: localStorage is simple but vulnerable to XSS.
-  // For higher security, consider httpOnly cookies with a backend BFF pattern.
-  const token = localStorage.getItem('access_token');
-  if (token) {
-    headers['Authorization'] = `Bearer ${token}`;
-  }
-
   const response = await fetch(`${API_BASE}${endpoint}`, {
     headers,
+    credentials: 'include',
     body: body ? JSON.stringify(body) : undefined,
     ...rest,
   });
+
+  // Automatic silent refresh on 401
+  if (response.status === 401 && !endpoint.includes('/auth/')) {
+    if (!isRefreshing) {
+      isRefreshing = true;
+      refreshPromise = tryRefresh();
+    }
+    const refreshed = await refreshPromise;
+    isRefreshing = false;
+    refreshPromise = null;
+
+    if (refreshed) {
+      // Retry the original request with new cookie
+      const retryResponse = await fetch(`${API_BASE}${endpoint}`, {
+        headers,
+        credentials: 'include',
+        body: body ? JSON.stringify(body) : undefined,
+        ...rest,
+      });
+      if (!retryResponse.ok) {
+        const error = await retryResponse.json().catch(() => ({ message: retryResponse.statusText }));
+        throw new ApiError(retryResponse.status, error.message || 'Request failed');
+      }
+      return retryResponse.json();
+    }
+  }
 
   if (!response.ok) {
     const error = await response.json().catch(() => ({ message: response.statusText }));
