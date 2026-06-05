@@ -30,7 +30,7 @@ import { usePatient } from '@/hooks/use-patients';
 import { usePatientMedicalRecords } from '@/hooks/use-medical-records';
 import { usePatientPrescriptions, type PrescriptionStatus } from '@/hooks/use-prescriptions';
 import { usePatientReferrals } from '@/hooks/use-referrals';
-import { useAiAnalyses, type AiAnalysisRecord } from '@/hooks/use-pneumonia';
+import { useAiAnalyses } from '@/hooks/use-pneumonia';
 import { useAuth } from '@/providers/auth-provider';
 import { PatientTimeline } from '@/components/medical-records/patient-timeline';
 import { Button } from '@/components/ui/button';

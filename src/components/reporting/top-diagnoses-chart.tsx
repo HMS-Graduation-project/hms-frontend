@@ -75,12 +75,12 @@ export function TopDiagnosesChart({ data, isLoading }: TopDiagnosesChartProps) {
                   borderRadius: '8px',
                   color: 'hsl(var(--card-foreground))',
                 }}
-                formatter={(value: number, _name: string, props: { payload: { percentage: number } }) => [
-                  `${value} (${props.payload.percentage}%)`,
+                formatter={(value: any, _name: any, props: any) => [
+                  `${value} (${props?.payload?.percentage ?? 0}%)`,
                   t('patients'),
                 ]}
               />
-              <Bar dataKey="count" fill="hsl(var(--primary))" radius={[0, 4, 4, 0]} label={{ position: 'right', fill: 'hsl(var(--muted-foreground))', fontSize: 11, formatter: (_v: number, entry: { percentage?: number }) => entry?.percentage != null ? `${entry.percentage}%` : '' }}>
+              <Bar dataKey="count" fill="hsl(var(--primary))" radius={[0, 4, 4, 0]} label={{ position: 'right', fill: 'hsl(var(--muted-foreground))', fontSize: 11, formatter: ((_v: any, entry: any) => entry?.percentage != null ? `${entry.percentage}%` : '') as any }}>
                 {enriched.map((_, i) => (
                   <Cell key={i} fillOpacity={i === 0 ? 1 : 0.75} />
                 ))}

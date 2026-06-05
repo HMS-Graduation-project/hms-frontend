@@ -2,8 +2,8 @@ import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Upload, Scan, Eye, Trash2, AlertTriangle, CheckCircle2, XCircle,
-  Loader2, Info, ChevronDown, ChevronUp, ShieldAlert, Stethoscope,
-  Activity, BarChart3, FileText, Brain, Save, Search, User, Layers,
+  Loader2, Info, ChevronDown, ChevronUp, Stethoscope,
+  Activity, FileText, Save, Search, User, Layers,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -71,14 +71,6 @@ function getPatientName(patient: PatientProfile): string {
   return fromUser || patient.user?.email || '---';
 }
 
-// ── Static benchmark data (from model comparison study) ─────────────
-
-const BENCHMARK = {
-  densenet121: { recall: '97.9%', specificity: '87.0%', f1: '95.2%', auc: '97.75%', size: '80.5 MB', speed: '1.7 ms', fn: '8', fp: '30', role: 'liveDefault', verdict: 'cds_verdictDense' },
-  efficientnet_b0: { recall: '96.9%', specificity: '84.4%', f1: '94.0%', auc: '94.57%', size: '46.4 MB', speed: '0.9 ms', fn: '12', fp: '36', role: 'benchmarkResearch', verdict: 'cds_verdictEff' },
-  resnet50: { recall: '96.9%', specificity: '82.7%', f1: '93.5%', auc: '94.70%', size: '269.5 MB', speed: '0.5 ms', fn: '12', fp: '40', role: 'benchmarkResearch', verdict: 'cds_verdictRes' },
-};
-
 // ═════════════════════════════════════════════════════════════════════
 
 export default function PneumoniaPage() {
@@ -99,7 +91,6 @@ export default function PneumoniaPage() {
   const [preview, setPreview] = useState<string | null>(null);
   const [result, setResult] = useState<PneumoniaPrediction | PneumoniaExplanation | PneumoniaEnsembleResult | null>(null);
   const [showDetails, setShowDetails] = useState(false);
-  const [showBenchmark, setShowBenchmark] = useState(false);
   const [savedRecordId, setSavedRecordId] = useState<string | null>(null);
   const [analysisMode, setAnalysisMode] = useState<'SINGLE_MODEL' | 'ENSEMBLE'>('ENSEMBLE');
 

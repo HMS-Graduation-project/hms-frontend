@@ -137,9 +137,9 @@ export function DepartmentChart() {
                     borderRadius: '8px',
                     color: 'hsl(var(--card-foreground))',
                   }}
-                  formatter={(value: number, dataKey: string) => {
+                  formatter={(value: any, dataKey: any) => {
                     if (dataKey === 'revenue') {
-                      return [`$${value.toLocaleString()}`, t('revenue')];
+                      return [`$${Number(value).toLocaleString()}`, t('revenue')];
                     }
                     return [value, t(dataKey as 'patients' | 'appointments' | 'doctors')];
                   }}

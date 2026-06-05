@@ -3,13 +3,13 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
   ArrowLeft, Eye, CheckCircle2, XCircle, Clock, ShieldCheck,
-  User, Activity, FileText, Stethoscope, AlertTriangle, Info,
-  Loader2, Layers, BarChart3, ChevronDown, ChevronUp,
+  Activity, FileText, Stethoscope, AlertTriangle, Info,
+  Loader2, Layers, ChevronDown, ChevronUp,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Textarea } from '@/components/ui/textarea';
