@@ -246,6 +246,80 @@ export function useAiAnalysis(id: string | undefined) {
   });
 }
 
+// ── AI Analytics ────────────────────────────────────────────────────
+
+interface AiAnalyticsParams {
+  fromDate?: string;
+  toDate?: string;
+  analysisMode?: string;
+  status?: string;
+  riskLevel?: string;
+  prediction?: string;
+}
+
+export interface AiAnalyticsData {
+  overview: {
+    totalAnalyses: number;
+    positiveResults: number;
+    negativeResults: number;
+    pendingReview: number;
+    reviewed: number;
+    approved: number;
+    rejected: number;
+    ensembleAnalyses: number;
+    singleModelAnalyses: number;
+  };
+  usage: {
+    dailyTrend: { date: string; count: number }[];
+    averagePerDay: number;
+  };
+  distribution: {
+    prediction: Record<string, number>;
+    riskLevel: Record<string, number>;
+    status: Record<string, number>;
+    analysisMode: Record<string, number>;
+  };
+  clinicalPerformance: {
+    reviewedRecords: number;
+    truePositive: number;
+    falsePositive: number;
+    trueNegative: number;
+    falseNegative: number;
+    sensitivityEstimate: number | null;
+    specificityEstimate: number | null;
+    precisionEstimate: number | null;
+    accuracyEstimate: number | null;
+  };
+  modelPerformance: {
+    modelName: string;
+    totalRuns: number;
+    positive: number;
+    negative: number;
+    averageProbability: number;
+    averageConfidence: number;
+    strongAgreement?: number;
+    moderateAgreement?: number;
+    lowAgreement?: number;
+    averageAgreementScore?: number;
+  }[];
+}
+
+export function useAiAnalytics(params: AiAnalyticsParams = {}) {
+  const searchParams = new URLSearchParams();
+  if (params.fromDate) searchParams.set('fromDate', params.fromDate);
+  if (params.toDate) searchParams.set('toDate', params.toDate);
+  if (params.analysisMode) searchParams.set('analysisMode', params.analysisMode);
+  if (params.status) searchParams.set('status', params.status);
+  if (params.riskLevel) searchParams.set('riskLevel', params.riskLevel);
+  if (params.prediction) searchParams.set('prediction', params.prediction);
+  const qs = searchParams.toString();
+
+  return useQuery<AiAnalyticsData>({
+    queryKey: ['ai-analytics', params],
+    queryFn: () => api.get<AiAnalyticsData>(`/v1/ai-analyses/analytics${qs ? `?${qs}` : ''}`),
+  });
+}
+
 export function useReviewAiAnalysis() {
   const queryClient = useQueryClient();
 
