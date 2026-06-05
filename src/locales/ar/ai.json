@@ -236,5 +236,7 @@
   "analytics_ensembleAgreement": "تحليل اتفاق النماذج",
   "analytics_avgAgreement": "متوسط الاتفاق",
   "analytics_notEnoughChartData": "لا توجد نتائج كافية لعرض هذا الرسم.",
-  "analytics_notEnoughEnsembleData": "لا توجد تحليلات جماعية كافية لعرض اتفاق النماذج."
+  "analytics_notEnoughEnsembleData": "لا توجد تحليلات جماعية كافية لعرض اتفاق النماذج.",
+  "downloadPdfReport": "تحميل تقرير PDF",
+  "pdfDownloadFailed": "فشل تحميل تقرير PDF."
 }

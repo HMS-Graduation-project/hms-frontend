@@ -236,5 +236,7 @@
   "analytics_ensembleAgreement": "Ensemble Agreement Analysis",
   "analytics_avgAgreement": "Avg Agreement",
   "analytics_notEnoughChartData": "Not enough data to display this chart.",
-  "analytics_notEnoughEnsembleData": "Not enough ensemble analyses to display model agreement."
+  "analytics_notEnoughEnsembleData": "Not enough ensemble analyses to display model agreement.",
+  "downloadPdfReport": "Download PDF Report",
+  "pdfDownloadFailed": "Failed to download PDF report."
 }

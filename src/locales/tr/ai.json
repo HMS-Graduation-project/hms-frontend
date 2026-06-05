@@ -236,5 +236,7 @@
   "analytics_ensembleAgreement": "Topluluk Uyum Analizi",
   "analytics_avgAgreement": "Ort Uyum",
   "analytics_notEnoughChartData": "Bu grafigi gosterecek yeterli veri yok.",
-  "analytics_notEnoughEnsembleData": "Model uyumunu gosterecek yeterli topluluk analizi yok."
+  "analytics_notEnoughEnsembleData": "Model uyumunu gosterecek yeterli topluluk analizi yok.",
+  "downloadPdfReport": "PDF Raporu Indir",
+  "pdfDownloadFailed": "PDF raporu indirilemedi."
 }

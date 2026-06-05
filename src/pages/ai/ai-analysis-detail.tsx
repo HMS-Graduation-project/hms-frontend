@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import {
   ArrowLeft, Eye, CheckCircle2, XCircle, Clock, ShieldCheck,
   Activity, FileText, Stethoscope, AlertTriangle, Info,
-  Loader2, Layers, ChevronDown, ChevronUp,
+  Loader2, Layers, ChevronDown, ChevronUp, Download,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -86,6 +86,7 @@ export default function AiAnalysisDetailPage() {
   const [reviewStatus, setReviewStatus] = useState<string>('');
   const [doctorComment, setDoctorComment] = useState('');
   const [showDetails, setShowDetails] = useState(false);
+  const [pdfLoading, setPdfLoading] = useState(false);
 
   if (isLoading) {
     return (
@@ -134,6 +135,32 @@ export default function AiAnalysisDetailPage() {
   };
   const possibleStatuses = allowedTransitions[record.status] || [];
 
+  const handleDownloadPdf = async () => {
+    if (!id) return;
+    setPdfLoading(true);
+    try {
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
+      const res = await fetch(`${API_BASE_URL}/v1/ai-analyses/${id}/report/pdf`, {
+        credentials: 'include',
+      });
+      if (!res.ok) throw new Error(res.statusText);
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = res.headers.get('content-disposition')?.match(/filename="(.+)"/)?.[1]
+        || `pneumonia-ai-report-${id.slice(0, 8)}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    } catch {
+      toast({ title: t('pdfDownloadFailed'), variant: 'destructive' });
+    } finally {
+      setPdfLoading(false);
+    }
+  };
+
   const handleReview = async () => {
     if (!reviewStatus || !id) return;
     if (reviewStatus === 'REJECTED' && !doctorComment.trim()) {
@@ -180,6 +207,10 @@ export default function AiAnalysisDetailPage() {
           {STATUS_ICON[record.status]}
           {t(`status_${record.status}`)}
         </Badge>
+        <Button variant="outline" onClick={handleDownloadPdf} disabled={pdfLoading} className="gap-2">
+          {pdfLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
+          {t('downloadPdfReport')}
+        </Button>
         {canReview && (
           <Button onClick={() => { setReviewOpen(true); setReviewStatus(''); setDoctorComment(''); }}>
             <ShieldCheck className="h-4 w-4 me-2" />{t('reviewAction')}
