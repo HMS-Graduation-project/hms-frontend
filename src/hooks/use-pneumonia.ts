@@ -86,6 +86,52 @@ export function usePneumoniaExplain() {
   });
 }
 
+// ── Ensemble preview (runs 3 models, not persisted to DB) ───────────
+
+export interface EnsembleModelResult {
+  modelName: string;
+  modelVersion: string;
+  prediction: string;
+  probability: number;
+  confidence: number;
+  threshold: number;
+  isPositive: boolean;
+  device: string;
+}
+
+export interface PneumoniaEnsembleResult {
+  prediction: string;
+  probability: number;
+  confidence: number;
+  threshold: number;
+  isPositive: boolean;
+  riskLevel: string;
+  modelVersion: string;
+  device: string;
+  clinicalNote: string;
+  ensemble: {
+    method: string;
+    weights: Record<string, number>;
+    modelAgreement: string;
+    agreementScore: number;
+    models: EnsembleModelResult[];
+  };
+  explainability?: {
+    type: string;
+    sourceModel: string;
+    overlayImageBase64: string;
+    heatmapImageBase64: string;
+    clinicalNote: string;
+  };
+}
+
+export function usePneumoniaEnsemble() {
+  return useMutation<PneumoniaEnsembleResult, Error, File>({
+    mutationFn: (file) =>
+      uploadFile<PneumoniaEnsembleResult>('/v1/ai/pneumonia/ensemble', file),
+  });
+}
+
 // ── AI Analysis Records (persisted to DB with patient link) ─────────
 
 export interface ModelResult {

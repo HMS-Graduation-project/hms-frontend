@@ -25,9 +25,10 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import {
-  usePneumoniaPredict, usePneumoniaExplain,
+  usePneumoniaPredict, usePneumoniaExplain, usePneumoniaEnsemble,
   useCreatePneumoniaAnalysis,
   type PneumoniaPrediction, type PneumoniaExplanation,
+  type PneumoniaEnsembleResult,
 } from '@/hooks/use-pneumonia';
 import { usePatients, type PatientProfile } from '@/hooks/use-patients';
 
@@ -96,7 +97,7 @@ export default function PneumoniaPage() {
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
-  const [result, setResult] = useState<PneumoniaPrediction | PneumoniaExplanation | null>(null);
+  const [result, setResult] = useState<PneumoniaPrediction | PneumoniaExplanation | PneumoniaEnsembleResult | null>(null);
   const [showDetails, setShowDetails] = useState(false);
   const [showBenchmark, setShowBenchmark] = useState(false);
   const [savedRecordId, setSavedRecordId] = useState<string | null>(null);
@@ -104,8 +105,9 @@ export default function PneumoniaPage() {
 
   const predict = usePneumoniaPredict();
   const explain = usePneumoniaExplain();
+  const ensemble = usePneumoniaEnsemble();
   const saveAnalysis = useCreatePneumoniaAnalysis();
-  const isPending = predict.isPending || explain.isPending;
+  const isPending = predict.isPending || explain.isPending || ensemble.isPending;
 
   const selectedPatient = patientsData?.data?.find((p) => p.id === selectedPatientId);
 
@@ -126,15 +128,26 @@ export default function PneumoniaPage() {
   const handlePredict = async () => {
     if (!selectedFile) return;
     setSavedRecordId(null);
-    try { setResult(await predict.mutateAsync(selectedFile)); }
-    catch (err) { toast({ title: err instanceof Error ? err.message : t('pneumoniaError'), variant: 'destructive' }); }
+    try {
+      if (analysisMode === 'ENSEMBLE') {
+        setResult(await ensemble.mutateAsync(selectedFile));
+      } else {
+        setResult(await predict.mutateAsync(selectedFile));
+      }
+    } catch (err) { toast({ title: err instanceof Error ? err.message : t('pneumoniaError'), variant: 'destructive' }); }
   };
 
   const handleExplain = async () => {
     if (!selectedFile) return;
     setSavedRecordId(null);
-    try { setResult(await explain.mutateAsync(selectedFile)); }
-    catch (err) { toast({ title: err instanceof Error ? err.message : t('pneumoniaError'), variant: 'destructive' }); }
+    try {
+      if (analysisMode === 'ENSEMBLE') {
+        // Ensemble endpoint always includes Grad-CAM from DenseNet121
+        setResult(await ensemble.mutateAsync(selectedFile));
+      } else {
+        setResult(await explain.mutateAsync(selectedFile));
+      }
+    } catch (err) { toast({ title: err instanceof Error ? err.message : t('pneumoniaError'), variant: 'destructive' }); }
   };
 
   const handleSaveToRecord = async () => {
@@ -157,6 +170,8 @@ export default function PneumoniaPage() {
   };
 
   const hasExplanation = result && 'explainability' in result;
+  const isEnsembleResult = result && 'ensemble' in result;
+  const ensembleData = isEnsembleResult ? (result as PneumoniaEnsembleResult).ensemble : null;
   const risk = result ? getRiskLevel(result.probability) : null;
   const probStr = result ? pct(result.probability) : '0';
   const threshStr = result ? pct(result.threshold) : '94';
@@ -354,9 +369,19 @@ export default function PneumoniaPage() {
                 {/* Header: model name + role + decision */}
                 <div className="flex items-center justify-between gap-2 flex-wrap">
                   <div className="flex items-center gap-2">
-                    <Activity className="h-4 w-4 text-primary" />
-                    <span className="font-semibold text-sm">DenseNet121</span>
-                    <Badge variant="success" className="text-[9px]">{t('cds_liveDefault')}</Badge>
+                    {isEnsembleResult ? (
+                      <>
+                        <Layers className="h-4 w-4 text-primary" />
+                        <span className="font-semibold text-sm">{t('finalConsensus')}</span>
+                        <Badge variant="default" className="text-[9px]">{t('ensembleBadge')}</Badge>
+                      </>
+                    ) : (
+                      <>
+                        <Activity className="h-4 w-4 text-primary" />
+                        <span className="font-semibold text-sm">DenseNet121</span>
+                        <Badge variant="success" className="text-[9px]">{t('cds_liveDefault')}</Badge>
+                      </>
+                    )}
                   </div>
                   <Badge variant={result.isPositive ? 'destructive' : 'success'} className="text-sm px-3 py-1 gap-1.5">
                     {result.isPositive ? <XCircle className="h-3.5 w-3.5" /> : <CheckCircle2 className="h-3.5 w-3.5" />}
@@ -412,6 +437,72 @@ export default function PneumoniaPage() {
                 </div>
               </CardContent>
             </Card>
+
+            {/* ── Ensemble Model Breakdown ──────────────────────── */}
+            {isEnsembleResult && ensembleData && (
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm font-semibold flex items-center gap-2">
+                    <BarChart3 className="h-4 w-4" />{t('modelBreakdown')}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {/* Agreement & Method KPIs */}
+                  <div className="grid grid-cols-3 gap-3">
+                    <div className="rounded-md border bg-muted/20 p-2.5 text-center">
+                      <p className="text-[10px] text-muted-foreground leading-tight">{t('modelAgreement')}</p>
+                      <p className="text-sm font-semibold mt-1">{t(`agreement_${ensembleData.modelAgreement}`)}</p>
+                    </div>
+                    <div className="rounded-md border bg-muted/20 p-2.5 text-center">
+                      <p className="text-[10px] text-muted-foreground leading-tight">{t('agreementScore')}</p>
+                      <p className="text-sm font-semibold mt-1 tabular-nums">{(ensembleData.agreementScore * 100).toFixed(0)}%</p>
+                    </div>
+                    <div className="rounded-md border bg-muted/20 p-2.5 text-center">
+                      <p className="text-[10px] text-muted-foreground leading-tight">{t('ensembleMethodLabel')}</p>
+                      <p className="text-sm font-semibold mt-1">{t('weightedAverage')}</p>
+                    </div>
+                  </div>
+
+                  {/* Individual model results */}
+                  <div className="overflow-x-auto">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead className="text-xs">{t('pneumoniaModel')}</TableHead>
+                          <TableHead className="text-xs text-end">{t('pneumoniaProbability')}</TableHead>
+                          <TableHead className="text-xs">{t('colPrediction')}</TableHead>
+                          <TableHead className="text-xs text-end">{t('ensembleWeights')}</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {ensembleData.models.map((m) => (
+                          <TableRow key={m.modelName}>
+                            <TableCell className="text-xs font-medium">{m.modelName}</TableCell>
+                            <TableCell className="text-xs text-end tabular-nums">{(m.probability * 100).toFixed(1)}%</TableCell>
+                            <TableCell>
+                              <Badge variant={m.prediction === 'PNEUMONIA' ? 'destructive' : 'success'} className="text-[10px]">
+                                {m.prediction}
+                              </Badge>
+                            </TableCell>
+                            <TableCell className="text-xs text-end tabular-nums">
+                              {ensembleData.weights[m.modelName] != null
+                                ? `${(ensembleData.weights[m.modelName] * 100).toFixed(0)}%`
+                                : '---'}
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+
+                  {/* Final consensus line */}
+                  <div className="rounded-md bg-muted/30 p-2.5 text-xs text-muted-foreground">
+                    <span className="font-medium">{t('finalConsensus')}:</span>{' '}
+                    {probStr}% ({t('weightedAverage')})
+                  </div>
+                </CardContent>
+              </Card>
+            )}
 
             {/* ── S5: Radiology Summary ─────────────────────────── */}
             <Card>
