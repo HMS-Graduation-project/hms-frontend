@@ -1,0 +1,421 @@
+{
+  "meta": {
+    "title": "Suriye Ulusal Hastane Yönetim Platformu | 14 İl İçin Tek Ağ",
+    "description": "Suriye'nin 14 ilindeki tüm hastaneleri birbirine bağlayan birleşik ve güvenli bir hastane yönetim platformu — tek ulusal hasta kaydı, hastaneler arası sevkler, yapay zekâ destekli tanı ve ulusal sağlık raporlaması.",
+    "ogTitle": "Suriye Ulusal Hastane Yönetim Platformu",
+    "ogDescription": "Suriye'nin 14 ili için birleşik ve güvenli bir sağlık ağı."
+  },
+  "brand": {
+    "name": "Suriye Ulusal Hastane Yönetim Platformu",
+    "short": "SNH Platformu",
+    "mark": "SNH"
+  },
+  "nav": {
+    "overview": "Genel bakış",
+    "modules": "Modüller",
+    "workflow": "Nasıl çalışır",
+    "network": "Ağ",
+    "ai": "Yapay zekâ",
+    "security": "Güvenlik",
+    "faq": "SSS",
+    "contact": "İletişim",
+    "login": "Giriş yap",
+    "register": "Hesap oluştur",
+    "dashboard": "Panele git",
+    "openMenu": "Menüyü aç",
+    "closeMenu": "Menüyü kapat",
+    "skip": "Ana içeriğe geç"
+  },
+  "hero": {
+    "badge": "Ulusal sağlık ağı",
+    "title": "{{highlight}} için tek bir ulusal sağlık ağı",
+    "highlight": "Suriye",
+    "subtitle": "14 ildeki hastaneleri birbirine bağlayan birleşik, güvenli bir platform — her hastanede tek hasta kaydı. Poliklinikten acile, yatan hasta servislerine, laboratuvara, eczaneye ve yapay zekâ destekli tanıya kadar.",
+    "ctaPrimary": "Platformu keşfedin",
+    "ctaSecondary": "Giriş yap",
+    "stats": [
+      { "value": "14", "label": "İl" },
+      { "value": "25+", "label": "Entegre modül" },
+      { "value": "3", "label": "Dil, RTL destekli" }
+    ],
+    "mapCaption": "Her Suriye ilinde tek ve bağlantılı bir ağ"
+  },
+  "band": {
+    "title": "14 ilin tamamı için tasarlandı"
+  },
+  "governorates": [
+    "Şam",
+    "Şam Kırsalı",
+    "Halep",
+    "Humus",
+    "Hama",
+    "Lazkiye",
+    "Tartus",
+    "İdlib",
+    "Dera",
+    "Süveyda",
+    "Kuneytra",
+    "Deyrizor",
+    "Haseke",
+    "Rakka"
+  ],
+  "overview": {
+    "eyebrow": "Platforma genel bakış",
+    "title": "Ulusal sağlık için tek ve bağlantılı bir sistem",
+    "subtitle": "Platform; hastaneleri, bölgesel sağlık otoritelerini ve bakanlığı tek bir güvenli sistemde birleştirir — hastayı nerede bakım alırsa alsın takip eden tek bir ulusal hasta kimliği etrafında kurulmuştur.",
+    "pillars": [
+      {
+        "title": "Birleşik hasta kaydı",
+        "description": "Her hastanın tek bir ulusal sağlık kimliği (NHID) vardır. Geçmişi hastaneler arasında onunla birlikte gelir — parçalı, yinelenen kayıtlar olmadan."
+      },
+      {
+        "title": "Bağlantılı hastaneler",
+        "description": "Hastaneler yapılandırılmış, onaya dayalı sevkler aracılığıyla koordine olur; böylece hastalar klinik bağlamları bozulmadan kuruluşlar arasında geçer."
+      },
+      {
+        "title": "Ulusal denetim",
+        "description": "Bölgesel ve bakanlık ekipleri, hastane düzeyindeki veri yalıtımını hiç bozmadan ağın tamamına dair canlı, toplu içgörü görür."
+      }
+    ]
+  },
+  "benefits": {
+    "eyebrow": "Temel faydalar",
+    "title": "Sağlık kuruluşları bu platformu neden seçiyor",
+    "subtitle": "Bakanlıklar, hastane yöneticileri, klinisyenler ve hastalar için önemli olan sonuçlar.",
+    "items": [
+      {
+        "title": "Tek ulusal hasta kaydı",
+        "description": "Hasta başına tek bir ulusal kimlik, kuruluşlar arasındaki parçalı geçmişlere ve yinelenen dosyalara son verir."
+      },
+      {
+        "title": "Sorunsuz hastaneler arası sevk",
+        "description": "Hastaları klinik özetiyle birlikte sevk edin — kayıt erişimi yalnızca kabul edilmiş, onaya dayalı sevkle verilir."
+      },
+      {
+        "title": "Yapay zekâ destekli tanı",
+        "description": "Yerleşik klinik yapay zekâ, ekiplerin akciğer grafilerini taramasına, belirtileri kontrol etmesine ve ilaç etkileşimlerini daha hızlı işaretlemesine yardımcı olur."
+      },
+      {
+        "title": "Gerçek zamanlı ulusal raporlama",
+        "description": "Bölgesel ve bakanlık panoları yatak doluluğunu, hastalık eğilimlerini ve sevk akışlarını anlık olarak gösterir."
+      },
+      {
+        "title": "Rol tabanlı, denetlenen güvenlik",
+        "description": "En az ayrıcalık ilkesiyle on farklı rol ve her eylemin arkasında eksiksiz bir denetim izi."
+      },
+      {
+        "title": "Çok dilli ve RTL",
+        "description": "İngilizce, Arapça ve Türkçe kutudan çıktığı gibi hazır — Arapça için tam sağdan sola desteğiyle."
+      }
+    ]
+  },
+  "modules": {
+    "eyebrow": "Temel modüller",
+    "title": "Modern bir hastanenin ihtiyacı olan her şey — tek platformda",
+    "subtitle": "Ayrı araçlar olarak değil, birlikte çalışmak üzere tasarlanmış eksiksiz bir klinik ve operasyonel paket.",
+    "items": [
+      {
+        "title": "Poliklinik ve randevular",
+        "description": "Doktor çizelgeleri, zaman dilimine dayalı randevu ve eksiksiz muayene akışı."
+      },
+      {
+        "title": "Acil ve triyaj",
+        "description": "Başvuru kabulü, beş seviyeli triyaj, ilgili hekim atama ve sonlandırma."
+      },
+      {
+        "title": "Yatan hasta, servisler ve yataklar",
+        "description": "Yatışlar, canlı yatak panosu, yataklar arası transfer ve taburcu özetleri."
+      },
+      {
+        "title": "Tıbbi kayıtlar",
+        "description": "Klinik notlar, ICD kodlu tanılar, tedavi planları ve yaşamsal bulgular."
+      },
+      {
+        "title": "Laboratuvar",
+        "description": "Test isteme, numune takibi ve anormal değer işaretlemeli sonuçlar."
+      },
+      {
+        "title": "Eczane ve teslim",
+        "description": "İlaç envanteri, düşük stok uyarıları ve reçeteye göre ilaç teslimi."
+      },
+      {
+        "title": "Reçeteler",
+        "description": "Doğrudan hastanın tıbbi kaydına bağlı yapılandırılmış reçeteler."
+      },
+      {
+        "title": "Faturalama ve ödemeler",
+        "description": "Kategoriye göre faturalama; nakit, kart, sigorta ve havale ile ödeme."
+      },
+      {
+        "title": "Hastaneler arası sevkler",
+        "description": "Hastaneler arasında ortak klinik bağlamla, onaya dayalı hasta transferi."
+      },
+      {
+        "title": "Ulusal hasta sicili",
+        "description": "Tek ulusal kimlik (NHID), yinelenenleri ayıklama ve hastaneler arası arama."
+      },
+      {
+        "title": "Yapay zekâ tanısı",
+        "description": "Akciğer grafisi analizi, belirti denetleyici ve ilaç etkileşim kontrolü."
+      },
+      {
+        "title": "Analitik ve raporlama",
+        "description": "Hastane KPI'larının yanı sıra denetim için bölgesel ve ulusal panolar."
+      },
+      {
+        "title": "Hasta portalı",
+        "description": "Hastaneler arası randevular, kayıtlar, reçeteler ve faturalar için self servis."
+      },
+      {
+        "title": "Bildirimler",
+        "description": "Randevu, laboratuvar sonucu, reçete ve sevkler için olay tabanlı uyarılar."
+      },
+      {
+        "title": "Güvenlik ve denetim",
+        "description": "Rol tabanlı erişim, ayarlar, tatiller ve eksiksiz bir eylem denetim günlüğü."
+      }
+    ]
+  },
+  "workflow": {
+    "eyebrow": "Nasıl çalışır",
+    "title": "Baştan sona hasta yolculuğu",
+    "subtitle": "İlk kayıttan hastaneler arası sevke kadar her adım tek bir platformda bağlantılıdır.",
+    "steps": [
+      {
+        "title": "Ulusal kayıt",
+        "description": "Personel hastayı ulusal sicilde bulur ya da yeni bir ulusal kimlik (NHID) oluşturur."
+      },
+      {
+        "title": "Randevu veya acil kabul",
+        "description": "Poliklinik randevusu alın ya da bir başvuruyu acil triyajıyla kabul edin."
+      },
+      {
+        "title": "Triyaj ve muayene",
+        "description": "Hastayı değerlendirip önceliklendirin, ardından klinik muayeneyi yapın."
+      },
+      {
+        "title": "Tıbbi kayıt ve yaşamsal bulgular",
+        "description": "Tanıyı, tedavi planını, ICD kodlarını ve yaşamsal bulguları belgeleyin."
+      },
+      {
+        "title": "Laboratuvar ve reçeteler",
+        "description": "Laboratuvar testleri isteyin ve kayda bağlı reçeteler düzenleyin."
+      },
+      {
+        "title": "Eczane ve teslim",
+        "description": "İlacı reçeteye göre teslim edin ve envanteri güncelleyin."
+      },
+      {
+        "title": "Faturalama ve ödeme",
+        "description": "Kalem kalem bir fatura oluşturun ve seçilen yöntemle ödemeyi kaydedin."
+      },
+      {
+        "title": "Sevk ve portal",
+        "description": "Gerektiğinde hastayı başka bir hastaneye sevk edin — hepsini hasta portalında görür."
+      }
+    ]
+  },
+  "vision": {
+    "eyebrow": "Ulusal sağlık vizyonu",
+    "title": "Her düzeyde yönetişim",
+    "subtitle": "Tek bir platform; ulusal politikadan hasta başına kadar tüm sağlık sistemine, her rol için doğru görünümle hizmet eder.",
+    "tiers": [
+      {
+        "level": "Ulusal",
+        "title": "Bakanlık",
+        "description": "Ulusal panolar, hasta sicili yönetimi ve ağın tamamı üzerinde denetim."
+      },
+      {
+        "level": "Bölgesel",
+        "title": "Bölgesel otoriteler",
+        "description": "Her il için bir yönetici; hacim, hastalık eğilimleri ve sevkler hakkında bölgesel raporlama."
+      },
+      {
+        "level": "Kuruluş",
+        "title": "Hastaneler",
+        "description": "On personel rolü üzerinden günlük klinik ve operasyonel çalışma, hastane bazında katı veri yalıtımıyla."
+      },
+      {
+        "level": "Vatandaş",
+        "title": "Hastalar",
+        "description": "Hastanın bakım aldığı her hastaneyi kapsayan tek bir self servis portal."
+      }
+    ]
+  },
+  "network": {
+    "eyebrow": "Ulusal ağ",
+    "title": "Suriye'nin her yerinde bağlantılı",
+    "subtitle": "Platform, hastaneleri tek ve koordineli bir ulusal ağ içinde birleştirerek her Suriye ilini kapsayacak şekilde tasarlanmıştır.",
+    "hint": "Bir ili vurgulamak için üzerine gelin veya dokunun",
+    "label": "İl",
+    "legend": "Her il, tek ve güvenli bir ulusal ağa bağlanır."
+  },
+  "stats": {
+    "eyebrow": "Bir bakışta platform",
+    "title": "Ulusal ölçek için tasarlandı",
+    "subtitle": "Bu rakamlar platformun ne yapmak üzere kurulduğunu anlatır — tasarım kapsamını, bir kullanım raporunu değil.",
+    "items": [
+      { "value": 14, "suffix": "", "label": "İl", "description": "Tasarımı gereği ülke çapında kapsam." },
+      { "value": 25, "suffix": "+", "label": "Entegre modül", "description": "Eksiksiz bir klinik ve operasyonel paket." },
+      { "value": 10, "suffix": "", "label": "Kullanıcı rolü", "description": "Ayrıntılı, rol tabanlı erişim kontrolü." },
+      { "value": 3, "suffix": "", "label": "Yapay zekâ modeli", "description": "Topluluk akciğer grafisi analizi." },
+      { "value": 3, "suffix": "", "label": "Dil", "description": "İngilizce, Arapça ve Türkçe; RTL ile." },
+      { "value": 100, "suffix": "%", "label": "Bakım sürekliliği", "description": "Poliklinik, acil ve yatan hasta." }
+    ]
+  },
+  "ai": {
+    "eyebrow": "Yapay zekâ yetenekleri",
+    "title": "Ekibinizi destekleyen klinik yapay zekâ",
+    "subtitle": "Klinisyenlerin daha hızlı ve daha güvenle ilerlemesine yardımcı olan karar destek araçları — her zaman insan denetimi altında.",
+    "disclaimer": "Yalnızca yapay zekâ destekli tarama — profesyonel klinik tanının yerini tutmaz.",
+    "items": [
+      {
+        "tag": "Radyoloji",
+        "title": "Akciğer grafisinden pnömoni tespiti",
+        "description": "Üç modelden oluşan bir topluluk (DenseNet121, EfficientNet-B0, ResNet50); sonucu neyin etkilediğini gösteren Grad-CAM ısı haritaları, dışa aktarılabilir PDF raporları ve doktor inceleme akışı."
+      },
+      {
+        "tag": "Triyaj desteği",
+        "title": "Belirtiye dayalı hastalık tahmini",
+        "description": "Hastanın belirtilerini girin; seçilmiş bir hastalık kümesinde sıralı, güven puanlı öneriler alın — erken değerlendirme için hızlı bir ikinci görüş."
+      },
+      {
+        "tag": "İlaç güvenliği",
+        "title": "İlaç etkileşim kontrolü",
+        "description": "Bir ilaç listesini seçilmiş bir etkileşim veritabanıyla karşılaştırın ve riskli kombinasyonları, hastaya ulaşmadan önce şiddet düzeyleriyle gösterin."
+      }
+    ]
+  },
+  "tour": {
+    "eyebrow": "Ürün turu",
+    "title": "Platformu iş başında görün",
+    "subtitle": "Her iş akışında tutarlı, modern bir arayüz — açık veya koyu modda, her cihazda.",
+    "shots": [
+      {
+        "title": "Hastane panosu",
+        "description": "Canlı KPI'lar: hastalar, randevular, bekleyen laboratuvarlar ve gelir bir bakışta."
+      },
+      {
+        "title": "Acil triyaj panosu",
+        "description": "Kritikten acil olmayana kadar triyaj seviyesine göre renk kodlu tam acil kuyruğu."
+      },
+      {
+        "title": "Yapay zekâ grafi analizi",
+        "description": "Açıklanabilirlik ısı haritalarıyla tahminler ve yapılandırılmış bir inceleme akışı."
+      },
+      {
+        "title": "Ulusal raporlama",
+        "description": "Yatak doluluğu, eğilimler ve sevk akışı için bölgesel ve ulusal panolar."
+      }
+    ]
+  },
+  "security": {
+    "eyebrow": "Güvenlik ve uyum",
+    "title": "Tasarımı gereği kurumsal düzeyde",
+    "subtitle": "Sağlık verileri en yüksek standartları gerektirir. Platform, güvenlik ve hesap verebilirlik temel alınarak kurulmuştur.",
+    "items": [
+      {
+        "title": "Rol tabanlı erişim kontrolü",
+        "description": "On farklı rol; her biri tam olarak işinin gerektirdiğiyle sınırlı — varsayılan olarak en az ayrıcalık."
+      },
+      {
+        "title": "Hastane veri yalıtımı",
+        "description": "Her hastanenin verisi katı biçimde ayrılır; personel yalnızca kendi hastanesini görür."
+      },
+      {
+        "title": "Onaya dayalı paylaşım",
+        "description": "Hastaneler arası kayıt erişimi yalnızca kabul edilmiş bir sevkle verilir — asla varsayılan olarak değil."
+      },
+      {
+        "title": "Eksiksiz denetim izi",
+        "description": "Her oluşturma, güncelleme ve silme; kullanıcı, eylem ve IP adresiyle kaydedilir."
+      },
+      {
+        "title": "Güçlendirilmiş oturumlar",
+        "description": "Kimlik doğrulama; dönen yenileme belirteci aileleri ve HttpOnly çerezlerle JWT kullanır."
+      },
+      {
+        "title": "Korumalı API'ler",
+        "description": "İstek hız sınırlandırması ve güvenlik başlıkları her uç noktayı kötüye kullanıma karşı korur."
+      }
+    ]
+  },
+  "future": {
+    "eyebrow": "Gelecek vizyonu",
+    "title": "Platform nereye gidiyor",
+    "subtitle": "Daha fazla hastaya ulaşmaya ve klinisyenlere daha da güçlü araçlar sunmaya odaklı bir yol haritası.",
+    "items": [
+      {
+        "title": "SMS ve e-posta bildirimleri",
+        "description": "Randevu hatırlatmaları ve sonuç uyarılarıyla hastalara portal dışında da ulaşın."
+      },
+      {
+        "title": "Genişletilmiş klinik yapay zekâ",
+        "description": "Ek branşlarda daha fazla görüntüleme modeli ve karar destek aracı."
+      },
+      {
+        "title": "Daha derin analitik",
+        "description": "Daha zengin toplum sağlığı içgörüsü ve öngörücü kapasite planlaması."
+      },
+      {
+        "title": "Açık entegrasyonlar",
+        "description": "Laboratuvarlar, cihazlar ve iş ortağı sistemlerle standartlara dayalı birlikte çalışabilirlik."
+      }
+    ]
+  },
+  "faq": {
+    "eyebrow": "SSS",
+    "title": "Sık sorulan sorular",
+    "subtitle": "Hastanelerin ve sağlık otoritelerinin en çok sorduğu soruların yanıtları.",
+    "items": [
+      {
+        "q": "Bu tek bir hastane için mi yoksa tüm ülke için mi?",
+        "a": "İkisi de. Platform çok kiracılıdır: her hastane günlük operasyonlarını yalıtılmış biçimde yürütürken, bölgesel ve bakanlık ekipleri ağın tamamına bağlı, ulusal bir görünüm elde eder."
+      },
+      {
+        "q": "Hasta verileri nasıl korunuyor?",
+        "a": "Veriler hastane bazında yalıtılır, erişim en az ayrıcalıkla rol tabanlıdır, her eylem denetlenir ve oturumlar güçlendirilmiş, dönen belirteçler kullanır. Hastaneler arası erişim yalnızca kabul edilmiş bir sevkle verilir."
+      },
+      {
+        "q": "Hastaneler bir hastanın kayıtlarını paylaşabilir mi?",
+        "a": "Evet — güvenle. Her hastanın tek bir ulusal kimliği vardır ve bir hastane bir sevki kabul ettiğinde, o hastanın ağ genelindeki ilgili kayıtlarına onaya dayalı erişim kazanır."
+      },
+      {
+        "q": "Hangi diller destekleniyor?",
+        "a": "İngilizce, Arapça ve Türkçe, Arapça için tam sağdan sola düzen dâhil platform genelinde desteklenir."
+      },
+      {
+        "q": "Yapay zekâ bir tıbbi tanı mı?",
+        "a": "Hayır. Yapay zekâ karar desteği sağlar — tarama, öneriler ve güvenlik kontrolleri. Her sonuç nitelikli bir klinisyen tarafından incelenir ve profesyonel tanının yerini tutmaz."
+      },
+      {
+        "q": "Personel ve hastalar nasıl giriş yapar?",
+        "a": "Personel ve hastalar güvenli giriş üzerinden oturum açar. Hesabınıza erişmek için gezinmedeki Giriş yap düğmesini kullanın; hastalar hasta portalına, personel ise rolüne özel panoya yönlendirilir."
+      }
+    ]
+  },
+  "contact": {
+    "eyebrow": "İletişime geçin",
+    "title": "Hastanenizi ulusal ağa katın",
+    "subtitle": "İster bir hastaneyi, ister bir bölgesel otoriteyi, ister bakanlığı temsil edin, platformu size memnuniyetle gösteririz.",
+    "emailLabel": "Bize e-posta gönderin",
+    "email": "info@snhhmp.com",
+    "ctaPrimary": "Giriş yap",
+    "ctaSecondary": "Hesap oluştur"
+  },
+  "cta": {
+    "title": "İş başında görmeye hazır mısınız?",
+    "subtitle": "Platformu keşfetmek için giriş yapın ya da bize ulaşın, adım adım anlatalım.",
+    "primary": "Platforma giriş yap",
+    "secondary": "Bize ulaşın"
+  },
+  "footer": {
+    "tagline": "Suriye için tek bir ulusal sağlık ağı.",
+    "product": "Platform",
+    "company": "Ağ",
+    "account": "Hesap",
+    "builtFor": "14 Suriye ilinin tamamı için tasarlandı.",
+    "rights": "Tüm hakları saklıdır.",
+    "disclaimer": "Suriye ulusal sağlık sistemi için birleşik bir hastane yönetim platformu."
+  }
+}

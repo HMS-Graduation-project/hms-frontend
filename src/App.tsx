@@ -1,3 +1,4 @@
+import { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from '@/providers/auth-provider';
 import { QueryProvider } from '@/providers/query-provider';
@@ -7,74 +8,80 @@ import { PatientLayout } from '@/components/layout/patient-layout';
 import { ErrorBoundary } from '@/components/error-boundary';
 import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
-import LoginPage from '@/pages/login';
-import RegisterPage from '@/pages/register';
-import DashboardPage from '@/pages/dashboard';
-import PortalHomePage from '@/pages/portal/home';
-import PortalAppointmentsPage from '@/pages/portal/appointments';
-import PortalBookAppointmentPage from '@/pages/portal/book-appointment';
-import PortalRecordsPage from '@/pages/portal/records';
-import PortalPrescriptionsPage from '@/pages/portal/prescriptions';
-import PortalLabResultsPage from '@/pages/portal/lab-results';
-import PortalInvoicesPage from '@/pages/portal/invoices';
-import PortalReferralsPage from '@/pages/portal/referrals';
-import PortalProfilePage from '@/pages/portal/profile';
-import ProfilePage from '@/pages/profile';
-import UsersPage from '@/pages/admin/users';
-import NationalRegistryPage from '@/pages/admin/national-registry';
-import CitiesPage from '@/pages/admin/cities';
-import DepartmentsPage from '@/pages/departments';
-import DepartmentDetailPage from '@/pages/departments/department-detail';
-import DoctorsPage from '@/pages/doctors';
-import DoctorDetailPage from '@/pages/doctors/doctor-detail';
-import PatientsPage from '@/pages/patients';
-import PatientDetailPage from '@/pages/patients/patient-detail';
-import AppointmentsPage from '@/pages/appointments';
-import BookAppointmentPage from '@/pages/appointments/book-appointment';
-import AppointmentDetailPage from '@/pages/appointments/appointment-detail';
-import EmergencyQueuePage from '@/pages/emergency/queue';
-import EmergencyIntakePage from '@/pages/emergency/intake';
-import EmergencyVisitDetailPage from '@/pages/emergency/visit-detail';
-import WardsPage from '@/pages/inpatient/wards';
-import BedBoardPage from '@/pages/inpatient/bed-board';
-import AdmissionsPage from '@/pages/inpatient/admissions';
-import AdmissionDetailPage from '@/pages/inpatient/admission-detail';
-import ReferralsListPage from '@/pages/referrals/list';
-import NewReferralPage from '@/pages/referrals/new';
-import ReferralDetailPage from '@/pages/referrals/detail';
-import MedicalRecordsPage from '@/pages/medical-records';
-import RecordFormPage from '@/pages/medical-records/record-form';
-import RecordDetailPage from '@/pages/medical-records/record-detail';
-import PrescriptionsPage from '@/pages/prescriptions';
-import PrescriptionDetailPage from '@/pages/prescriptions/prescription-detail';
-import LaboratoryPage from '@/pages/laboratory';
-import LabOrderDetailPage from '@/pages/laboratory/lab-order-detail';
-import MedicationsPage from '@/pages/pharmacy/medications';
-import DispensingPage from '@/pages/pharmacy/dispensing';
-import BillingPage from '@/pages/billing';
-import CreateInvoicePage from '@/pages/billing/create-invoice';
-import InvoiceDetailPage from '@/pages/billing/invoice-detail';
-import SettingsPage from '@/pages/settings';
-import NotificationsPage from '@/pages/notifications';
-import SymptomCheckerPage from '@/pages/ai/symptom-checker';
-import DrugInteractionsPage from '@/pages/ai/drug-interactions';
-import PneumoniaPage from '@/pages/ai/pneumonia';
-import AiAnalysesPage from '@/pages/ai/ai-analyses';
-import AiAnalysisDetailPage from '@/pages/ai/ai-analysis-detail';
-import AiAnalyticsPage from '@/pages/ai/ai-analytics';
-import AnalyticsPage from '@/pages/analytics';
-import RegionalDashboardPage from '@/pages/regional/dashboard';
-import MinistryDashboardPage from '@/pages/ministry/dashboard';
+import { PageLoading } from '@/components/page-loading';
+// Every routed page is lazy-loaded so each ships as its own chunk. This keeps
+// the initial bundle tiny: a marketing visitor at "/" downloads only the shell
+// plus the landing chunk, and never the authenticated dashboard code (and
+// vice-versa). The <Suspense> boundary below covers the load.
+const LandingPage = lazy(() => import('@/pages/marketing/landing'));
+const LoginPage = lazy(() => import('@/pages/login'));
+const RegisterPage = lazy(() => import('@/pages/register'));
+const DashboardPage = lazy(() => import('@/pages/dashboard'));
+const PortalHomePage = lazy(() => import('@/pages/portal/home'));
+const PortalAppointmentsPage = lazy(() => import('@/pages/portal/appointments'));
+const PortalBookAppointmentPage = lazy(() => import('@/pages/portal/book-appointment'));
+const PortalRecordsPage = lazy(() => import('@/pages/portal/records'));
+const PortalPrescriptionsPage = lazy(() => import('@/pages/portal/prescriptions'));
+const PortalLabResultsPage = lazy(() => import('@/pages/portal/lab-results'));
+const PortalInvoicesPage = lazy(() => import('@/pages/portal/invoices'));
+const PortalReferralsPage = lazy(() => import('@/pages/portal/referrals'));
+const PortalProfilePage = lazy(() => import('@/pages/portal/profile'));
+const ProfilePage = lazy(() => import('@/pages/profile'));
+const UsersPage = lazy(() => import('@/pages/admin/users'));
+const NationalRegistryPage = lazy(() => import('@/pages/admin/national-registry'));
+const CitiesPage = lazy(() => import('@/pages/admin/cities'));
+const DepartmentsPage = lazy(() => import('@/pages/departments'));
+const DepartmentDetailPage = lazy(() => import('@/pages/departments/department-detail'));
+const DoctorsPage = lazy(() => import('@/pages/doctors'));
+const DoctorDetailPage = lazy(() => import('@/pages/doctors/doctor-detail'));
+const PatientsPage = lazy(() => import('@/pages/patients'));
+const PatientDetailPage = lazy(() => import('@/pages/patients/patient-detail'));
+const AppointmentsPage = lazy(() => import('@/pages/appointments'));
+const BookAppointmentPage = lazy(() => import('@/pages/appointments/book-appointment'));
+const AppointmentDetailPage = lazy(() => import('@/pages/appointments/appointment-detail'));
+const EmergencyQueuePage = lazy(() => import('@/pages/emergency/queue'));
+const EmergencyIntakePage = lazy(() => import('@/pages/emergency/intake'));
+const EmergencyVisitDetailPage = lazy(() => import('@/pages/emergency/visit-detail'));
+const WardsPage = lazy(() => import('@/pages/inpatient/wards'));
+const BedBoardPage = lazy(() => import('@/pages/inpatient/bed-board'));
+const AdmissionsPage = lazy(() => import('@/pages/inpatient/admissions'));
+const AdmissionDetailPage = lazy(() => import('@/pages/inpatient/admission-detail'));
+const ReferralsListPage = lazy(() => import('@/pages/referrals/list'));
+const NewReferralPage = lazy(() => import('@/pages/referrals/new'));
+const ReferralDetailPage = lazy(() => import('@/pages/referrals/detail'));
+const MedicalRecordsPage = lazy(() => import('@/pages/medical-records'));
+const RecordFormPage = lazy(() => import('@/pages/medical-records/record-form'));
+const RecordDetailPage = lazy(() => import('@/pages/medical-records/record-detail'));
+const PrescriptionsPage = lazy(() => import('@/pages/prescriptions'));
+const PrescriptionDetailPage = lazy(() => import('@/pages/prescriptions/prescription-detail'));
+const LaboratoryPage = lazy(() => import('@/pages/laboratory'));
+const LabOrderDetailPage = lazy(() => import('@/pages/laboratory/lab-order-detail'));
+const MedicationsPage = lazy(() => import('@/pages/pharmacy/medications'));
+const DispensingPage = lazy(() => import('@/pages/pharmacy/dispensing'));
+const BillingPage = lazy(() => import('@/pages/billing'));
+const CreateInvoicePage = lazy(() => import('@/pages/billing/create-invoice'));
+const InvoiceDetailPage = lazy(() => import('@/pages/billing/invoice-detail'));
+const SettingsPage = lazy(() => import('@/pages/settings'));
+const NotificationsPage = lazy(() => import('@/pages/notifications'));
+const SymptomCheckerPage = lazy(() => import('@/pages/ai/symptom-checker'));
+const DrugInteractionsPage = lazy(() => import('@/pages/ai/drug-interactions'));
+const PneumoniaPage = lazy(() => import('@/pages/ai/pneumonia'));
+const AiAnalysesPage = lazy(() => import('@/pages/ai/ai-analyses'));
+const AiAnalysisDetailPage = lazy(() => import('@/pages/ai/ai-analysis-detail'));
+const AiAnalyticsPage = lazy(() => import('@/pages/ai/ai-analytics'));
+const AnalyticsPage = lazy(() => import('@/pages/analytics'));
+const RegionalDashboardPage = lazy(() => import('@/pages/regional/dashboard'));
+const MinistryDashboardPage = lazy(() => import('@/pages/ministry/dashboard'));
 
 /**
- * Catch-all redirect that respects role: PATIENT → /portal/home,
- * everyone else → /dashboard.
+ * Catch-all redirect that respects role: unauthenticated visitors land on the
+ * public marketing site ("/"), PATIENT → /portal/home, everyone else → /dashboard.
  */
 function RoleAwareRedirect() {
   const { user, isAuthenticated, isLoading } = useAuth();
   if (isLoading) return null;
   if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/" replace />;
   }
   if (user?.role === 'PATIENT') {
     return <Navigate to="/portal/home" replace />;
@@ -89,7 +96,11 @@ export default function App() {
       <AuthProvider>
         <TooltipProvider>
         <BrowserRouter>
+          <Suspense fallback={<PageLoading variant="spinner" className="min-h-screen" />}>
           <Routes>
+            {/* Public marketing landing page */}
+            <Route path="/" element={<LandingPage />} />
+
             {/* Public routes */}
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
@@ -178,6 +189,7 @@ export default function App() {
             {/* Catch-all redirect — patients go to the portal */}
             <Route path="*" element={<RoleAwareRedirect />} />
           </Routes>
+          </Suspense>
         </BrowserRouter>
         <Toaster />
         </TooltipProvider>

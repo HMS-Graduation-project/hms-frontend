@@ -26,6 +26,7 @@ import enAnalytics from '@/locales/en/analytics.json';
 import enReporting from '@/locales/en/reporting.json';
 import enPortal from '@/locales/en/portal.json';
 import enCities from '@/locales/en/cities.json';
+import enMarketing from '@/locales/en/marketing.json';
 import trCommon from '@/locales/tr/common.json';
 import trAuth from '@/locales/tr/auth.json';
 import trNavigation from '@/locales/tr/navigation.json';
@@ -50,6 +51,7 @@ import trAnalytics from '@/locales/tr/analytics.json';
 import trReporting from '@/locales/tr/reporting.json';
 import trPortal from '@/locales/tr/portal.json';
 import trCities from '@/locales/tr/cities.json';
+import trMarketing from '@/locales/tr/marketing.json';
 import arCommon from '@/locales/ar/common.json';
 import arAuth from '@/locales/ar/auth.json';
 import arNavigation from '@/locales/ar/navigation.json';
@@ -74,6 +76,7 @@ import arAnalytics from '@/locales/ar/analytics.json';
 import arReporting from '@/locales/ar/reporting.json';
 import arPortal from '@/locales/ar/portal.json';
 import arCities from '@/locales/ar/cities.json';
+import arMarketing from '@/locales/ar/marketing.json';
 
 /** Languages whose UI must render right-to-left. Add others here as needed. */
 export const RTL_LANGUAGES = new Set(['ar', 'he', 'fa', 'ur']);
@@ -121,6 +124,7 @@ i18n
         reporting: enReporting,
         portal: enPortal,
         cities: enCities,
+        marketing: enMarketing,
       },
       tr: {
         common: trCommon,
@@ -147,6 +151,7 @@ i18n
         reporting: trReporting,
         portal: trPortal,
         cities: trCities,
+        marketing: trMarketing,
       },
       ar: {
         common: arCommon,
@@ -173,12 +178,13 @@ i18n
         reporting: arReporting,
         portal: arPortal,
         cities: arCities,
+        marketing: arMarketing,
       },
     },
     fallbackLng: 'en',
     supportedLngs: ['en', 'tr', 'ar'],
     nonExplicitSupportedLngs: true,
-    ns: ['common', 'auth', 'navigation', 'dashboard', 'users', 'departments', 'doctors', 'patients', 'appointments', 'emergency', 'inpatient', 'referrals', 'medical-records', 'prescriptions', 'laboratory', 'pharmacy', 'billing', 'settings', 'notifications', 'ai', 'analytics', 'reporting', 'portal', 'cities'],
+    ns: ['common', 'auth', 'navigation', 'dashboard', 'users', 'departments', 'doctors', 'patients', 'appointments', 'emergency', 'inpatient', 'referrals', 'medical-records', 'prescriptions', 'laboratory', 'pharmacy', 'billing', 'settings', 'notifications', 'ai', 'analytics', 'reporting', 'portal', 'cities', 'marketing'],
     defaultNS: 'common',
     interpolation: {
       escapeValue: false,

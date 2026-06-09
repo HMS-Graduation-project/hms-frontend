@@ -1,0 +1,421 @@
+{
+  "meta": {
+    "title": "Syrian National Hospital Management Platform | One Network for 14 Governorates",
+    "description": "A unified, secure hospital management platform connecting hospitals across all 14 Syrian governorates — one national patient record, cross-hospital referrals, AI-assisted diagnostics, and national health reporting.",
+    "ogTitle": "Syrian National Hospital Management Platform",
+    "ogDescription": "One unified, secure health network for all 14 Syrian governorates."
+  },
+  "brand": {
+    "name": "Syrian National Hospital Management Platform",
+    "short": "SNH Platform",
+    "mark": "SNH"
+  },
+  "nav": {
+    "overview": "Overview",
+    "modules": "Modules",
+    "workflow": "How it works",
+    "network": "Network",
+    "ai": "AI",
+    "security": "Security",
+    "faq": "FAQ",
+    "contact": "Contact",
+    "login": "Login",
+    "register": "Register",
+    "dashboard": "Go to dashboard",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "skip": "Skip to main content"
+  },
+  "hero": {
+    "badge": "National health network",
+    "title": "One national health network for {{highlight}}",
+    "highlight": "Syria",
+    "subtitle": "A unified, secure platform connecting hospitals across all 14 governorates — one patient record, every hospital. From outpatient clinics to emergency, inpatient wards, labs, pharmacy, and AI-assisted diagnostics.",
+    "ctaPrimary": "Explore the platform",
+    "ctaSecondary": "Login",
+    "stats": [
+      { "value": "14", "label": "Governorates" },
+      { "value": "25+", "label": "Integrated modules" },
+      { "value": "3", "label": "Languages, with RTL" }
+    ],
+    "mapCaption": "One connected network across every Syrian governorate"
+  },
+  "band": {
+    "title": "Built for all 14 governorates"
+  },
+  "governorates": [
+    "Damascus",
+    "Rural Damascus",
+    "Aleppo",
+    "Homs",
+    "Hama",
+    "Latakia",
+    "Tartus",
+    "Idlib",
+    "Daraa",
+    "As-Suwayda",
+    "Quneitra",
+    "Deir ez-Zor",
+    "Al-Hasakah",
+    "Raqqa"
+  ],
+  "overview": {
+    "eyebrow": "Platform overview",
+    "title": "A single, connected system for national healthcare",
+    "subtitle": "The platform unifies hospitals, regional health authorities, and the ministry under one secure system — built around a single national patient identity that follows the patient wherever they receive care.",
+    "pillars": [
+      {
+        "title": "Unified patient record",
+        "description": "Every patient has one national health identity (NHID). Their history follows them across hospitals — no fragmented, duplicated records."
+      },
+      {
+        "title": "Connected hospitals",
+        "description": "Hospitals coordinate through structured, consent-based referrals, so patients move between facilities with their clinical context intact."
+      },
+      {
+        "title": "National oversight",
+        "description": "Regional and ministry teams see live, aggregated insight across the whole network — without ever breaking hospital-level data isolation."
+      }
+    ]
+  },
+  "benefits": {
+    "eyebrow": "Key benefits",
+    "title": "Why healthcare organizations choose the platform",
+    "subtitle": "Outcomes that matter to ministries, hospital leaders, clinicians, and patients alike.",
+    "items": [
+      {
+        "title": "One national patient record",
+        "description": "A single national identity per patient ends fragmented histories and duplicate files across facilities."
+      },
+      {
+        "title": "Seamless inter-hospital referrals",
+        "description": "Refer patients between hospitals with their clinical summary — record access is granted only on accepted, consent-based referral."
+      },
+      {
+        "title": "AI-assisted diagnostics",
+        "description": "Built-in clinical AI helps teams screen chest X-rays, check symptoms, and flag drug interactions faster."
+      },
+      {
+        "title": "Real-time national reporting",
+        "description": "Regional and ministry dashboards surface bed occupancy, disease trends, and referral flows as they happen."
+      },
+      {
+        "title": "Role-based, audited security",
+        "description": "Ten distinct roles with least-privilege access, and a complete audit trail behind every action."
+      },
+      {
+        "title": "Multilingual and RTL",
+        "description": "English, Arabic, and Turkish out of the box — with full right-to-left support for Arabic."
+      }
+    ]
+  },
+  "modules": {
+    "eyebrow": "Core modules",
+    "title": "Everything a modern hospital runs on — in one platform",
+    "subtitle": "A complete clinical and operational suite, designed to work together rather than as disconnected tools.",
+    "items": [
+      {
+        "title": "Outpatient & appointments",
+        "description": "Doctor schedules, slot-based booking, and the full consultation workflow."
+      },
+      {
+        "title": "Emergency & triage",
+        "description": "Walk-in intake, five-level triage, attending assignment, and disposition."
+      },
+      {
+        "title": "Inpatient, wards & beds",
+        "description": "Admissions, a live bed board, inter-bed transfers, and discharge summaries."
+      },
+      {
+        "title": "Medical records",
+        "description": "Clinical notes, diagnoses with ICD codes, treatment plans, and vital signs."
+      },
+      {
+        "title": "Laboratory",
+        "description": "Test ordering, sample tracking, and results with abnormal-value flagging."
+      },
+      {
+        "title": "Pharmacy & dispensing",
+        "description": "Medication inventory, low-stock alerts, and dispensing against prescriptions."
+      },
+      {
+        "title": "Prescriptions",
+        "description": "Structured prescriptions tied directly to the patient's medical record."
+      },
+      {
+        "title": "Billing & payments",
+        "description": "Invoicing by category with cash, card, insurance, and bank-transfer payments."
+      },
+      {
+        "title": "Cross-hospital referrals",
+        "description": "Consent-gated patient transfers with shared clinical context between hospitals."
+      },
+      {
+        "title": "National patient registry",
+        "description": "One national identity (NHID), de-duplication, and cross-hospital search."
+      },
+      {
+        "title": "AI diagnostics",
+        "description": "Chest X-ray analysis, a symptom checker, and drug-interaction checking."
+      },
+      {
+        "title": "Analytics & reporting",
+        "description": "Hospital KPIs plus regional and national dashboards for oversight."
+      },
+      {
+        "title": "Patient portal",
+        "description": "Self-service appointments, records, prescriptions, and invoices across hospitals."
+      },
+      {
+        "title": "Notifications",
+        "description": "Event-driven alerts for appointments, lab results, prescriptions, and referrals."
+      },
+      {
+        "title": "Security & audit",
+        "description": "Role-based access, settings, holidays, and a complete action audit log."
+      }
+    ]
+  },
+  "workflow": {
+    "eyebrow": "How it works",
+    "title": "The patient journey, end to end",
+    "subtitle": "From the first registration to a cross-hospital referral, every step is connected on one platform.",
+    "steps": [
+      {
+        "title": "National registration",
+        "description": "Staff find the patient in the national registry or create a new national identity (NHID)."
+      },
+      {
+        "title": "Appointment or ER intake",
+        "description": "Book an outpatient appointment or admit a walk-in through emergency triage."
+      },
+      {
+        "title": "Triage & consultation",
+        "description": "Assess and prioritize the patient, then carry out the clinical consultation."
+      },
+      {
+        "title": "Medical record & vitals",
+        "description": "Document the diagnosis, treatment plan, ICD codes, and vital signs."
+      },
+      {
+        "title": "Labs & prescriptions",
+        "description": "Order laboratory tests and issue prescriptions tied to the record."
+      },
+      {
+        "title": "Pharmacy & dispensing",
+        "description": "Dispense medication against the prescription and update inventory."
+      },
+      {
+        "title": "Billing & payment",
+        "description": "Generate an itemized invoice and record payment by the chosen method."
+      },
+      {
+        "title": "Referral & portal",
+        "description": "Refer the patient to another hospital when needed — they see it all in the patient portal."
+      }
+    ]
+  },
+  "vision": {
+    "eyebrow": "National healthcare vision",
+    "title": "Governance at every level",
+    "subtitle": "One platform serves the whole health system — from national policy to the bedside — with the right view for every role.",
+    "tiers": [
+      {
+        "level": "National",
+        "title": "Ministry",
+        "description": "National dashboards, patient-registry stewardship, and oversight across the entire network."
+      },
+      {
+        "level": "Regional",
+        "title": "Regional authorities",
+        "description": "An administrator for each governorate, with regional reporting on volume, disease trends, and referrals."
+      },
+      {
+        "level": "Facility",
+        "title": "Hospitals",
+        "description": "Day-to-day clinical and operational work across ten staff roles, with strict per-hospital data isolation."
+      },
+      {
+        "level": "Citizen",
+        "title": "Patients",
+        "description": "A single self-service portal that spans every hospital where the patient has received care."
+      }
+    ]
+  },
+  "network": {
+    "eyebrow": "National network",
+    "title": "Connected across all of Syria",
+    "subtitle": "The platform is designed to span every Syrian governorate, linking hospitals into one coordinated national network.",
+    "hint": "Hover or tap a governorate to highlight it",
+    "label": "Governorate",
+    "legend": "Each governorate connects into one secure national network."
+  },
+  "stats": {
+    "eyebrow": "Platform at a glance",
+    "title": "Designed for national scale",
+    "subtitle": "These figures describe what the platform is built to do — its design scope, not a usage report.",
+    "items": [
+      { "value": 14, "suffix": "", "label": "Governorates", "description": "Nationwide coverage by design." },
+      { "value": 25, "suffix": "+", "label": "Integrated modules", "description": "A complete clinical and operational suite." },
+      { "value": 10, "suffix": "", "label": "User roles", "description": "Granular, role-based access control." },
+      { "value": 3, "suffix": "", "label": "AI models", "description": "Ensemble chest X-ray analysis." },
+      { "value": 3, "suffix": "", "label": "Languages", "description": "English, Arabic, and Turkish, with RTL." },
+      { "value": 100, "suffix": "%", "label": "Care continuum", "description": "Outpatient, emergency, and inpatient." }
+    ]
+  },
+  "ai": {
+    "eyebrow": "AI capabilities",
+    "title": "Clinical AI that supports your team",
+    "subtitle": "Decision-support tools that help clinicians move faster and with more confidence — always under human review.",
+    "disclaimer": "AI-assisted screening only — not a substitute for professional clinical diagnosis.",
+    "items": [
+      {
+        "tag": "Radiology",
+        "title": "Pneumonia detection from chest X-rays",
+        "description": "An ensemble of three models (DenseNet121, EfficientNet-B0, ResNet50) with Grad-CAM heatmaps that show what influenced the result, exportable PDF reports, and a doctor review workflow."
+      },
+      {
+        "tag": "Triage support",
+        "title": "Symptom-based disease prediction",
+        "description": "Enter a patient's symptoms to get ranked, confidence-scored suggestions across a curated set of conditions — a fast second opinion for early assessment."
+      },
+      {
+        "tag": "Medication safety",
+        "title": "Drug-interaction checking",
+        "description": "Check a medication list against a curated interaction database and surface risky combinations with severity levels before they reach the patient."
+      }
+    ]
+  },
+  "tour": {
+    "eyebrow": "Product tour",
+    "title": "See the platform in action",
+    "subtitle": "A consistent, modern interface across every workflow — in light or dark mode, on any device.",
+    "shots": [
+      {
+        "title": "Hospital dashboard",
+        "description": "Live KPIs: patients, appointments, pending labs, and revenue at a glance."
+      },
+      {
+        "title": "Emergency triage board",
+        "description": "The full ER queue, color-coded by triage level from critical to non-urgent."
+      },
+      {
+        "title": "AI X-ray analysis",
+        "description": "Predictions with explainability heatmaps and a structured review workflow."
+      },
+      {
+        "title": "National reporting",
+        "description": "Regional and national dashboards for bed occupancy, trends, and referral flow."
+      }
+    ]
+  },
+  "security": {
+    "eyebrow": "Security & compliance",
+    "title": "Enterprise-grade by design",
+    "subtitle": "Healthcare data demands the highest standards. The platform is built with security and accountability at its core.",
+    "items": [
+      {
+        "title": "Role-based access control",
+        "description": "Ten distinct roles, each scoped to exactly what its work requires — least privilege by default."
+      },
+      {
+        "title": "Hospital data isolation",
+        "description": "Each hospital's data is strictly partitioned; staff only ever see their own hospital."
+      },
+      {
+        "title": "Consent-gated sharing",
+        "description": "Cross-hospital record access is granted only through an accepted referral — never by default."
+      },
+      {
+        "title": "Complete audit trail",
+        "description": "Every create, update, and delete is logged with the user, action, and IP address."
+      },
+      {
+        "title": "Hardened sessions",
+        "description": "Authentication uses JWTs with rotating refresh-token families and HttpOnly cookies."
+      },
+      {
+        "title": "Protected APIs",
+        "description": "Request rate limiting and security headers guard every endpoint against abuse."
+      }
+    ]
+  },
+  "future": {
+    "eyebrow": "Future vision",
+    "title": "Where the platform is heading",
+    "subtitle": "A roadmap focused on reaching more patients and giving clinicians even stronger tools.",
+    "items": [
+      {
+        "title": "SMS & email notifications",
+        "description": "Reach patients beyond the portal with appointment reminders and result alerts."
+      },
+      {
+        "title": "Expanded clinical AI",
+        "description": "More imaging models and decision-support tools across additional specialties."
+      },
+      {
+        "title": "Deeper analytics",
+        "description": "Richer population-health insight and predictive capacity planning."
+      },
+      {
+        "title": "Open integrations",
+        "description": "Standards-based interoperability with labs, devices, and partner systems."
+      }
+    ]
+  },
+  "faq": {
+    "eyebrow": "FAQ",
+    "title": "Frequently asked questions",
+    "subtitle": "Answers to the questions hospitals and health authorities ask most.",
+    "items": [
+      {
+        "q": "Is this for a single hospital or the whole country?",
+        "a": "Both. The platform is multi-tenant: each hospital runs its own day-to-day operations in isolation, while regional and ministry teams get a connected, national view across the whole network."
+      },
+      {
+        "q": "How is patient data protected?",
+        "a": "Data is isolated per hospital, access is role-based with least privilege, every action is audited, and sessions use hardened, rotating tokens. Cross-hospital access is only ever granted through an accepted referral."
+      },
+      {
+        "q": "Can hospitals share a patient's records?",
+        "a": "Yes — safely. Each patient has one national identity, and when a hospital accepts a referral it gains consent-based access to that patient's relevant records across the network."
+      },
+      {
+        "q": "Which languages are supported?",
+        "a": "English, Arabic, and Turkish are supported throughout, including full right-to-left layout for Arabic."
+      },
+      {
+        "q": "Is the AI a medical diagnosis?",
+        "a": "No. The AI provides decision support — screening, suggestions, and safety checks. Every result is reviewed by a qualified clinician and is not a substitute for professional diagnosis."
+      },
+      {
+        "q": "How do staff and patients sign in?",
+        "a": "Staff and patients sign in through the secure login. Use the Login button in the navigation to access your account; patients land in the patient portal and staff in their role-specific dashboard."
+      }
+    ]
+  },
+  "contact": {
+    "eyebrow": "Get in touch",
+    "title": "Bring your hospital onto the national network",
+    "subtitle": "Whether you represent a hospital, a regional authority, or the ministry, we would be glad to show you the platform.",
+    "emailLabel": "Email us",
+    "email": "info@snhhmp.com",
+    "ctaPrimary": "Login",
+    "ctaSecondary": "Create an account"
+  },
+  "cta": {
+    "title": "Ready to see it in action?",
+    "subtitle": "Sign in to explore the platform, or reach out and we will walk you through it.",
+    "primary": "Login to the platform",
+    "secondary": "Contact us"
+  },
+  "footer": {
+    "tagline": "One national health network for Syria.",
+    "product": "Platform",
+    "company": "Network",
+    "account": "Account",
+    "builtFor": "Built for all 14 Syrian governorates.",
+    "rights": "All rights reserved.",
+    "disclaimer": "A unified hospital management platform for the Syrian national health system."
+  }
+}

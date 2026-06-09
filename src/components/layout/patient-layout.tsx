@@ -14,7 +14,7 @@ import {
   Activity,
   Menu,
 } from 'lucide-react';
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/providers/auth-provider';
 import { usePortalProfile } from '@/hooks/use-portal';
@@ -27,6 +27,7 @@ import {
 } from '@/components/ui/sheet';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { LanguageSwitcher } from '@/components/language-switcher';
+import { PageLoading } from '@/components/page-loading';
 
 interface PortalNavItem {
   href: string;
@@ -223,7 +224,9 @@ export function PatientLayout() {
 
         {/* Content */}
         <main className="flex-1 p-4 sm:p-6">
-          <Outlet />
+          <Suspense fallback={<PageLoading variant="skeleton" />}>
+            <Outlet />
+          </Suspense>
         </main>
       </div>
     </div>

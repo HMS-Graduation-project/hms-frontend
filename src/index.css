@@ -73,3 +73,44 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  /* Smooth in-page navigation for the marketing site, with a scroll offset so
+     anchored sections clear the sticky nav. Guarded by reduced-motion below. */
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+  }
+
+  /* Continuous horizontal marquee (governorate band). */
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  .animate-marquee {
+    animation: marquee 40s linear infinite;
+  }
+  [dir='rtl'] .animate-marquee {
+    animation-direction: reverse;
+  }
+  .marquee-pause:hover .animate-marquee {
+    animation-play-state: paused;
+  }
+}
+
+/* Honour the user's OS "reduce motion" preference everywhere. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .animate-marquee {
+    animation: none;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

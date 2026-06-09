@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /$
+Allow: /og-image.svg
+Allow: /favicon.svg
+
+# Authenticated application areas (no value to crawlers)
+Disallow: /login
+Disallow: /register
+Disallow: /dashboard
+Disallow: /portal
+Disallow: /admin
+Disallow: /api
+
+Sitemap: https://snhhmp.com/sitemap.xml

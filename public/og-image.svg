@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="Syrian National Hospital Management Platform">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1220"/>
+      <stop offset="1" stop-color="#111a33"/>
+    </linearGradient>
+    <linearGradient id="brand" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#3b82f6"/>
+      <stop offset="1" stop-color="#8b5cf6"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <g opacity="0.12" stroke="#3b82f6" stroke-width="1.5" fill="none">
+    <circle cx="980" cy="150" r="120"/>
+    <circle cx="980" cy="150" r="200"/>
+    <circle cx="980" cy="150" r="280"/>
+  </g>
+  <g transform="translate(90,90)">
+    <rect width="84" height="84" rx="20" fill="url(#brand)"/>
+    <path d="M42 16c13 9 21 11 21 11v16c0 14-11 21-21 24-10-3-21-10-21-24V27s8-2 21-11z" fill="#fff" opacity="0.95"/>
+    <path d="M38 28h8v8h8v8h-8v8h-8v-8h-8v-8h8z" fill="#2563eb"/>
+  </g>
+  <text x="200" y="128" fill="#ffffff" font-family="Segoe UI, Arial, sans-serif" font-size="34" font-weight="700">Syrian National Hospital</text>
+  <text x="200" y="168" fill="#cbd5e1" font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="500">Management Platform</text>
+  <text x="90" y="360" fill="#ffffff" font-family="Segoe UI, Arial, sans-serif" font-size="68" font-weight="800">One national health</text>
+  <text x="90" y="438" fill="#ffffff" font-family="Segoe UI, Arial, sans-serif" font-size="68" font-weight="800">network for <tspan fill="#60a5fa">Syria</tspan>.</text>
+  <text x="90" y="520" fill="#94a3b8" font-family="Segoe UI, Arial, sans-serif" font-size="32" font-weight="500">14 governorates · one patient record · AI-assisted care</text>
+  <rect x="90" y="556" width="1020" height="3" fill="url(#brand)" opacity="0.7"/>
+</svg>

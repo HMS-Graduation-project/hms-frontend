@@ -1,9 +1,11 @@
+import { Suspense } from 'react';
 import { Outlet, Navigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { useSidebar } from '@/hooks/use-sidebar';
 import { useAuth } from '@/providers/auth-provider';
 import { Sidebar } from '@/components/layout/sidebar';
 import { Header } from '@/components/layout/header';
+import { PageLoading } from '@/components/page-loading';
 
 export function DashboardLayout() {
   const { isOpen, toggle } = useSidebar();
@@ -29,7 +31,9 @@ export function DashboardLayout() {
         <Header />
 
         <main className="flex-1 p-4 sm:p-6">
-          <Outlet />
+          <Suspense fallback={<PageLoading variant="skeleton" />}>
+            <Outlet />
+          </Suspense>
         </main>
       </div>
     </div>
