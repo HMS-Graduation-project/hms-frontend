@@ -9,6 +9,11 @@ export interface DoctorProfile {
   licenseNumber: string;
   departmentId: string | null;
   department?: { id: string; name: string } | null;
+  hospital?: {
+    id: string;
+    name: string;
+    city?: { id: string; name: string } | null;
+  } | null;
   bio: string | null;
   yearsExperience: number | null;
   consultationFee: string | null;

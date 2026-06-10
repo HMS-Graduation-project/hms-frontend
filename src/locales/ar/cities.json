@@ -13,6 +13,7 @@
   "cityDeactivated": "تم إلغاء تفعيل المدينة",
   "nameEn": "الاسم بالإنجليزية",
   "nameAr": "الاسم بالعربية",
+  "cityColumn": "المدينة",
   "governorate": "المحافظة",
   "selectGovernorate": "اختر المحافظة",
   "noGovernorate": "بدون",
@@ -23,5 +24,42 @@
   "activate": "تفعيل",
   "deactivate": "إلغاء التفعيل",
   "noCities": "لا توجد مدن",
-  "searchPlaceholder": "البحث في المدن..."
+  "searchPlaceholder": "البحث في المدن...",
+  "showingCount": "عرض {{shown}} من {{total}} مدينة",
+  "clearGovernorate": "إزالة تصفية المحافظة",
+  "clearFilters": "مسح التصفية",
+  "stats": {
+    "totalCities": "إجمالي المدن",
+    "totalCitiesDesc": "في {{count}} محافظة",
+    "activeCities": "المدن النشطة",
+    "inactiveCount": "{{count}} غير نشطة",
+    "totalHospitals": "إجمالي المستشفيات",
+    "totalHospitalsDesc": "مسجلة في جميع المدن",
+    "governorates": "المحافظات المغطاة",
+    "governoratesDesc": "من إجمالي المحافظات السورية"
+  },
+  "map": {
+    "title": "التوزيع الجغرافي",
+    "subtitle": "انقر على محافظة للتصفية، أو على علامة مدينة لتمييزها",
+    "ariaLabel": "خريطة المحافظات السورية تعرض المدن والمستشفيات",
+    "govSummary": "{{cities}} مدن، {{hospitals}} مستشفى",
+    "citiesCount": "{{count}} مدن",
+    "hospitalsCount": "{{count}} مستشفى",
+    "legendLow": "أقل",
+    "legendHigh": "أكثر",
+    "legendMetric": "مستشفيات"
+  },
+  "tooltip": {
+    "activate": "إتاحة هذه المدينة للاختيار مجدداً عبر المنصة",
+    "deactivate": "إخفاء هذه المدينة ومنع تعيين مستشفيات جديدة لها"
+  },
+  "confirm": {
+    "activateTitle": "تفعيل \"{{name}}\"؟",
+    "deactivateTitle": "إلغاء تفعيل \"{{name}}\"؟",
+    "activateDesc": "ستصبح هذه المدينة متاحة مجدداً عبر المنصة.",
+    "deactivateDesc": "سيتم إخفاء هذه المدينة من الاختيار ولن يمكن تعيين مستشفيات جديدة لها. تبقى البيانات الحالية محفوظة.",
+    "currentStatus": "الحالية",
+    "newStatus": "بعد التغيير",
+    "hospitalWarning": "تحتوي هذه المدينة حالياً على {{count}} مستشفى. ستبقى موجودة، لكن لن تظهر المدينة في قوائم الاختيار."
+  }
 }

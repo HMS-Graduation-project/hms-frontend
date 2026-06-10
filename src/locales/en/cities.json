@@ -13,6 +13,7 @@
   "cityDeactivated": "City deactivated",
   "nameEn": "English Name",
   "nameAr": "Arabic Name",
+  "cityColumn": "City",
   "governorate": "Governorate",
   "selectGovernorate": "Select governorate",
   "noGovernorate": "None",
@@ -23,5 +24,42 @@
   "activate": "Activate",
   "deactivate": "Deactivate",
   "noCities": "No cities found",
-  "searchPlaceholder": "Search cities..."
+  "searchPlaceholder": "Search cities...",
+  "showingCount": "Showing {{shown}} of {{total}} cities",
+  "clearGovernorate": "Clear governorate filter",
+  "clearFilters": "Clear filters",
+  "stats": {
+    "totalCities": "Total Cities",
+    "totalCitiesDesc": "Across {{count}} governorates",
+    "activeCities": "Active Cities",
+    "inactiveCount": "{{count}} inactive",
+    "totalHospitals": "Total Hospitals",
+    "totalHospitalsDesc": "Registered across all cities",
+    "governorates": "Governorates Covered",
+    "governoratesDesc": "Of all Syrian governorates"
+  },
+  "map": {
+    "title": "Geographic Distribution",
+    "subtitle": "Click a governorate to filter, or a city marker to highlight it",
+    "ariaLabel": "Map of Syrian governorates showing cities and hospitals",
+    "govSummary": "{{cities}} cities, {{hospitals}} hospitals",
+    "citiesCount": "{{count}} cities",
+    "hospitalsCount": "{{count}} hospitals",
+    "legendLow": "Fewer",
+    "legendHigh": "More",
+    "legendMetric": "hospitals"
+  },
+  "tooltip": {
+    "activate": "Make this city selectable again across the platform",
+    "deactivate": "Hide this city and stop new hospitals from being assigned to it"
+  },
+  "confirm": {
+    "activateTitle": "Activate \"{{name}}\"?",
+    "deactivateTitle": "Deactivate \"{{name}}\"?",
+    "activateDesc": "This city will become available again across the platform.",
+    "deactivateDesc": "This city will be hidden from selection and new hospitals cannot be assigned to it. Existing data is preserved.",
+    "currentStatus": "Current",
+    "newStatus": "After",
+    "hospitalWarning": "This city currently has {{count}} hospital(s). They will remain, but the city will no longer appear in selection lists."
+  }
 }

@@ -23,12 +23,34 @@ export interface Appointment {
   reason: string | null;
   notes: string | null;
   cancelReason: string | null;
-  patient: { user: { firstName: string | null; lastName: string | null } };
+  patient: {
+    // Demographics source-of-truth — always present.
+    nationalPatient: {
+      firstName: string;
+      lastName: string;
+      firstNameAr: string | null;
+      lastNameAr: string | null;
+      syrianNationalId: string | null;
+    };
+    // Optional login account — null for staff-created patients.
+    user: { firstName: string | null; lastName: string | null } | null;
+  };
   doctor: {
     user: { firstName: string | null; lastName: string | null };
     specialization: string;
   };
-  department?: { name: string } | null;
+  department?: { id: string; name: string } | null;
+  hospital?: {
+    id: string;
+    name: string;
+    nameAr: string | null;
+    city?: {
+      id: string;
+      name: string;
+      nameAr: string | null;
+      governorate: string | null;
+    } | null;
+  } | null;
   medicalRecord?: { id: string } | null;
   createdAt: string;
 }
@@ -50,6 +72,9 @@ interface UseAppointmentsParams {
   patientId?: string;
   dateFrom?: string;
   dateTo?: string;
+  governorate?: string;
+  hospitalId?: string;
+  departmentId?: string;
 }
 
 interface CreateAppointmentPayload {
@@ -112,16 +137,19 @@ export function useAppointments(params: UseAppointmentsParams = {}) {
     patientId,
     dateFrom,
     dateTo,
+    governorate,
+    hospitalId,
+    departmentId,
   } = params;
 
   return useQuery<PaginatedResponse<Appointment>>({
     queryKey: [
       'appointments',
-      { page, limit, sortBy, sortOrder, search, status, doctorId, patientId, dateFrom, dateTo },
+      { page, limit, sortBy, sortOrder, search, status, doctorId, patientId, dateFrom, dateTo, governorate, hospitalId, departmentId },
     ],
     queryFn: () =>
       api.get<PaginatedResponse<Appointment>>(
-        `/v1/appointments${buildQueryString({ page, limit, sortBy, sortOrder, search, status, doctorId, patientId, dateFrom, dateTo })}`,
+        `/v1/appointments${buildQueryString({ page, limit, sortBy, sortOrder, search, status, doctorId, patientId, dateFrom, dateTo, governorate, hospitalId, departmentId })}`,
       ),
   });
 }

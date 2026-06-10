@@ -5,7 +5,8 @@ import { ArrowLeft, Check, ChevronRight, ChevronLeft, Calendar, Clock, User, Ste
 import { useAuth } from '@/providers/auth-provider';
 import { useCreateAppointment, useAvailableSlots, type AvailableSlot } from '@/hooks/use-appointments';
 import { useDoctors, type DoctorProfile } from '@/hooks/use-doctors';
-import { usePatients, type PatientProfile } from '@/hooks/use-patients';
+import { usePatients } from '@/hooks/use-patients';
+import { getPatientDisplayName } from '@/lib/patient-name';
 import { TimeSlotPicker } from '@/components/appointments/time-slot-picker';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -27,20 +28,6 @@ const STEPS = [1, 2, 3, 4] as const;
 
 function getDoctorName(doctor: DoctorProfile): string {
   return [doctor.user.firstName, doctor.user.lastName].filter(Boolean).join(' ') || doctor.user.email;
-}
-
-function getPatientName(patient: PatientProfile): string {
-  const fromNational = [
-    patient.nationalPatient?.firstName,
-    patient.nationalPatient?.lastName,
-  ]
-    .filter(Boolean)
-    .join(' ');
-  if (fromNational) return fromNational;
-  const fromUser = [patient.user?.firstName, patient.user?.lastName]
-    .filter(Boolean)
-    .join(' ');
-  return fromUser || patient.user?.email || '—';
 }
 
 export default function BookAppointmentPage() {
@@ -339,7 +326,7 @@ export default function BookAppointmentPage() {
                       <SelectContent>
                         {patientsData?.data?.map((patient) => (
                           <SelectItem key={patient.id} value={patient.id}>
-                            {getPatientName(patient)}
+                            {getPatientDisplayName(patient)}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -441,7 +428,7 @@ export default function BookAppointmentPage() {
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <p className="font-medium">{getPatientName(selectedPatient)}</p>
+                      <p className="font-medium">{getPatientDisplayName(selectedPatient)}</p>
                     </CardContent>
                   </Card>
                 )}

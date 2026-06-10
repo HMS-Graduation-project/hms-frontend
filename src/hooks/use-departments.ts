@@ -16,12 +16,42 @@ export interface Department {
   updatedAt: string;
 }
 
+export interface GroupedHospital {
+  id: string;
+  name: string;
+  nameAr: string | null;
+  code: string;
+  city: { id: string; name: string; nameAr: string | null } | null;
+  departmentCount: number;
+  doctorCount: number;
+  departments: Department[];
+}
+
+export interface GroupedGovernorate {
+  governorate: string;
+  hospitalCount: number;
+  departmentCount: number;
+  doctorCount: number;
+  hospitals: GroupedHospital[];
+}
+
+export interface GroupedDepartmentsResponse {
+  governorates: GroupedGovernorate[];
+  totals: {
+    governorateCount: number;
+    hospitalCount: number;
+    departmentCount: number;
+    doctorCount: number;
+  };
+}
+
 interface UseDepartmentsParams {
   page?: number;
   limit?: number;
   sortBy?: string;
   sortOrder?: string;
   search?: string;
+  enabled?: boolean;
 }
 
 interface CreateDepartmentPayload {
@@ -55,7 +85,7 @@ function buildQueryString(params: Record<string, string | number | undefined>): 
 }
 
 export function useDepartments(params: UseDepartmentsParams = {}) {
-  const { page = 1, limit = 10, sortBy, sortOrder, search } = params;
+  const { page = 1, limit = 10, sortBy, sortOrder, search, enabled = true } = params;
 
   return useQuery<PaginatedResponse<Department>>({
     queryKey: ['departments', { page, limit, sortBy, sortOrder, search }],
@@ -63,6 +93,16 @@ export function useDepartments(params: UseDepartmentsParams = {}) {
       api.get<PaginatedResponse<Department>>(
         `/v1/departments${buildQueryString({ page, limit, sortBy, sortOrder, search })}`
       ),
+    enabled,
+  });
+}
+
+export function useGroupedDepartments(enabled = true) {
+  return useQuery<GroupedDepartmentsResponse>({
+    queryKey: ['departments', 'grouped'],
+    queryFn: () =>
+      api.get<GroupedDepartmentsResponse>('/v1/departments/grouped'),
+    enabled,
   });
 }
 

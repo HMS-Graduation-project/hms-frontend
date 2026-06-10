@@ -17,13 +17,20 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { useToast } from '@/components/ui/use-toast';
+import { useAuth } from '@/providers/auth-provider';
 import { DepartmentForm } from './department-form';
+import { GroupedDepartmentsView } from './grouped-view';
 
 export default function DepartmentsPage() {
   const { t } = useTranslation('departments');
   const { t: tCommon } = useTranslation('common');
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { user } = useAuth();
+
+  // National / regional scope (no single hospital) → show the
+  // governorate → hospital → department hierarchy instead of a flat list.
+  const isGrouped = !user?.hospitalId;
 
   const [formDialogOpen, setFormDialogOpen] = useState(false);
   const [editingDepartment, setEditingDepartment] = useState<Department | null>(null);
@@ -41,6 +48,7 @@ export default function DepartmentsPage() {
     sortBy: table.sortBy,
     sortOrder: table.sortOrder,
     search: table.debouncedSearch,
+    enabled: !isGrouped,
   });
 
   const deleteDepartment = useDeleteDepartment();
@@ -187,23 +195,30 @@ export default function DepartmentsPage() {
         </Button>
       </div>
 
-      {/* Data Table */}
-      <DataTable<Department>
-        columns={columns}
-        data={data?.data ?? []}
-        meta={data?.meta}
-        isLoading={isLoading}
-        page={table.page}
-        limit={table.limit}
-        sortBy={table.sortBy}
-        sortOrder={table.sortOrder}
-        search={table.search}
-        onPageChange={table.onPageChange}
-        onLimitChange={table.onLimitChange}
-        onSortChange={table.onSortChange}
-        onSearchChange={table.onSearchChange}
-        onRowClick={handleRowClick}
-      />
+      {/* National / regional scope: grouped hierarchy. Hospital scope: flat table. */}
+      {isGrouped ? (
+        <GroupedDepartmentsView
+          onEdit={handleOpenEdit}
+          onDelete={handleOpenDelete}
+        />
+      ) : (
+        <DataTable<Department>
+          columns={columns}
+          data={data?.data ?? []}
+          meta={data?.meta}
+          isLoading={isLoading}
+          page={table.page}
+          limit={table.limit}
+          sortBy={table.sortBy}
+          sortOrder={table.sortOrder}
+          search={table.search}
+          onPageChange={table.onPageChange}
+          onLimitChange={table.onLimitChange}
+          onSortChange={table.onSortChange}
+          onSearchChange={table.onSearchChange}
+          onRowClick={handleRowClick}
+        />
+      )}
 
       {/* Create / Edit Dialog */}
       <Dialog open={formDialogOpen} onOpenChange={setFormDialogOpen}>

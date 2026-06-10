@@ -21,5 +21,7 @@
   "departmentUpdated": "Department updated successfully",
   "departmentDeleted": "Department deleted successfully",
   "noDepartments": "No departments found",
-  "backToList": "Back to departments"
+  "backToList": "Back to departments",
+  "governorates": "Governorates",
+  "hospitals": "Hospitals"
 }

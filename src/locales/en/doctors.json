@@ -12,6 +12,8 @@
   "department": "Department",
   "selectDepartment": "Select department",
   "noDepartment": "No department",
+  "hospital": "Hospital",
+  "city": "City",
   "bio": "Biography",
   "yearsExperience": "Years of Experience",
   "consultationFee": "Consultation Fee",

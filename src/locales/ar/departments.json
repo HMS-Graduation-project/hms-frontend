@@ -21,5 +21,7 @@
   "departmentUpdated": "تم تحديث القسم بنجاح",
   "departmentDeleted": "تم حذف القسم بنجاح",
   "noDepartments": "لا توجد أقسام",
-  "backToList": "العودة إلى الأقسام"
+  "backToList": "العودة إلى الأقسام",
+  "governorates": "المحافظات",
+  "hospitals": "المستشفيات"
 }

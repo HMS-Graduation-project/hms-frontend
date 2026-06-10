@@ -16,6 +16,8 @@ import {
 } from '@/hooks/use-billing';
 import { PaymentForm } from '@/components/billing/payment-form';
 import { PrintInvoice } from '@/components/billing/print-invoice';
+import { NoPortalAccountBadge } from '@/components/patients/no-portal-account-badge';
+import { getPatientDisplayName } from '@/lib/patient-name';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -81,9 +83,7 @@ export default function InvoiceDetailPage() {
   }
 
   const patientName = invoice.patient
-    ? [invoice.patient.user.firstName, invoice.patient.user.lastName]
-        .filter(Boolean)
-        .join(' ') || invoice.patient.user.email
+    ? getPatientDisplayName(invoice.patient)
     : '--';
 
   const invoiceDate = invoice.issuedAt
@@ -176,6 +176,7 @@ export default function InvoiceDetailPage() {
                 >
                   {patientName}
                 </Link>
+                <NoPortalAccountBadge patient={invoice.patient} className="mt-1" />
               </div>
             </CardContent>
           </Card>

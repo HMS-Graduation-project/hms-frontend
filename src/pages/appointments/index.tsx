@@ -8,8 +8,12 @@ import {
   type Appointment,
   type AppointmentStatus,
 } from '@/hooks/use-appointments';
+import { useGroupedDepartments } from '@/hooks/use-departments';
+import { useAuth } from '@/providers/auth-provider';
 import { DataTable } from '@/components/data-table/data-table';
 import { StatusBadge } from '@/components/appointments/status-badge';
+import { NoPortalAccountBadge } from '@/components/patients/no-portal-account-badge';
+import { getPatientDisplayName } from '@/lib/patient-name';
 import type { DataTableColumn } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import {
@@ -41,16 +45,35 @@ function formatTime(time: string): string {
 }
 
 export default function AppointmentsPage() {
-  const { t } = useTranslation('appointments');
+  const { t, i18n } = useTranslation('appointments');
   const { t: tCommon } = useTranslation('common');
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const isArabic = (i18n.language || 'en').split('-')[0] === 'ar';
+
+  // National / regional scope (no single hospital): show the
+  // Governorate → Hospital → Department drill-down filters + context columns.
+  const isNational = !user?.hospitalId;
 
   const [statusFilter, setStatusFilter] = useState<string>('');
+  const [governorate, setGovernorate] = useState<string>('');
+  const [hospitalId, setHospitalId] = useState<string>('');
+  const [departmentId, setDepartmentId] = useState<string>('');
 
   const table = useDataTable({
     initialSortBy: 'date',
     initialSortOrder: 'desc',
   });
+
+  // Reuse the grouped-departments tree to drive the cascading filters.
+  const { data: grouped } = useGroupedDepartments(isNational);
+  const govOptions = grouped?.governorates ?? [];
+  const selectedGov = govOptions.find((g) => g.governorate === governorate);
+  const hospitalOptions = selectedGov
+    ? selectedGov.hospitals
+    : govOptions.flatMap((g) => g.hospitals);
+  const selectedHospital = hospitalOptions.find((h) => h.id === hospitalId);
+  const departmentOptions = selectedHospital?.departments ?? [];
 
   const { data, isLoading } = useAppointments({
     page: table.page,
@@ -59,6 +82,9 @@ export default function AppointmentsPage() {
     sortOrder: table.sortOrder,
     search: table.debouncedSearch,
     status: statusFilter || undefined,
+    governorate: isNational ? governorate || undefined : undefined,
+    hospitalId: isNational ? hospitalId || undefined : undefined,
+    departmentId: isNational ? departmentId || undefined : undefined,
   });
 
   const handleRowClick = (appointment: Appointment) => {
@@ -72,8 +98,9 @@ export default function AppointmentsPage() {
         label: t('patient'),
         sortable: false,
         render: (row) => (
-          <span className="font-medium">
-            {formatName(row.patient?.user?.firstName, row.patient?.user?.lastName)}
+          <span className="flex items-center gap-2 font-medium">
+            {getPatientDisplayName(row.patient)}
+            <NoPortalAccountBadge patient={row.patient} />
           </span>
         ),
       },
@@ -92,6 +119,43 @@ export default function AppointmentsPage() {
           </div>
         ),
       },
+      ...(isNational
+        ? [
+            {
+              key: 'hospital',
+              label: t('hospital'),
+              sortable: false,
+              render: (row: Appointment) => {
+                const h = row.hospital;
+                if (!h) return <span className="text-muted-foreground">-</span>;
+                const name = isArabic && h.nameAr ? h.nameAr : h.name;
+                const cityName =
+                  isArabic && h.city?.nameAr ? h.city.nameAr : h.city?.name;
+                const sub = [h.city?.governorate, cityName]
+                  .filter(Boolean)
+                  .join(' · ');
+                return (
+                  <div>
+                    <span className="font-medium">{name}</span>
+                    {sub && (
+                      <p className="text-xs text-muted-foreground">{sub}</p>
+                    )}
+                  </div>
+                );
+              },
+            },
+            {
+              key: 'department',
+              label: t('department'),
+              sortable: false,
+              render: (row: Appointment) => (
+                <span className="text-muted-foreground">
+                  {row.department?.name || '-'}
+                </span>
+              ),
+            },
+          ]
+        : []),
       {
         key: 'date',
         label: t('date'),
@@ -135,29 +199,103 @@ export default function AppointmentsPage() {
         ),
       },
     ],
-    [t, tCommon, navigate],
+    [t, tCommon, navigate, isNational, isArabic],
   );
 
   const filterSlot = (
-    <Select
-      value={statusFilter}
-      onValueChange={(value) => {
-        setStatusFilter(value === 'ALL' ? '' : value);
-        table.onPageChange(1);
-      }}
-    >
-      <SelectTrigger className="w-[180px]">
-        <SelectValue placeholder={t('filterByStatus')} />
-      </SelectTrigger>
-      <SelectContent>
-        <SelectItem value="ALL">{t('allStatuses')}</SelectItem>
-        {ALL_STATUSES.map((status) => (
-          <SelectItem key={status} value={status}>
-            {t(`statuses.${status}`)}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
+    <>
+      {isNational && (
+        <>
+          {/* Governorate */}
+          <Select
+            value={governorate}
+            onValueChange={(value) => {
+              setGovernorate(value === 'ALL' ? '' : value);
+              setHospitalId('');
+              setDepartmentId('');
+              table.onPageChange(1);
+            }}
+          >
+            <SelectTrigger className="w-[170px]">
+              <SelectValue placeholder={t('filterByGovernorate')} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="ALL">{t('allGovernorates')}</SelectItem>
+              {govOptions.map((g) => (
+                <SelectItem key={g.governorate} value={g.governorate}>
+                  {g.governorate}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          {/* Hospital */}
+          <Select
+            value={hospitalId}
+            onValueChange={(value) => {
+              setHospitalId(value === 'ALL' ? '' : value);
+              setDepartmentId('');
+              table.onPageChange(1);
+            }}
+          >
+            <SelectTrigger className="w-[190px]">
+              <SelectValue placeholder={t('filterByHospital')} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="ALL">{t('allHospitals')}</SelectItem>
+              {hospitalOptions.map((h) => (
+                <SelectItem key={h.id} value={h.id}>
+                  {isArabic && h.nameAr ? h.nameAr : h.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          {/* Department (requires a hospital) */}
+          <Select
+            value={departmentId}
+            disabled={!selectedHospital}
+            onValueChange={(value) => {
+              setDepartmentId(value === 'ALL' ? '' : value);
+              table.onPageChange(1);
+            }}
+          >
+            <SelectTrigger className="w-[170px]">
+              <SelectValue placeholder={t('filterByDepartment')} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="ALL">{t('allDepartments')}</SelectItem>
+              {departmentOptions.map((d) => (
+                <SelectItem key={d.id} value={d.id}>
+                  {d.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </>
+      )}
+
+      {/* Status */}
+      <Select
+        value={statusFilter}
+        onValueChange={(value) => {
+          setStatusFilter(value === 'ALL' ? '' : value);
+          table.onPageChange(1);
+        }}
+      >
+        <SelectTrigger className="w-[170px]">
+          <SelectValue placeholder={t('filterByStatus')} />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="ALL">{t('allStatuses')}</SelectItem>
+          {ALL_STATUSES.map((status) => (
+            <SelectItem key={status} value={status}>
+              {t(`statuses.${status}`)}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </>
   );
 
   return (

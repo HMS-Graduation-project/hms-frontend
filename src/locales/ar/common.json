@@ -61,5 +61,10 @@
   "goHome": "الصفحة الرئيسية",
   "noData": "لا توجد بيانات متاحة",
   "areYouSure": "هل أنت متأكد؟",
-  "notFound": "غير موجود"
+  "notFound": "غير موجود",
+  "noPortalAccount": "لا يوجد حساب بوابة",
+  "governorate": "المحافظة",
+  "hospital": "المستشفى",
+  "allGovernorates": "كل المحافظات",
+  "allHospitals": "كل المستشفيات"
 }

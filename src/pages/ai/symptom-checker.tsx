@@ -12,37 +12,73 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import {
-  SYMPTOMS_LIST,
+  useSymptomCatalog,
   usePredictDisease,
   type PredictionResult,
 } from '@/hooks/use-ai';
 
+/** Maps an AI disease name (e.g. "Tension Headache") to its i18n key slug. */
+function diseaseSlug(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '_')
+    .replace(/^_+|_+$/g, '');
+}
+
 export default function SymptomCheckerPage() {
-  const { t } = useTranslation('ai');
+  const { t, i18n } = useTranslation('ai');
+  // selectedSymptoms holds canonical symptom IDs (the values the AI expects).
   const [selectedSymptoms, setSelectedSymptoms] = useState<string[]>([]);
   const [search, setSearch] = useState('');
   const predictDisease = usePredictDisease();
 
-  const filteredSymptoms = useMemo(() => {
-    if (!search.trim()) return SYMPTOMS_LIST;
-    const lower = search.toLowerCase();
-    return SYMPTOMS_LIST.filter((s) => s.toLowerCase().includes(lower));
-  }, [search]);
+  const {
+    data: catalog,
+    isLoading: catalogLoading,
+    isError: catalogError,
+  } = useSymptomCatalog();
 
-  const toggleSymptom = (symptom: string) => {
+  // Localize each catalog symptom by its canonical id, falling back to the
+  // AI's English label when no translation exists. Re-runs on language change.
+  const symptoms = useMemo(
+    () =>
+      (catalog?.symptoms ?? []).map((s) => ({
+        id: s.id,
+        label: t(`symptomNames.${s.id}`, { defaultValue: s.label }),
+      })),
+    [catalog, t, i18n.language],
+  );
+
+  // id → localized label for rendering the selected-symptom chips.
+  const labelById = useMemo(() => {
+    const map: Record<string, string> = {};
+    for (const s of symptoms) map[s.id] = s.label;
+    return map;
+  }, [symptoms]);
+
+  const filteredSymptoms = useMemo(() => {
+    if (!search.trim()) return symptoms;
+    const lower = search.toLowerCase();
+    return symptoms.filter(
+      (s) =>
+        s.label.toLowerCase().includes(lower) ||
+        s.id.toLowerCase().includes(lower),
+    );
+  }, [search, symptoms]);
+
+  const toggleSymptom = (id: string) => {
     setSelectedSymptoms((prev) =>
-      prev.includes(symptom)
-        ? prev.filter((s) => s !== symptom)
-        : [...prev, symptom],
+      prev.includes(id) ? prev.filter((s) => s !== id) : [...prev, id],
     );
   };
 
-  const removeSymptom = (symptom: string) => {
-    setSelectedSymptoms((prev) => prev.filter((s) => s !== symptom));
+  const removeSymptom = (id: string) => {
+    setSelectedSymptoms((prev) => prev.filter((s) => s !== id));
   };
 
   const handleAnalyze = () => {
     if (selectedSymptoms.length === 0) return;
+    // Submit canonical IDs, not display labels.
     predictDisease.mutate({ symptoms: selectedSymptoms });
   };
 
@@ -66,15 +102,15 @@ export default function SymptomCheckerPage() {
             {/* Selected symptoms tags */}
             {selectedSymptoms.length > 0 && (
               <div className="flex flex-wrap gap-2">
-                {selectedSymptoms.map((symptom) => (
+                {selectedSymptoms.map((id) => (
                   <Badge
-                    key={symptom}
+                    key={id}
                     variant="secondary"
                     className="cursor-pointer gap-1 pe-1"
                   >
-                    {symptom}
+                    {labelById[id] ?? id}
                     <button
-                      onClick={() => removeSymptom(symptom)}
+                      onClick={() => removeSymptom(id)}
                       className="ms-1 rounded-full p-0.5 hover:bg-muted-foreground/20"
                     >
                       <X className="h-3 w-3" />
@@ -98,18 +134,32 @@ export default function SymptomCheckerPage() {
             {/* Symptoms checklist */}
             <ScrollArea className="h-[300px]">
               <div className="space-y-2 pe-4">
-                {filteredSymptoms.map((symptom) => (
-                  <label
-                    key={symptom}
-                    className="flex cursor-pointer items-center gap-3 rounded-md px-3 py-2 transition-colors hover:bg-accent"
-                  >
-                    <Checkbox
-                      checked={selectedSymptoms.includes(symptom)}
-                      onCheckedChange={() => toggleSymptom(symptom)}
-                    />
-                    <span className="text-sm">{symptom}</span>
-                  </label>
-                ))}
+                {catalogLoading ? (
+                  Array.from({ length: 8 }).map((_, i) => (
+                    <Skeleton key={i} className="h-9 w-full rounded-md" />
+                  ))
+                ) : catalogError ? (
+                  <p className="px-3 py-2 text-sm text-destructive">
+                    {t('symptomsLoadError')}
+                  </p>
+                ) : filteredSymptoms.length === 0 ? (
+                  <p className="px-3 py-2 text-sm text-muted-foreground">
+                    {t('noSymptomsFound')}
+                  </p>
+                ) : (
+                  filteredSymptoms.map((symptom) => (
+                    <label
+                      key={symptom.id}
+                      className="flex cursor-pointer items-center gap-3 rounded-md px-3 py-2 transition-colors hover:bg-accent"
+                    >
+                      <Checkbox
+                        checked={selectedSymptoms.includes(symptom.id)}
+                        onCheckedChange={() => toggleSymptom(symptom.id)}
+                      />
+                      <span className="text-sm">{symptom.label}</span>
+                    </label>
+                  ))
+                )}
               </div>
             </ScrollArea>
 
@@ -149,13 +199,21 @@ export default function SymptomCheckerPage() {
               predictDisease.data.predictions.length > 0 ? (
                 <div className="space-y-4">
                   {predictDisease.data.predictions.map(
-                    (result: PredictionResult, index: number) => (
+                    (result: PredictionResult, index: number) => {
+                      const slug = diseaseSlug(result.disease);
+                      const diseaseName = t(`diseaseNames.${slug}`, {
+                        defaultValue: result.disease,
+                      });
+                      const diseaseDesc = t(`diseaseDescriptions.${slug}`, {
+                        defaultValue: result.description ?? '',
+                      });
+                      return (
                       <div
                         key={index}
                         className="rounded-lg border p-4 space-y-3"
                       >
                         <div className="flex items-center justify-between">
-                          <h4 className="font-semibold">{result.disease}</h4>
+                          <h4 className="font-semibold">{diseaseName}</h4>
                           <Badge
                             variant={
                               result.confidence >= 0.7
@@ -168,9 +226,9 @@ export default function SymptomCheckerPage() {
                             {Math.round(result.confidence * 100)}%
                           </Badge>
                         </div>
-                        {result.description && (
+                        {diseaseDesc && (
                           <p className="text-sm text-muted-foreground">
-                            {result.description}
+                            {diseaseDesc}
                           </p>
                         )}
                         {/* Confidence bar */}
@@ -196,7 +254,8 @@ export default function SymptomCheckerPage() {
                           </div>
                         </div>
                       </div>
-                    ),
+                      );
+                    },
                   )}
                 </div>
               ) : (

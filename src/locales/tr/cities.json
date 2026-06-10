@@ -13,6 +13,7 @@
   "cityDeactivated": "Şehir devre dışı bırakıldı",
   "nameEn": "İngilizce Adı",
   "nameAr": "Arapça Adı",
+  "cityColumn": "Şehir",
   "governorate": "Vilayet",
   "selectGovernorate": "Vilayet seçin",
   "noGovernorate": "Yok",
@@ -23,5 +24,42 @@
   "activate": "Etkinleştir",
   "deactivate": "Devre Dışı Bırak",
   "noCities": "Şehir bulunamadı",
-  "searchPlaceholder": "Şehir ara..."
+  "searchPlaceholder": "Şehir ara...",
+  "showingCount": "{{total}} şehirden {{shown}} tanesi gösteriliyor",
+  "clearGovernorate": "Vilayet filtresini temizle",
+  "clearFilters": "Filtreleri temizle",
+  "stats": {
+    "totalCities": "Toplam Şehir",
+    "totalCitiesDesc": "{{count}} vilayet genelinde",
+    "activeCities": "Aktif Şehirler",
+    "inactiveCount": "{{count}} pasif",
+    "totalHospitals": "Toplam Hastane",
+    "totalHospitalsDesc": "Tüm şehirlerde kayıtlı",
+    "governorates": "Kapsanan Vilayetler",
+    "governoratesDesc": "Tüm Suriye vilayetlerinden"
+  },
+  "map": {
+    "title": "Coğrafi Dağılım",
+    "subtitle": "Filtrelemek için bir vilayete, vurgulamak için bir şehir işaretine tıklayın",
+    "ariaLabel": "Şehirleri ve hastaneleri gösteren Suriye vilayetleri haritası",
+    "govSummary": "{{cities}} şehir, {{hospitals}} hastane",
+    "citiesCount": "{{count}} şehir",
+    "hospitalsCount": "{{count}} hastane",
+    "legendLow": "Daha az",
+    "legendHigh": "Daha fazla",
+    "legendMetric": "hastane"
+  },
+  "tooltip": {
+    "activate": "Bu şehri platform genelinde yeniden seçilebilir yapın",
+    "deactivate": "Bu şehri gizleyin ve yeni hastane atanmasını durdurun"
+  },
+  "confirm": {
+    "activateTitle": "\"{{name}}\" etkinleştirilsin mi?",
+    "deactivateTitle": "\"{{name}}\" devre dışı bırakılsın mı?",
+    "activateDesc": "Bu şehir platform genelinde yeniden kullanılabilir olacak.",
+    "deactivateDesc": "Bu şehir seçimlerden gizlenecek ve yeni hastaneler atanamayacak. Mevcut veriler korunur.",
+    "currentStatus": "Mevcut",
+    "newStatus": "Sonra",
+    "hospitalWarning": "Bu şehirde şu anda {{count}} hastane var. Bunlar kalacak, ancak şehir artık seçim listelerinde görünmeyecek."
+  }
 }

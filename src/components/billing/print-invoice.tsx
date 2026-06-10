@@ -1,6 +1,7 @@
 import { forwardRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { Invoice } from '@/hooks/use-billing';
+import { getPatientDisplayName } from '@/lib/patient-name';
 
 interface PrintInvoiceProps {
   invoice: Invoice;
@@ -18,9 +19,7 @@ export const PrintInvoice = forwardRef<HTMLDivElement, PrintInvoiceProps>(
     const { t } = useTranslation('billing');
 
     const patientName = invoice.patient
-      ? [invoice.patient.user.firstName, invoice.patient.user.lastName]
-          .filter(Boolean)
-          .join(' ') || invoice.patient.user.email
+      ? getPatientDisplayName(invoice.patient)
       : '--';
 
     const invoiceDate = invoice.issuedAt
@@ -133,7 +132,7 @@ export const PrintInvoice = forwardRef<HTMLDivElement, PrintInvoiceProps>(
               <p className="print-text-muted">{t('issuedAt')}:</p>
               <p className="font-semibold">{invoiceDate}</p>
             </div>
-            {invoice.patient?.user.email && (
+            {invoice.patient?.user?.email && (
               <div>
                 <p className="print-text-muted">Email:</p>
                 <p className="font-semibold">{invoice.patient.user.email}</p>

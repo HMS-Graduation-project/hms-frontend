@@ -16,7 +16,12 @@ export interface HospitalBrief {
   code: string;
   name: string;
   nameAr: string | null;
-  city: { id: string; name: string };
+  city: {
+    id: string;
+    name: string;
+    nameAr?: string | null;
+    governorate?: string | null;
+  };
 }
 
 export interface DoctorBrief {
@@ -74,6 +79,8 @@ export interface ReferralQueryParams {
   urgency?: ReferralUrgency;
   page?: number;
   limit?: number;
+  governorate?: string;
+  hospitalId?: string;
 }
 
 export interface CreateReferralPayload {

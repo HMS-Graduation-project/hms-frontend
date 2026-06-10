@@ -14,6 +14,8 @@ import {
 } from 'lucide-react';
 import { useMedicalRecord } from '@/hooks/use-medical-records';
 import { VitalsForm } from '@/components/medical-records/vitals-form';
+import { NoPortalAccountBadge } from '@/components/patients/no-portal-account-badge';
+import { getPatientDisplayName } from '@/lib/patient-name';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -48,9 +50,7 @@ export default function RecordDetailPage() {
   }
 
   const patientName = record.patient
-    ? [record.patient.user.firstName, record.patient.user.lastName]
-        .filter(Boolean)
-        .join(' ') || record.patient.user.email
+    ? getPatientDisplayName(record.patient)
     : '';
 
   const doctorName = record.doctor
@@ -114,6 +114,7 @@ export default function RecordDetailPage() {
                 >
                   {patientName}
                 </Link>
+                <NoPortalAccountBadge patient={record.patient} className="mt-1" />
               </div>
             </CardContent>
           </Card>

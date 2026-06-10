@@ -10,6 +10,7 @@ import {
   type EmergencyVisit,
 } from '@/hooks/use-emergency';
 import { useAuth } from '@/providers/auth-provider';
+import { GovernorateHospitalFilter } from '@/components/scope/governorate-hospital-filter';
 import { TriageBadge, triageRowClassMap } from '@/components/emergency/triage-badge';
 import { EmergencyStatusBadge } from '@/components/emergency/emergency-status-badge';
 import { EmptyState } from '@/components/empty-state';
@@ -101,19 +102,35 @@ export default function EmergencyQueuePage() {
   const navigate = useNavigate();
   const { user } = useAuth();
 
+  // National / regional scope (no single hospital): show the Governorate →
+  // Hospital filters and a Hospital context column.
+  const isNational = !user?.hospitalId;
+
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('OPEN');
   const [triageFilter, setTriageFilter] = useState<TriageFilter>('ALL');
+  const [governorate, setGovernorate] = useState('');
+  const [hospitalId, setHospitalId] = useState('');
 
   const params = useMemo(() => {
-    const p: { status?: string; triageLevel?: string; limit: number } = {
+    const p: {
+      status?: string;
+      triageLevel?: string;
+      governorate?: string;
+      hospitalId?: string;
+      limit: number;
+    } = {
       limit: 50,
     };
     if (statusFilter !== 'OPEN' && statusFilter !== 'ALL') {
       p.status = statusFilter;
     }
     if (triageFilter !== 'ALL') p.triageLevel = triageFilter;
+    if (isNational) {
+      if (governorate) p.governorate = governorate;
+      if (hospitalId) p.hospitalId = hospitalId;
+    }
     return p;
-  }, [statusFilter, triageFilter]);
+  }, [statusFilter, triageFilter, isNational, governorate, hospitalId]);
 
   const { data, isLoading } = useEmergencyVisits(params);
 
@@ -155,6 +172,16 @@ export default function EmergencyQueuePage() {
 
       {/* Filters */}
       <div className="flex flex-wrap items-center gap-2">
+        <GovernorateHospitalFilter
+          governorate={governorate}
+          hospitalId={hospitalId}
+          onGovernorateChange={(v) => {
+            setGovernorate(v);
+            setHospitalId('');
+          }}
+          onHospitalChange={setHospitalId}
+          enabled={isNational}
+        />
         <Select
           value={statusFilter}
           onValueChange={(v) => setStatusFilter(v as StatusFilter)}
@@ -220,6 +247,7 @@ export default function EmergencyQueuePage() {
               <TableRow>
                 <TableHead className="w-[110px]">{t('triageLevel')}</TableHead>
                 <TableHead>{t('patient')}</TableHead>
+                {isNational && <TableHead>{tCommon('hospital')}</TableHead>}
                 <TableHead>{t('chiefComplaint')}</TableHead>
                 <TableHead className="w-[140px]">{t('status')}</TableHead>
                 <TableHead className="w-[130px]">{t('arrived')}</TableHead>
@@ -232,7 +260,11 @@ export default function EmergencyQueuePage() {
             </TableHeader>
             <TableBody>
               {visits.map((visit) => (
-                <QueueRow key={visit.id} visit={visit} />
+                <QueueRow
+                  key={visit.id}
+                  visit={visit}
+                  showHospital={isNational}
+                />
               ))}
             </TableBody>
           </Table>
@@ -244,12 +276,14 @@ export default function EmergencyQueuePage() {
 
 interface QueueRowProps {
   visit: EmergencyVisit;
+  showHospital?: boolean;
 }
 
-function QueueRow({ visit }: QueueRowProps) {
-  const { t } = useTranslation('emergency');
+function QueueRow({ visit, showHospital = false }: QueueRowProps) {
+  const { t, i18n } = useTranslation('emergency');
   const navigate = useNavigate();
   const { user } = useAuth();
+  const isArabic = (i18n.language || 'en').split('-')[0] === 'ar';
 
   const rowClass = visit.triageLevel
     ? triageRowClassMap[visit.triageLevel]
@@ -313,6 +347,31 @@ function QueueRow({ visit }: QueueRowProps) {
           </div>
         </div>
       </TableCell>
+      {showHospital && (
+        <TableCell>
+          {visit.hospital ? (
+            <div className="text-sm">
+              <p className="font-medium leading-none">
+                {isArabic && visit.hospital.nameAr
+                  ? visit.hospital.nameAr
+                  : visit.hospital.name}
+              </p>
+              <p className="text-xs text-muted-foreground">
+                {[
+                  visit.hospital.city?.governorate,
+                  isArabic && visit.hospital.city?.nameAr
+                    ? visit.hospital.city.nameAr
+                    : visit.hospital.city?.name,
+                ]
+                  .filter(Boolean)
+                  .join(' · ')}
+              </p>
+            </div>
+          ) : (
+            <span className="text-muted-foreground">—</span>
+          )}
+        </TableCell>
+      )}
       <TableCell className="max-w-xs">
         <p className="truncate text-sm text-muted-foreground" title={visit.chiefComplaint}>
           {visit.chiefComplaint}

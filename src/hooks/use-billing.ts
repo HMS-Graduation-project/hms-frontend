@@ -58,13 +58,36 @@ export interface Invoice {
   payments: InvoicePayment[];
   patient?: {
     id: string;
+    // Demographics source-of-truth — always present.
+    nationalPatient: {
+      id: string;
+      firstName: string;
+      lastName: string;
+      firstNameAr: string | null;
+      lastNameAr: string | null;
+      syrianNationalId: string | null;
+    };
+    // Optional login account — null when the patient was staff-created and
+    // has no login yet.
     user: {
       id: string;
       firstName: string | null;
       lastName: string | null;
       email: string;
-    };
+    } | null;
   };
+  hospital?: {
+    id: string;
+    code: string;
+    name: string;
+    nameAr: string | null;
+    city: {
+      id: string;
+      name: string;
+      nameAr: string | null;
+      governorate: string | null;
+    } | null;
+  } | null;
   issuedAt: string | null;
   dueDate: string | null;
   createdAt: string;
@@ -76,6 +99,8 @@ interface UseInvoicesParams {
   status?: string;
   patientId?: string;
   search?: string;
+  governorate?: string;
+  hospitalId?: string;
 }
 
 interface CreateInvoicePayload {
@@ -132,10 +157,14 @@ function buildQueryString(
 // ---------------------------------------------------------------------------
 
 export function useInvoices(params: UseInvoicesParams = {}) {
-  const { page = 1, limit = 10, status, patientId, search } = params;
+  const { page = 1, limit = 10, status, patientId, search, governorate, hospitalId } =
+    params;
 
   return useQuery<PaginatedResponse<Invoice>>({
-    queryKey: ['invoices', { page, limit, status, patientId, search }],
+    queryKey: [
+      'invoices',
+      { page, limit, status, patientId, search, governorate, hospitalId },
+    ],
     queryFn: () =>
       api.get<PaginatedResponse<Invoice>>(
         `/v1/invoices${buildQueryString({
@@ -144,6 +173,8 @@ export function useInvoices(params: UseInvoicesParams = {}) {
           status: status || undefined,
           patientId: patientId || undefined,
           search: search || undefined,
+          governorate: governorate || undefined,
+          hospitalId: hospitalId || undefined,
         })}`
       ),
   });

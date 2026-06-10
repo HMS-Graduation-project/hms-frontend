@@ -35,12 +35,22 @@ export interface Prescription {
   items?: PrescriptionItem[];
   patient?: {
     id: string;
+    // Demographics source-of-truth — always present.
+    nationalPatient: {
+      id: string;
+      firstName: string;
+      lastName: string;
+      firstNameAr: string | null;
+      lastNameAr: string | null;
+      syrianNationalId: string | null;
+    };
+    // Optional login account — null for staff-created patients.
     user: {
       id: string;
       firstName: string | null;
       lastName: string | null;
       email: string;
-    };
+    } | null;
   };
   doctor?: {
     id: string;
@@ -51,6 +61,18 @@ export interface Prescription {
       email: string;
     };
   };
+  hospital?: {
+    id: string;
+    code: string;
+    name: string;
+    nameAr: string | null;
+    city: {
+      id: string;
+      name: string;
+      nameAr: string | null;
+      governorate: string | null;
+    } | null;
+  } | null;
   _count?: { items: number };
 }
 
@@ -58,6 +80,9 @@ interface UsePrescriptionsParams {
   page?: number;
   limit?: number;
   status?: PrescriptionStatus | '';
+  search?: string;
+  governorate?: string;
+  hospitalId?: string;
 }
 
 interface CreatePrescriptionPayload {
@@ -98,13 +123,20 @@ function buildQueryString(params: Record<string, string | number | undefined>): 
 // ---------------------------------------------------------------------------
 
 export function usePrescriptions(params: UsePrescriptionsParams = {}) {
-  const { page = 1, limit = 10, status } = params;
+  const { page = 1, limit = 10, status, search, governorate, hospitalId } = params;
 
   return useQuery<PaginatedResponse<Prescription>>({
-    queryKey: ['prescriptions', { page, limit, status }],
+    queryKey: ['prescriptions', { page, limit, status, search, governorate, hospitalId }],
     queryFn: () =>
       api.get<PaginatedResponse<Prescription>>(
-        `/v1/prescriptions${buildQueryString({ page, limit, status: status || undefined })}`
+        `/v1/prescriptions${buildQueryString({
+          page,
+          limit,
+          status: status || undefined,
+          search: search || undefined,
+          governorate: governorate || undefined,
+          hospitalId: hospitalId || undefined,
+        })}`
       ),
   });
 }

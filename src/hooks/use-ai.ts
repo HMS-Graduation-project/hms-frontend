@@ -1,49 +1,5 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { api } from '@/lib/api';
-
-// Hardcoded common symptoms list
-export const SYMPTOMS_LIST = [
-  'Fever',
-  'Cough',
-  'Headache',
-  'Fatigue',
-  'Nausea',
-  'Vomiting',
-  'Diarrhea',
-  'Shortness of breath',
-  'Chest pain',
-  'Abdominal pain',
-  'Back pain',
-  'Joint pain',
-  'Muscle pain',
-  'Sore throat',
-  'Runny nose',
-  'Nasal congestion',
-  'Sneezing',
-  'Dizziness',
-  'Blurred vision',
-  'Rash',
-  'Itching',
-  'Swelling',
-  'Weight loss',
-  'Weight gain',
-  'Loss of appetite',
-  'Constipation',
-  'Frequent urination',
-  'Blood in urine',
-  'Insomnia',
-  'Anxiety',
-  'Depression',
-  'Numbness',
-  'Tingling',
-  'Chills',
-  'Night sweats',
-  'Palpitations',
-  'Dry mouth',
-  'Excessive thirst',
-  'Bruising',
-  'Bleeding gums',
-];
 
 // Hardcoded common medications list
 export const MEDICATIONS_LIST = [
@@ -79,6 +35,17 @@ export const MEDICATIONS_LIST = [
   'Pantoprazole',
 ];
 
+/** A symptom from the AI catalog: canonical id + human-readable label. */
+export interface SymptomCatalogItem {
+  id: string;
+  label: string;
+}
+
+interface SymptomsCatalogResponse {
+  symptoms: SymptomCatalogItem[];
+  total: number;
+}
+
 export interface PredictionResult {
   disease: string;
   confidence: number;
@@ -98,6 +65,15 @@ interface PredictDiseaseResponse {
 
 interface CheckInteractionsResponse {
   interactions: DrugInteraction[];
+}
+
+/** Loads the canonical symptom catalog (id + label) from the AI service. */
+export function useSymptomCatalog() {
+  return useQuery<SymptomsCatalogResponse>({
+    queryKey: ['ai', 'symptoms'],
+    queryFn: () => api.get<SymptomsCatalogResponse>('/v1/ai/symptoms'),
+    staleTime: 60 * 60 * 1000, // catalog is effectively static
+  });
 }
 
 export function usePredictDisease() {

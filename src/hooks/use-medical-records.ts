@@ -36,12 +36,22 @@ export interface MedicalRecord {
   updatedAt: string;
   patient?: {
     id: string;
+    // Demographics source-of-truth — always present.
+    nationalPatient: {
+      id: string;
+      firstName: string;
+      lastName: string;
+      firstNameAr: string | null;
+      lastNameAr: string | null;
+      syrianNationalId: string | null;
+    };
+    // Optional login account — null for staff-created patients.
     user: {
       id: string;
       firstName: string | null;
       lastName: string | null;
       email: string;
-    };
+    } | null;
   };
   doctor?: {
     id: string;
@@ -57,6 +67,18 @@ export interface MedicalRecord {
     scheduledAt: string;
     status: string;
   };
+  hospital?: {
+    id: string;
+    code: string;
+    name: string;
+    nameAr: string | null;
+    city: {
+      id: string;
+      name: string;
+      nameAr: string | null;
+      governorate: string | null;
+    } | null;
+  } | null;
   vitalSigns?: VitalSigns[];
   prescriptions?: {
     id: string;
@@ -134,6 +156,8 @@ export function useMedicalRecords(params: {
   sortBy?: string;
   sortOrder?: string;
   search?: string;
+  governorate?: string;
+  hospitalId?: string;
 } = {}) {
   const qs = buildQueryString(params);
   return useQuery<PaginatedResponse<MedicalRecord>>({

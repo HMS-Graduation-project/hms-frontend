@@ -61,5 +61,10 @@
   "goHome": "Ana Sayfa",
   "noData": "Veri bulunamadı",
   "areYouSure": "Emin misiniz?",
-  "notFound": "Bulunamadı"
+  "notFound": "Bulunamadı",
+  "noPortalAccount": "Portal hesabı yok",
+  "governorate": "İl",
+  "hospital": "Hastane",
+  "allGovernorates": "Tüm İller",
+  "allHospitals": "Tüm Hastaneler"
 }

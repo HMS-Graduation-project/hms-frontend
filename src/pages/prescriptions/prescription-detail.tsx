@@ -17,6 +17,8 @@ import {
   type PrescriptionStatus,
 } from '@/hooks/use-prescriptions';
 import { PrintPrescription } from '@/components/prescriptions/print-prescription';
+import { NoPortalAccountBadge } from '@/components/patients/no-portal-account-badge';
+import { getPatientDisplayName } from '@/lib/patient-name';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -108,12 +110,7 @@ export default function PrescriptionDetailPage() {
   }
 
   const patientName = prescription.patient
-    ? [
-        prescription.patient.user.firstName,
-        prescription.patient.user.lastName,
-      ]
-        .filter(Boolean)
-        .join(' ') || prescription.patient.user.email
+    ? getPatientDisplayName(prescription.patient)
     : '';
 
   const doctorName = prescription.doctor
@@ -213,6 +210,7 @@ export default function PrescriptionDetailPage() {
                 >
                   {patientName}
                 </Link>
+                <NoPortalAccountBadge patient={prescription.patient} className="mt-1" />
               </div>
             </CardContent>
           </Card>

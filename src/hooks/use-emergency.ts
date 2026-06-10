@@ -63,6 +63,18 @@ export interface EmergencyVisit {
     specialization: string;
     user: { id: string; firstName: string | null; lastName: string | null };
   } | null;
+  hospital?: {
+    id: string;
+    code: string;
+    name: string;
+    nameAr: string | null;
+    city: {
+      id: string;
+      name: string;
+      nameAr: string | null;
+      governorate: string | null;
+    } | null;
+  } | null;
   medicalRecord: { id: string } | null;
 }
 
@@ -73,6 +85,8 @@ export interface UseEmergencyVisitsParams {
   limit?: number;
   sortBy?: string;
   sortOrder?: string;
+  governorate?: string;
+  hospitalId?: string;
 }
 
 export interface CreateEmergencyVisitPayload {
@@ -111,13 +125,14 @@ function buildQueryString(
 }
 
 export function useEmergencyVisits(params: UseEmergencyVisitsParams = {}) {
-  const { status, triageLevel, page, limit, sortBy, sortOrder } = params;
+  const { status, triageLevel, page, limit, sortBy, sortOrder, governorate, hospitalId } =
+    params;
 
   return useQuery<PaginatedResponse<EmergencyVisit>>({
     queryKey: [
       'emergency',
       'visits',
-      { status, triageLevel, page, limit, sortBy, sortOrder },
+      { status, triageLevel, page, limit, sortBy, sortOrder, governorate, hospitalId },
     ],
     queryFn: () =>
       api.get<PaginatedResponse<EmergencyVisit>>(
@@ -128,6 +143,8 @@ export function useEmergencyVisits(params: UseEmergencyVisitsParams = {}) {
           limit,
           sortBy,
           sortOrder,
+          governorate,
+          hospitalId,
         })}`,
       ),
     refetchInterval: 15000,

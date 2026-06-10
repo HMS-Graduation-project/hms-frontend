@@ -13,6 +13,7 @@ import {
 import { usePatients } from '@/hooks/use-patients';
 import { useDoctors } from '@/hooks/use-doctors';
 import { useAuth } from '@/providers/auth-provider';
+import { GovernorateHospitalFilter } from '@/components/scope/governorate-hospital-filter';
 import { AdmissionStatusBadge } from '@/components/inpatient/admission-status-badge';
 import { EmptyState } from '@/components/empty-state';
 import { Button } from '@/components/ui/button';
@@ -59,21 +60,37 @@ const STATUS_OPTIONS: StatusFilter[] = [
 const ADMIT_ROLES = ['DOCTOR', 'ADMIN', 'HOSPITAL_ADMIN'];
 
 export default function AdmissionsPage() {
-  const { t } = useTranslation('inpatient');
+  const { t, i18n } = useTranslation('inpatient');
   const { t: tCommon } = useTranslation('common');
   const navigate = useNavigate();
   const { user } = useAuth();
+  const isArabic = (i18n.language || 'en').split('-')[0] === 'ar';
+
+  // National / regional scope (no single hospital): Governorate → Hospital
+  // filters and a Hospital context column.
+  const isNational = !user?.hospitalId;
 
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('OPEN');
+  const [governorate, setGovernorate] = useState('');
+  const [hospitalId, setHospitalId] = useState('');
   const [admitOpen, setAdmitOpen] = useState(false);
 
   const params = useMemo(() => {
-    const p: { status?: AdmissionStatus; limit: number } = { limit: 50 };
+    const p: {
+      status?: AdmissionStatus;
+      governorate?: string;
+      hospitalId?: string;
+      limit: number;
+    } = { limit: 50 };
     if (statusFilter !== 'OPEN' && statusFilter !== 'ALL') {
       p.status = statusFilter;
     }
+    if (isNational) {
+      if (governorate) p.governorate = governorate;
+      if (hospitalId) p.hospitalId = hospitalId;
+    }
     return p;
-  }, [statusFilter]);
+  }, [statusFilter, isNational, governorate, hospitalId]);
 
   const { data, isLoading } = useAdmissions(params);
 
@@ -104,6 +121,16 @@ export default function AdmissionsPage() {
       </div>
 
       <div className="flex flex-wrap items-center gap-2">
+        <GovernorateHospitalFilter
+          governorate={governorate}
+          hospitalId={hospitalId}
+          onGovernorateChange={(v) => {
+            setGovernorate(v);
+            setHospitalId('');
+          }}
+          onHospitalChange={setHospitalId}
+          enabled={isNational}
+        />
         <Select
           value={statusFilter}
           onValueChange={(v) => setStatusFilter(v as StatusFilter)}
@@ -151,6 +178,7 @@ export default function AdmissionsPage() {
             <TableHeader>
               <TableRow>
                 <TableHead>{t('admissions.columns.patient')}</TableHead>
+                {isNational && <TableHead>{tCommon('hospital')}</TableHead>}
                 <TableHead>{t('admissions.columns.bed')}</TableHead>
                 <TableHead>{t('admissions.columns.diagnosis')}</TableHead>
                 <TableHead>{t('admissions.columns.admittedBy')}</TableHead>
@@ -177,6 +205,31 @@ export default function AdmissionsPage() {
                         {t('nhid', { ns: 'patients' })}: {name.id.slice(0, 8)}
                       </div>
                     </TableCell>
+                    {isNational && (
+                      <TableCell>
+                        {adm.hospital ? (
+                          <div className="text-sm">
+                            <p className="font-medium leading-none">
+                              {isArabic && adm.hospital.nameAr
+                                ? adm.hospital.nameAr
+                                : adm.hospital.name}
+                            </p>
+                            <p className="text-xs text-muted-foreground">
+                              {[
+                                adm.hospital.city?.governorate,
+                                isArabic && adm.hospital.city?.nameAr
+                                  ? adm.hospital.city.nameAr
+                                  : adm.hospital.city?.name,
+                              ]
+                                .filter(Boolean)
+                                .join(' · ')}
+                            </p>
+                          </div>
+                        ) : (
+                          <span className="text-muted-foreground">—</span>
+                        )}
+                      </TableCell>
+                    )}
                     <TableCell>
                       {adm.bed
                         ? `${adm.bed.ward.name} · ${adm.bed.number}`

@@ -101,6 +101,26 @@ export default function DoctorsPage() {
         ),
       },
       {
+        key: 'hospital',
+        label: t('hospital'),
+        sortable: false,
+        render: (row) => (
+          <span className="text-muted-foreground">
+            {row.hospital?.name || '—'}
+          </span>
+        ),
+      },
+      {
+        key: 'city',
+        label: t('city'),
+        sortable: false,
+        render: (row) => (
+          <span className="text-muted-foreground">
+            {row.hospital?.city?.name || '—'}
+          </span>
+        ),
+      },
+      {
         key: 'isAvailable',
         label: t('availability'),
         sortable: false,

@@ -20,6 +20,8 @@ import {
   type LabOrderPriority,
 } from '@/hooks/use-laboratory';
 import { LabResultForm } from '@/components/laboratory/lab-result-form';
+import { NoPortalAccountBadge } from '@/components/patients/no-portal-account-badge';
+import { getPatientDisplayName } from '@/lib/patient-name';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -108,9 +110,7 @@ export default function LabOrderDetailPage() {
   }
 
   const patientName = order.patient
-    ? [order.patient.user.firstName, order.patient.user.lastName]
-        .filter(Boolean)
-        .join(' ') || order.patient.user.email
+    ? getPatientDisplayName(order.patient)
     : '';
 
   const doctorName = order.doctor
@@ -221,6 +221,7 @@ export default function LabOrderDetailPage() {
                 >
                   {patientName}
                 </Link>
+                <NoPortalAccountBadge patient={order.patient} className="mt-1" />
               </div>
             </CardContent>
           </Card>

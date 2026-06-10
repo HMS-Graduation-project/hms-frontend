@@ -121,6 +121,19 @@ export interface AdmissionMedicalRecordRef {
   };
 }
 
+export interface AdmissionHospital {
+  id: string;
+  code: string;
+  name: string;
+  nameAr: string | null;
+  city: {
+    id: string;
+    name: string;
+    nameAr: string | null;
+    governorate: string | null;
+  } | null;
+}
+
 export interface Admission {
   id: string;
   hospitalId: string;
@@ -135,6 +148,7 @@ export interface Admission {
   dischargeSummary: string | null;
   createdAt: string;
   updatedAt: string;
+  hospital?: AdmissionHospital | null;
   patientProfile: AdmissionPatient;
   admittingDoctor: AdmissionDoctor;
   bed: AdmissionBed | null;
@@ -148,6 +162,8 @@ export interface AdmissionQueryParams {
   patientProfileId?: string;
   page?: number;
   limit?: number;
+  governorate?: string;
+  hospitalId?: string;
 }
 
 export interface CreateWardPayload {

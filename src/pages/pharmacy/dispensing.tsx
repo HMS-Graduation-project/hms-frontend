@@ -14,6 +14,8 @@ import {
   useUpdatePrescriptionStatus,
   type Prescription,
 } from '@/hooks/use-prescriptions';
+import { NoPortalAccountBadge } from '@/components/patients/no-portal-account-badge';
+import { getPatientDisplayName } from '@/lib/patient-name';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -175,12 +177,7 @@ function PrescriptionCard({
   t,
 }: PrescriptionCardProps) {
   const patientName = prescription.patient
-    ? [
-        prescription.patient.user.firstName,
-        prescription.patient.user.lastName,
-      ]
-        .filter(Boolean)
-        .join(' ') || prescription.patient.user.email
+    ? getPatientDisplayName(prescription.patient)
     : '--';
 
   const doctorName = prescription.doctor
@@ -224,6 +221,7 @@ function PrescriptionCard({
           <User className="h-4 w-4 text-muted-foreground shrink-0" />
           <span className="text-muted-foreground">{t('patient')}:</span>
           <span className="font-medium truncate">{patientName}</span>
+          <NoPortalAccountBadge patient={prescription.patient} />
         </div>
 
         {/* Doctor */}

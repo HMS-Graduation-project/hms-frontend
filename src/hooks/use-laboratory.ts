@@ -39,12 +39,22 @@ export interface LabOrder {
   result?: LabResult;
   patient?: {
     id: string;
+    // Demographics source-of-truth — always present.
+    nationalPatient: {
+      id: string;
+      firstName: string;
+      lastName: string;
+      firstNameAr: string | null;
+      lastNameAr: string | null;
+      syrianNationalId: string | null;
+    };
+    // Optional login account — null for staff-created patients.
     user: {
       id: string;
       firstName: string | null;
       lastName: string | null;
       email: string;
-    };
+    } | null;
   };
   doctor?: {
     id: string;
@@ -55,6 +65,18 @@ export interface LabOrder {
       email: string;
     };
   };
+  hospital?: {
+    id: string;
+    code: string;
+    name: string;
+    nameAr: string | null;
+    city: {
+      id: string;
+      name: string;
+      nameAr: string | null;
+      governorate: string | null;
+    } | null;
+  } | null;
   orderedAt: string;
   completedAt: string | null;
 }
@@ -65,6 +87,8 @@ interface UseLabOrdersParams {
   status?: string;
   priority?: string;
   search?: string;
+  governorate?: string;
+  hospitalId?: string;
 }
 
 interface CreateLabOrderPayload {
@@ -113,10 +137,14 @@ function buildQueryString(
 // ---------------------------------------------------------------------------
 
 export function useLabOrders(params: UseLabOrdersParams = {}) {
-  const { page = 1, limit = 10, status, priority, search } = params;
+  const { page = 1, limit = 10, status, priority, search, governorate, hospitalId } =
+    params;
 
   return useQuery<PaginatedResponse<LabOrder>>({
-    queryKey: ['lab-orders', { page, limit, status, priority, search }],
+    queryKey: [
+      'lab-orders',
+      { page, limit, status, priority, search, governorate, hospitalId },
+    ],
     queryFn: () =>
       api.get<PaginatedResponse<LabOrder>>(
         `/v1/lab-orders${buildQueryString({
@@ -125,6 +153,8 @@ export function useLabOrders(params: UseLabOrdersParams = {}) {
           status: status || undefined,
           priority: priority || undefined,
           search: search || undefined,
+          governorate: governorate || undefined,
+          hospitalId: hospitalId || undefined,
         })}`
       ),
   });

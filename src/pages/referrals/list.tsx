@@ -10,6 +10,7 @@ import {
   type ReferralUrgency,
 } from '@/hooks/use-referrals';
 import { useAuth } from '@/providers/auth-provider';
+import { GovernorateHospitalFilter } from '@/components/scope/governorate-hospital-filter';
 import { ReferralStatusBadge } from '@/components/referrals/referral-status-badge';
 import { ReferralUrgencyBadge } from '@/components/referrals/referral-urgency-badge';
 import { EmptyState } from '@/components/empty-state';
@@ -51,22 +52,39 @@ interface Props {
 }
 
 export default function ReferralsListPage({ direction }: Props) {
-  const { t } = useTranslation('referrals');
+  const { t, i18n } = useTranslation('referrals');
   const { t: tCommon } = useTranslation('common');
   const navigate = useNavigate();
   const { user } = useAuth();
+  const isArabic = (i18n.language || 'en').split('-')[0] === 'ar';
+
+  // National / regional scope (no single hospital): Governorate → Hospital
+  // filters and the full From → To route per row.
+  const isNational = !user?.hospitalId;
 
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('ALL');
   const [urgencyFilter, setUrgencyFilter] = useState<UrgencyFilter>('ALL');
+  const [governorate, setGovernorate] = useState('');
+  const [hospitalId, setHospitalId] = useState('');
 
   const params = useMemo(() => {
-    const p: { status?: ReferralStatus; urgency?: ReferralUrgency; limit: number } = {
+    const p: {
+      status?: ReferralStatus;
+      urgency?: ReferralUrgency;
+      governorate?: string;
+      hospitalId?: string;
+      limit: number;
+    } = {
       limit: 50,
     };
     if (statusFilter !== 'ALL') p.status = statusFilter as ReferralStatus;
     if (urgencyFilter !== 'ALL') p.urgency = urgencyFilter as ReferralUrgency;
+    if (isNational) {
+      if (governorate) p.governorate = governorate;
+      if (hospitalId) p.hospitalId = hospitalId;
+    }
     return p;
-  }, [statusFilter, urgencyFilter]);
+  }, [statusFilter, urgencyFilter, isNational, governorate, hospitalId]);
 
   const incoming = useIncomingReferrals(direction === 'incoming' ? params : {});
   const outgoing = useOutgoingReferrals(direction === 'outgoing' ? params : {});
@@ -117,6 +135,16 @@ export default function ReferralsListPage({ direction }: Props) {
       </div>
 
       <div className="flex flex-wrap gap-2">
+        <GovernorateHospitalFilter
+          governorate={governorate}
+          hospitalId={hospitalId}
+          onGovernorateChange={(v) => {
+            setGovernorate(v);
+            setHospitalId('');
+          }}
+          onHospitalChange={setHospitalId}
+          enabled={isNational}
+        />
         <Select value={statusFilter} onValueChange={(v) => setStatusFilter(v as StatusFilter)}>
           <SelectTrigger className="w-[180px]">
             <SelectValue />
@@ -172,7 +200,11 @@ export default function ReferralsListPage({ direction }: Props) {
                 <TableHead>{t('columns.patient')}</TableHead>
                 <TableHead>{t('columns.reason')}</TableHead>
                 <TableHead>
-                  {isIncoming ? t('columns.from') : t('columns.to')}
+                  {isNational
+                    ? `${t('columns.from')} → ${t('columns.to')}`
+                    : isIncoming
+                      ? t('columns.from')
+                      : t('columns.to')}
                 </TableHead>
                 <TableHead>{t('columns.status')}</TableHead>
                 <TableHead>{t('columns.created')}</TableHead>
@@ -183,6 +215,8 @@ export default function ReferralsListPage({ direction }: Props) {
               {query.data.data.map((r) => {
                 const np = r.nationalPatient;
                 const counter = isIncoming ? r.fromHospital : r.toHospital;
+                const hName = (h: typeof r.fromHospital) =>
+                  isArabic && h.nameAr ? h.nameAr : h.name;
                 return (
                   <TableRow
                     key={r.id}
@@ -210,10 +244,39 @@ export default function ReferralsListPage({ direction }: Props) {
                       {r.reason}
                     </TableCell>
                     <TableCell>
-                      <div className="text-sm font-medium">{counter.name}</div>
-                      <div className="text-xs text-muted-foreground">
-                        {counter.city.name}
-                      </div>
+                      {isNational ? (
+                        <div className="space-y-0.5 text-sm">
+                          <div className="truncate">
+                            <span className="text-xs text-muted-foreground">
+                              {t('columns.from')}:{' '}
+                            </span>
+                            {hName(r.fromHospital)}
+                            {r.fromHospital.city.governorate
+                              ? ` · ${r.fromHospital.city.governorate}`
+                              : ''}
+                          </div>
+                          <div className="truncate">
+                            <span className="text-xs text-muted-foreground">
+                              {t('columns.to')}:{' '}
+                            </span>
+                            {hName(r.toHospital)}
+                            {r.toHospital.city.governorate
+                              ? ` · ${r.toHospital.city.governorate}`
+                              : ''}
+                          </div>
+                        </div>
+                      ) : (
+                        <>
+                          <div className="text-sm font-medium">
+                            {hName(counter)}
+                          </div>
+                          <div className="text-xs text-muted-foreground">
+                            {[counter.city.governorate, counter.city.name]
+                              .filter(Boolean)
+                              .join(' · ')}
+                          </div>
+                        </>
+                      )}
                     </TableCell>
                     <TableCell>
                       <ReferralStatusBadge status={r.status} />

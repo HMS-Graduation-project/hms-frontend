@@ -1,6 +1,7 @@
 import { forwardRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { Prescription } from '@/hooks/use-prescriptions';
+import { getPatientDisplayName } from '@/lib/patient-name';
 
 interface PrintPrescriptionProps {
   prescription: Prescription;
@@ -13,12 +14,7 @@ export const PrintPrescription = forwardRef<
   const { t } = useTranslation('prescriptions');
 
   const patientName = prescription.patient
-    ? [
-        prescription.patient.user.firstName,
-        prescription.patient.user.lastName,
-      ]
-        .filter(Boolean)
-        .join(' ') || prescription.patient.user.email
+    ? getPatientDisplayName(prescription.patient)
     : '--';
 
   const doctorName = prescription.doctor

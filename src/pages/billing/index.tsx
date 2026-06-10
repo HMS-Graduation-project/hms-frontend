@@ -8,10 +8,19 @@ import {
   type Invoice,
   type InvoiceStatus,
 } from '@/hooks/use-billing';
+import { useAuth } from '@/providers/auth-provider';
 import { DataTable } from '@/components/data-table/data-table';
+import { GovernorateHospitalFilter } from '@/components/scope/governorate-hospital-filter';
 import type { DataTableColumn } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { NoPortalAccountBadge } from '@/components/patients/no-portal-account-badge';
+import { getPatientDisplayName } from '@/lib/patient-name';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import {
   Select,
   SelectContent,
@@ -40,11 +49,19 @@ function formatCurrency(amount: number): string {
 }
 
 export default function BillingPage() {
-  const { t } = useTranslation('billing');
+  const { t, i18n } = useTranslation('billing');
   const { t: tCommon } = useTranslation('common');
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const isArabic = (i18n.language || 'en').split('-')[0] === 'ar';
+
+  // National / regional scope (no single hospital): show Governorate +
+  // Hospital columns and the Governorate → Hospital filters.
+  const isNational = !user?.hospitalId;
 
   const [statusFilter, setStatusFilter] = useState<string>('ALL');
+  const [governorate, setGovernorate] = useState('');
+  const [hospitalId, setHospitalId] = useState('');
 
   const table = useDataTable({
     initialSortBy: 'createdAt',
@@ -56,6 +73,8 @@ export default function BillingPage() {
     limit: table.limit,
     status: statusFilter === 'ALL' ? '' : statusFilter,
     search: table.debouncedSearch || undefined,
+    governorate: isNational ? governorate || undefined : undefined,
+    hospitalId: isNational ? hospitalId || undefined : undefined,
   });
 
   const handleRowClick = (invoice: Invoice) => {
@@ -78,19 +97,50 @@ export default function BillingPage() {
         sortable: false,
         render: (row) => {
           if (!row.patient) return '--';
-          const name = [
-            row.patient.user.firstName,
-            row.patient.user.lastName,
-          ]
-            .filter(Boolean)
-            .join(' ');
           return (
-            <span className="text-muted-foreground">
-              {name || row.patient.user.email}
+            <span className="flex items-center gap-2">
+              <span className="text-muted-foreground">
+                {getPatientDisplayName(row.patient)}
+              </span>
+              <NoPortalAccountBadge patient={row.patient} />
             </span>
           );
         },
       },
+      ...(isNational
+        ? [
+            {
+              key: 'governorate',
+              label: tCommon('governorate'),
+              sortable: false,
+              render: (row: Invoice) => (
+                <span className="text-muted-foreground">
+                  {row.hospital?.city?.governorate || '-'}
+                </span>
+              ),
+            } as DataTableColumn<Invoice>,
+            {
+              key: 'hospital',
+              label: tCommon('hospital'),
+              sortable: false,
+              render: (row: Invoice) => {
+                const h = row.hospital;
+                if (!h) return <span className="text-muted-foreground">-</span>;
+                const name = isArabic && h.nameAr ? h.nameAr : h.name;
+                const cityName =
+                  isArabic && h.city?.nameAr ? h.city.nameAr : h.city?.name;
+                return (
+                  <div>
+                    <span className="font-medium">{name}</span>
+                    {cityName && (
+                      <p className="text-xs text-muted-foreground">{cityName}</p>
+                    )}
+                  </div>
+                );
+              },
+            } as DataTableColumn<Invoice>,
+          ]
+        : []),
       {
         key: 'createdAt',
         label: t('date'),
@@ -135,32 +185,52 @@ export default function BillingPage() {
         className: 'w-[80px]',
         render: (row) => (
           <div className="flex items-center gap-1">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={(e) => {
-                e.stopPropagation();
-                navigate(`/billing/${row.id}`);
-              }}
-              aria-label={t('invoiceDetail')}
-            >
-              <Eye className="h-4 w-4" />
-            </Button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigate(`/billing/${row.id}`);
+                  }}
+                  aria-label={t('invoiceDetail')}
+                >
+                  <Eye className="h-4 w-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>{t('invoiceDetail')}</TooltipContent>
+            </Tooltip>
           </div>
         ),
       },
     ],
-    [t, tCommon, navigate]
+    [t, tCommon, navigate, isNational, isArabic]
   );
 
   const statusFilterSlot = (
-    <Select
-      value={statusFilter}
-      onValueChange={(val) => setStatusFilter(val)}
-    >
-      <SelectTrigger className="w-[180px]">
-        <SelectValue placeholder={t('filterByStatus')} />
-      </SelectTrigger>
+    <>
+      <GovernorateHospitalFilter
+        governorate={governorate}
+        hospitalId={hospitalId}
+        onGovernorateChange={(v) => {
+          setGovernorate(v);
+          setHospitalId('');
+          table.onPageChange(1);
+        }}
+        onHospitalChange={(v) => {
+          setHospitalId(v);
+          table.onPageChange(1);
+        }}
+        enabled={isNational}
+      />
+      <Select
+        value={statusFilter}
+        onValueChange={(val) => setStatusFilter(val)}
+      >
+        <SelectTrigger className="w-[180px]">
+          <SelectValue placeholder={t('filterByStatus')} />
+        </SelectTrigger>
       <SelectContent>
         <SelectItem value="ALL">{t('allStatuses')}</SelectItem>
         <SelectItem value="DRAFT">{t('statuses.DRAFT')}</SelectItem>
@@ -171,8 +241,9 @@ export default function BillingPage() {
         </SelectItem>
         <SelectItem value="CANCELLED">{t('statuses.CANCELLED')}</SelectItem>
         <SelectItem value="OVERDUE">{t('statuses.OVERDUE')}</SelectItem>
-      </SelectContent>
-    </Select>
+        </SelectContent>
+      </Select>
+    </>
   );
 
   return (

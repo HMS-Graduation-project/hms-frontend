@@ -6,7 +6,8 @@ import {
   useCreateInvoice,
   type InvoiceItemCategory,
 } from '@/hooks/use-billing';
-import { usePatients, type PatientProfile } from '@/hooks/use-patients';
+import { usePatients } from '@/hooks/use-patients';
+import { getPatientDisplayName } from '@/lib/patient-name';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -49,20 +50,6 @@ function createEmptyItem(): LineItem {
     quantity: '1',
     unitPrice: '',
   };
-}
-
-function getPatientName(patient: PatientProfile): string {
-  const fromNational = [
-    patient.nationalPatient?.firstName,
-    patient.nationalPatient?.lastName,
-  ]
-    .filter(Boolean)
-    .join(' ');
-  if (fromNational) return fromNational;
-  const fromUser = [patient.user?.firstName, patient.user?.lastName]
-    .filter(Boolean)
-    .join(' ');
-  return fromUser || patient.user?.email || '—';
 }
 
 export default function CreateInvoicePage() {
@@ -210,7 +197,7 @@ export default function CreateInvoicePage() {
               <SelectContent>
                 {patientsData?.data?.map((patient) => (
                   <SelectItem key={patient.id} value={patient.id}>
-                    {getPatientName(patient)}
+                    {getPatientDisplayName(patient)}
                   </SelectItem>
                 ))}
               </SelectContent>

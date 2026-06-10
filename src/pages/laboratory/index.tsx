@@ -9,11 +9,20 @@ import {
   type LabOrderStatus,
   type LabOrderPriority,
 } from '@/hooks/use-laboratory';
+import { useAuth } from '@/providers/auth-provider';
 import { LabResultForm } from '@/components/laboratory/lab-result-form';
 import { DataTable } from '@/components/data-table/data-table';
+import { GovernorateHospitalFilter } from '@/components/scope/governorate-hospital-filter';
+import { NoPortalAccountBadge } from '@/components/patients/no-portal-account-badge';
+import { getPatientDisplayName } from '@/lib/patient-name';
 import type { DataTableColumn } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import {
   Select,
   SelectContent,
@@ -43,12 +52,20 @@ const PRIORITY_BADGE_MAP: Record<
 };
 
 export default function LaboratoryPage() {
-  const { t } = useTranslation('laboratory');
+  const { t, i18n } = useTranslation('laboratory');
   const { t: tCommon } = useTranslation('common');
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const isArabic = (i18n.language || 'en').split('-')[0] === 'ar';
+
+  // National / regional scope (no single hospital): show Governorate +
+  // Hospital columns and the Governorate → Hospital filters.
+  const isNational = !user?.hospitalId;
 
   const [statusFilter, setStatusFilter] = useState<string>('ALL');
   const [priorityFilter, setPriorityFilter] = useState<string>('ALL');
+  const [governorate, setGovernorate] = useState('');
+  const [hospitalId, setHospitalId] = useState('');
   const [resultFormOpen, setResultFormOpen] = useState(false);
   const [selectedOrderId, setSelectedOrderId] = useState<string>('');
 
@@ -63,6 +80,8 @@ export default function LaboratoryPage() {
     status: statusFilter === 'ALL' ? '' : statusFilter,
     priority: priorityFilter === 'ALL' ? '' : priorityFilter,
     search: table.debouncedSearch,
+    governorate: isNational ? governorate || undefined : undefined,
+    hospitalId: isNational ? hospitalId || undefined : undefined,
   });
 
   const handleEnterResults = (order: LabOrder) => {
@@ -90,15 +109,10 @@ export default function LaboratoryPage() {
         sortable: false,
         render: (row) => {
           if (!row.patient) return '--';
-          const name = [
-            row.patient.user.firstName,
-            row.patient.user.lastName,
-          ]
-            .filter(Boolean)
-            .join(' ');
           return (
-            <span className="text-muted-foreground">
-              {name || row.patient.user.email}
+            <span className="flex items-center gap-2 text-muted-foreground">
+              {getPatientDisplayName(row.patient)}
+              <NoPortalAccountBadge patient={row.patient} />
             </span>
           );
         },
@@ -122,6 +136,40 @@ export default function LaboratoryPage() {
           );
         },
       },
+      ...(isNational
+        ? [
+            {
+              key: 'governorate',
+              label: tCommon('governorate'),
+              sortable: false,
+              render: (row: LabOrder) => (
+                <span className="text-muted-foreground">
+                  {row.hospital?.city?.governorate || '-'}
+                </span>
+              ),
+            } as DataTableColumn<LabOrder>,
+            {
+              key: 'hospital',
+              label: tCommon('hospital'),
+              sortable: false,
+              render: (row: LabOrder) => {
+                const h = row.hospital;
+                if (!h) return <span className="text-muted-foreground">-</span>;
+                const name = isArabic && h.nameAr ? h.nameAr : h.name;
+                const cityName =
+                  isArabic && h.city?.nameAr ? h.city.nameAr : h.city?.name;
+                return (
+                  <div>
+                    <span className="font-medium">{name}</span>
+                    {cityName && (
+                      <p className="text-xs text-muted-foreground">{cityName}</p>
+                    )}
+                  </div>
+                );
+              },
+            } as DataTableColumn<LabOrder>,
+          ]
+        : []),
       {
         key: 'priority',
         label: t('priority'),
@@ -158,39 +206,63 @@ export default function LaboratoryPage() {
         className: 'w-[120px]',
         render: (row) => (
           <div className="flex items-center gap-1">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={(e) => {
-                e.stopPropagation();
-                navigate(`/laboratory/${row.id}`);
-              }}
-              aria-label={t('orderDetail')}
-            >
-              <Eye className="h-4 w-4" />
-            </Button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigate(`/laboratory/${row.id}`);
+                  }}
+                  aria-label={t('orderDetail')}
+                >
+                  <Eye className="h-4 w-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>{t('orderDetail')}</TooltipContent>
+            </Tooltip>
             {row.status !== 'COMPLETED' && row.status !== 'CANCELLED' && (
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleEnterResults(row);
-                }}
-                aria-label={t('enterResults')}
-              >
-                <FlaskConical className="h-4 w-4 text-primary" />
-              </Button>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleEnterResults(row);
+                    }}
+                    aria-label={t('enterResults')}
+                  >
+                    <FlaskConical className="h-4 w-4 text-primary" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>{t('enterResults')}</TooltipContent>
+              </Tooltip>
             )}
           </div>
         ),
       },
     ],
-    [t, tCommon, navigate]
+    [t, tCommon, navigate, isNational, isArabic]
   );
 
   const filterSlot = (
     <div className="flex flex-wrap gap-2">
+      <GovernorateHospitalFilter
+        governorate={governorate}
+        hospitalId={hospitalId}
+        onGovernorateChange={(v) => {
+          setGovernorate(v);
+          setHospitalId('');
+          table.onPageChange(1);
+        }}
+        onHospitalChange={(v) => {
+          setHospitalId(v);
+          table.onPageChange(1);
+        }}
+        enabled={isNational}
+      />
       <Select
         value={statusFilter}
         onValueChange={(val) => setStatusFilter(val)}

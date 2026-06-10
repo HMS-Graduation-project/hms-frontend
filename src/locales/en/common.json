@@ -61,5 +61,10 @@
   "goHome": "Go Home",
   "noData": "No data available",
   "areYouSure": "Are you sure?",
-  "notFound": "Not found"
+  "notFound": "Not found",
+  "noPortalAccount": "No portal account",
+  "governorate": "Governorate",
+  "hospital": "Hospital",
+  "allGovernorates": "All Governorates",
+  "allHospitals": "All Hospitals"
 }

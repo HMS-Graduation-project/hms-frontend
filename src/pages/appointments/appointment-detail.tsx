@@ -21,6 +21,8 @@ import {
 } from '@/hooks/use-appointments';
 import { StatusBadge } from '@/components/appointments/status-badge';
 import { TimeSlotPicker } from '@/components/appointments/time-slot-picker';
+import { NoPortalAccountBadge } from '@/components/patients/no-portal-account-badge';
+import { getPatientDisplayName } from '@/lib/patient-name';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -164,10 +166,7 @@ export default function AppointmentDetailPage() {
     );
   }
 
-  const patientName = formatName(
-    appointment.patient?.user?.firstName,
-    appointment.patient?.user?.lastName,
-  );
+  const patientName = getPatientDisplayName(appointment.patient);
   const doctorName = formatName(
     appointment.doctor?.user?.firstName,
     appointment.doctor?.user?.lastName,
@@ -280,6 +279,7 @@ export default function AppointmentDetailPage() {
           </CardHeader>
           <CardContent>
             <p className="font-medium">{patientName}</p>
+            <NoPortalAccountBadge patient={appointment.patient} className="mt-1" />
           </CardContent>
         </Card>
 

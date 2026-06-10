@@ -12,6 +12,8 @@
   "department": "القسم",
   "selectDepartment": "اختر القسم",
   "noDepartment": "لا يوجد قسم",
+  "hospital": "المستشفى",
+  "city": "المدينة",
   "bio": "السيرة الذاتية",
   "yearsExperience": "سنوات الخبرة",
   "consultationFee": "رسوم الاستشارة",
